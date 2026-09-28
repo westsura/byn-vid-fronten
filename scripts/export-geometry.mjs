@@ -2,20 +2,17 @@
 // so artists work from the same numbers the simulation uses.
 // Run: node scripts/export-geometry.mjs
 import { writeFileSync } from 'node:fs';
-import { W, H, STEP } from '../dist/src/config.js';
+import { W, H } from '../dist/src/config.js';
+import { NAV_CELL } from '../dist/src/nav.js';
 import { buildings, woods, objective, startingSquads } from '../dist/src/scenario.js';
 
-// These mirror the rules in dist/src/terrain.js (onWall/atDoor/atWindow).
-const WALL_INSIDE = 6; // wall band reaches 6 units inside the footprint edge
-const WALL_OUTSIDE = 3; // ... and 3 units outside it
-const DOOR_HALF = 19;
-const WINDOW_HALF = 16;
+import { WALL_IN as WALL_INSIDE, WALL_OUT as WALL_OUTSIDE, DOOR_HALF, WINDOW_HALF } from '../dist/src/terrain.js';
 
 const out = {
   version: 1,
   generatedFrom: 'dist/src/scenario.js + dist/src/terrain.js',
   units: 'world units; 1 unit ≈ 0.1 m; origin top-left, x → east, y → south',
-  map: { width: W, height: H, navGridCell: STEP, image: 'dist/map.png', imageSize: [1536, 1024], imagePxPerUnit: 1.28 },
+  map: { width: W, height: H, navGridCell: NAV_CELL, image: 'dist/map.png', imageSize: [1536, 1024], imagePxPerUnit: 1.28 },
   wallBand: { inside: WALL_INSIDE, outside: WALL_OUTSIDE },
   objective,
   woods: woods.map((w) => ({ ...w, cover: 0.55, blocksSight: false, affectsSpeed: false })),

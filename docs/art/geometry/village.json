@@ -5,7 +5,7 @@
   "map": {
     "width": 1200,
     "height": 800,
-    "navGridCell": 20,
+    "navGridCell": 10,
     "image": "dist/map.png",
     "imageSize": [
       1536,

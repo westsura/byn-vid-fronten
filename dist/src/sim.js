@@ -1,6 +1,6 @@
 // Battle simulation: squads, orders, movement, combat, morale and mission end.
 // No DOM access here — the UI listens to events emitted through `hooks`.
-import { STEP, MISSION_TIME, HOLD_TIME } from './config.js';
+import { MISSION_TIME, HOLD_TIME } from './config.js';
 import { objective, startingSquads } from './scenario.js';
 import { random, seedRandom } from './rng.js';
 import { dist, buildingAt, blocked, canWalk, coverAt, los } from './terrain.js';
@@ -67,6 +67,9 @@ function makeSquad({ name, x, y, side }, id) {
       role: i === 0 ? 'leader' : 'rifleman',
       coverPoint: null,
       coverTimer: 0,
+      route: null,
+      routeGoal: null,
+      stuck: 0,
     })),
   };
 }
@@ -113,8 +116,8 @@ export function issue(x, y) {
   y = Math.max(10, Math.min(790, y));
   const house = buildingAt(x, y);
   if (house) {
-    x = Math.floor(house.midX / STEP) * STEP + 10;
-    y = Math.floor(house.midY / STEP) * STEP + 10;
+    x = house.midX;
+    y = house.midY;
   }
   const path = pathTo(s, x, y);
   if (!path) {
@@ -262,17 +265,70 @@ function soldierTarget(s, m, i) {
     tx = m.coverPoint.x;
     ty = m.coverPoint.y;
   } else m.coverPoint = null;
-  if (!canWalk(m, { x: tx, y: ty })) {
-    const detour = pathTo(m, tx, ty);
-    if (detour?.length) {
-      tx = detour[0].x;
-      ty = detour[0].y;
-    }
-  }
   return { tx, ty };
 }
 
+// Individual route following. A soldier walks straight at its target when it can;
+// otherwise it follows its own planned route. Routes are cached and re-planned only
+// when the target has moved, the route is no longer walkable, or the soldier is
+// stuck. At most REPLAN_BUDGET plans are made per update to bound the cost.
+const REPLAN_BUDGET = 8;
+let replansLeft = REPLAN_BUDGET;
+
+function steer(m, tx, ty) {
+  const goal = { x: tx, y: ty };
+  if (canWalk(m, goal)) {
+    m.route = null;
+    return goal;
+  }
+  while (m.route?.length > 1 && dist(m, m.route[0]) < 1.5) m.route.shift();
+  const stale =
+    !m.route?.length ||
+    dist(m.routeGoal, goal) > 15 ||
+    m.stuck > 0.6 ||
+    !canWalk(m, m.route[0]);
+  if (stale && replansLeft > 0) {
+    replansLeft--;
+    m.route = pathTo(m, tx, ty);
+    m.routeGoal = goal;
+    m.stuck = 0;
+  }
+  if (!m.route?.length || !canWalk(m, m.route[0])) return null; // wait for a plan next update
+  return m.route[0];
+}
+
+// Soldiers of one squad keep a small distance so they never stack on one spot.
+// Returns a push per soldier; it is folded into that soldier's single move per
+// update, so every movement stays one straight, wall-checked segment.
+const SPACING = 9;
+function separation(s) {
+  const push = s.men.map(() => ({ x: 0, y: 0 }));
+  for (let a = 0; a < s.men.length; a++)
+    for (let b = a + 1; b < s.men.length; b++) {
+      const p = s.men[a];
+      const q = s.men[b];
+      if (p.hp <= 0 || q.hp <= 0) continue;
+      let dx = q.x - p.x;
+      let dy = q.y - p.y;
+      let d = Math.hypot(dx, dy);
+      if (d >= SPACING) continue;
+      if (d < 0.01) {
+        // identical positions: split along a fixed, deterministic axis
+        dx = Math.cos(b * 2.4);
+        dy = Math.sin(b * 2.4);
+        d = 1;
+      }
+      const k = (SPACING - d) / 4 / d;
+      push[a].x -= dx * k;
+      push[a].y -= dy * k;
+      push[b].x += dx * k;
+      push[b].y += dy * k;
+    }
+  return push;
+}
+
 function moveSoldiers(s, dt) {
+  const push = separation(s);
   for (let i = 0; i < s.men.length; i++) {
     const m = s.men[i];
     if (m.hp <= 0) continue;
@@ -280,20 +336,31 @@ function moveSoldiers(s, dt) {
     m.aim = Math.max(0, m.aim - dt);
     m.coverTimer -= dt;
     const { tx, ty } = soldierTarget(s, m, i);
-    const dx = tx - m.x;
-    const dy = ty - m.y;
-    const d = Math.hypot(dx, dy);
-    m.moving = d > 0.8;
-    if (!m.moving) continue;
-    if (!m.aim) m.angle = Math.atan2(dy, dx);
-    const step = Math.min(d, (soldierPose(m, s) === 'prone' ? 16 : 36) * dt);
-    const nx = m.x + (dx / d) * step;
-    const ny = m.y + (dy / d) * step;
-    if (!blocked(nx, ny) && canWalk(m, { x: nx, y: ny })) {
-      m.x = nx;
-      m.y = ny;
-      m.stride += step * 0.42;
+    const next = Math.hypot(tx - m.x, ty - m.y) > 0.8 ? steer(m, tx, ty) : null;
+    let mx = 0;
+    let my = 0;
+    m.moving = false;
+    if (next) {
+      const dx = next.x - m.x;
+      const dy = next.y - m.y;
+      const d = Math.hypot(dx, dy);
+      if (d > 0.8) {
+        m.moving = true;
+        if (!m.aim) m.angle = Math.atan2(dy, dx);
+        const step = Math.min(d, (soldierPose(m, s) === 'prone' ? 16 : 36) * dt);
+        mx = (dx / d) * step;
+        my = (dy / d) * step;
+      }
     }
+    // One straight move per update: try path step + spacing, then each alone.
+    const tries = [[mx + push[i].x, my + push[i].y], [mx, my], [push[i].x, push[i].y]];
+    const ok = tries.find(([x, y]) => (x || y) && canWalk(m, { x: m.x + x, y: m.y + y }));
+    if (ok) {
+      m.x += ok[0];
+      m.y += ok[1];
+      if (m.moving) m.stride += Math.hypot(mx, my) * 0.42;
+    }
+    if (m.moving) m.stuck = ok && ok !== tries[2] ? Math.max(0, m.stuck - dt) : m.stuck + dt;
   }
 }
 
@@ -342,7 +409,15 @@ function updateObjective(dt) {
   else if (state.elapsed >= MISSION_TIME) finish(false, 'Tiden tog slut innan målet säkrades.');
 }
 
+// Advance the battle unless it is paused or over. The frame loop calls this.
+export function step(dt) {
+  if (state.paused || state.ended) return false;
+  update(dt);
+  return true;
+}
+
 export function update(dt) {
+  replansLeft = REPLAN_BUDGET;
   state.elapsed += dt;
   state.effects = state.effects.filter((e) => (e.life -= dt) > 0);
   for (const s of state.squads) {

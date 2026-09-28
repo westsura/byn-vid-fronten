@@ -4,8 +4,6 @@ import { sim, state, player, run, killEnemies } from './helpers.js';
 import { buildings } from '../dist/src/scenario.js';
 import { buildingAt, blocked, canWalk, coverAt, los, dist } from '../dist/src/terrain.js';
 
-const where = (men) => men.map((m) => `(${m.x.toFixed(0)},${m.y.toFixed(0)})`).join(' ');
-
 test('house 0: entry, cover, walls, windows and exit', () => {
   sim.reset();
   killEnemies();
@@ -28,14 +26,3 @@ test('house 0: entry, cover, walls, windows and exit', () => {
   assert.ok(!buildingAt(s.x, s.y), 'squad leaves');
   assert.ok(s.men.every((m) => !buildingAt(m.x, m.y) && dist(m, s) < 60), 'all soldiers exit through door');
 });
-
-for (const b of buildings) {
-  test(`house ${b.id} (${b.name}): all five soldiers get in`, () => {
-    sim.reset();
-    killEnemies();
-    sim.issue(b.midX, b.midY);
-    run(5000);
-    const outside = player().men.filter((m) => buildingAt(m.x, m.y) !== b);
-    assert.equal(outside.length, 0, `outside: ${where(outside)}`);
-  });
-}

@@ -50,7 +50,7 @@ Markeringar i texten:
 | Koordinatsystem | Origo uppe till vänster, x ökar österut (höger), y ökar söderut (nedåt) |
 | Kartans logiska storlek | 1200 × 800 spelenheter |
 | Skala (konvention) | 1 spelenhet ≈ 0,1 m, så kartan är ungefär 120 × 80 m |
-| Navigationsrutnät | 20 × 20 enheter per ruta (60 × 40 rutor) |
+| Navigationsrutnät | 10 × 10 enheter per ruta (120 × 80 rutor) |
 | Vinklar | Radianer. 0 = öster, π/2 = söder (medurs i bild, eftersom y går nedåt) |
 
 **Storlek på objekt i spelvärlden**
