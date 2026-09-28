@@ -3,7 +3,8 @@
   "private": true,
   "description": "Taktiskt infanterispel i webbläsaren, sett ovanifrån.",
   "scripts": {
-    "test": "node tests/simulation.cjs",
+    "test": "node --test tests/*.test.js",
     "start": "npx --yes serve dist -l 8080"
-  }
+  },
+  "type": "module"
 }

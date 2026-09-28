@@ -1,0 +1,38 @@
+// Synthesised gunfire. Off by default; the AudioContext is created on first user action.
+let enabled = false;
+let audio = null;
+
+export const soundEnabled = () => enabled;
+
+export function setSound(on) {
+  enabled = on;
+  if (on) {
+    audio ??= new (window.AudioContext || window.webkitAudioContext)();
+    audio.resume();
+  }
+}
+
+export function resumeAudio() {
+  audio?.resume();
+}
+
+export function fireSound(x) {
+  if (!enabled) return;
+  try {
+    audio ??= new (window.AudioContext || window.webkitAudioContext)();
+    const len = audio.sampleRate * 0.08;
+    const buffer = audio.createBuffer(1, len, audio.sampleRate);
+    const v = buffer.getChannelData(0);
+    for (let i = 0; i < v.length; i++) v[i] = (Math.random() * 2 - 1) * Math.exp(-i / (v.length * 0.12));
+    const src = audio.createBufferSource();
+    const gain = audio.createGain();
+    const pan = audio.createStereoPanner();
+    src.buffer = buffer;
+    gain.gain.value = 0.13;
+    pan.pan.value = Math.max(-1, Math.min(1, (x - 600) / 600));
+    src.connect(gain).connect(pan).connect(audio.destination);
+    src.start(audio.currentTime);
+  } catch {
+    enabled = false;
+  }
+}
