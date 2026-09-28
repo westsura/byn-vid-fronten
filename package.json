@@ -1,0 +1,9 @@
+{
+  "name": "byn-vid-fronten",
+  "private": true,
+  "description": "Taktiskt infanterispel i webbläsaren, sett ovanifrån.",
+  "scripts": {
+    "test": "node tests/simulation.cjs",
+    "start": "npx --yes serve dist -l 8080"
+  }
+}
