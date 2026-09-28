@@ -1,0 +1,644 @@
+{
+  "version": 1,
+  "generatedFrom": "dist/src/scenario.js + dist/src/terrain.js",
+  "units": "world units; 1 unit ≈ 0.1 m; origin top-left, x → east, y → south",
+  "map": {
+    "width": 1200,
+    "height": 800,
+    "navGridCell": 20,
+    "image": "dist/map.png",
+    "imageSize": [
+      1536,
+      1024
+    ],
+    "imagePxPerUnit": 1.28
+  },
+  "wallBand": {
+    "inside": 6,
+    "outside": 3
+  },
+  "objective": {
+    "x": 755,
+    "y": 290,
+    "radius": 68,
+    "enemyRadius": 100
+  },
+  "woods": [
+    {
+      "x": 160,
+      "y": 200,
+      "r": 130,
+      "cover": 0.55,
+      "blocksSight": false,
+      "affectsSpeed": false
+    },
+    {
+      "x": 220,
+      "y": 515,
+      "r": 120,
+      "cover": 0.55,
+      "blocksSight": false,
+      "affectsSpeed": false
+    },
+    {
+      "x": 625,
+      "y": 95,
+      "r": 65,
+      "cover": 0.55,
+      "blocksSight": false,
+      "affectsSpeed": false
+    },
+    {
+      "x": 610,
+      "y": 610,
+      "r": 60,
+      "cover": 0.55,
+      "blocksSight": false,
+      "affectsSpeed": false
+    },
+    {
+      "x": 1110,
+      "y": 80,
+      "r": 70,
+      "cover": 0.55,
+      "blocksSight": false,
+      "affectsSpeed": false
+    },
+    {
+      "x": 925,
+      "y": 590,
+      "r": 60,
+      "cover": 0.55,
+      "blocksSight": false,
+      "affectsSpeed": false
+    }
+  ],
+  "startingSquads": [
+    {
+      "name": "Alfa",
+      "x": 130,
+      "y": 250,
+      "side": 0
+    },
+    {
+      "name": "Bravo",
+      "x": 115,
+      "y": 415,
+      "side": 0
+    },
+    {
+      "name": "Charlie",
+      "x": 145,
+      "y": 600,
+      "side": 0
+    },
+    {
+      "name": "Nord",
+      "x": 865,
+      "y": 335,
+      "side": 1
+    },
+    {
+      "name": "Öst",
+      "x": 1060,
+      "y": 430,
+      "side": 1
+    },
+    {
+      "name": "Syd",
+      "x": 875,
+      "y": 670,
+      "side": 1
+    }
+  ],
+  "buildings": [
+    {
+      "id": 0,
+      "name": "Västra huset",
+      "footprint": {
+        "x": 444,
+        "y": 120,
+        "w": 115,
+        "h": 99
+      },
+      "interiorCover": 0.78,
+      "doors": [
+        {
+          "wall": "south",
+          "from": 491,
+          "to": 529,
+          "y": 219,
+          "passes": [
+            "movement",
+            "sight",
+            "fire"
+          ]
+        }
+      ],
+      "windows": [
+        {
+          "wall": "north",
+          "from": 485.5,
+          "to": 517.5,
+          "y": 120,
+          "passes": [
+            "sight",
+            "fire"
+          ]
+        },
+        {
+          "wall": "south",
+          "from": 485.5,
+          "to": 517.5,
+          "y": 219,
+          "passes": [
+            "sight",
+            "fire"
+          ]
+        },
+        {
+          "wall": "west",
+          "from": 153.5,
+          "to": 185.5,
+          "x": 444,
+          "passes": [
+            "sight",
+            "fire"
+          ]
+        },
+        {
+          "wall": "east",
+          "from": 153.5,
+          "to": 185.5,
+          "x": 559,
+          "passes": [
+            "sight",
+            "fire"
+          ]
+        }
+      ],
+      "interiorSlots": [
+        {
+          "x": 501.5,
+          "y": 136
+        },
+        {
+          "x": 460,
+          "y": 169.5
+        },
+        {
+          "x": 543,
+          "y": 169.5
+        },
+        {
+          "x": 501.5,
+          "y": 202
+        },
+        {
+          "x": 486.5,
+          "y": 181.5
+        }
+      ]
+    },
+    {
+      "id": 1,
+      "name": "Gårdshuset",
+      "footprint": {
+        "x": 689,
+        "y": 145,
+        "w": 134,
+        "h": 102
+      },
+      "interiorCover": 0.78,
+      "doors": [
+        {
+          "wall": "south",
+          "from": 731,
+          "to": 769,
+          "y": 247,
+          "passes": [
+            "movement",
+            "sight",
+            "fire"
+          ]
+        }
+      ],
+      "windows": [
+        {
+          "wall": "north",
+          "from": 740,
+          "to": 772,
+          "y": 145,
+          "passes": [
+            "sight",
+            "fire"
+          ]
+        },
+        {
+          "wall": "south",
+          "from": 740,
+          "to": 772,
+          "y": 247,
+          "passes": [
+            "sight",
+            "fire"
+          ]
+        },
+        {
+          "wall": "west",
+          "from": 180,
+          "to": 212,
+          "x": 689,
+          "passes": [
+            "sight",
+            "fire"
+          ]
+        },
+        {
+          "wall": "east",
+          "from": 180,
+          "to": 212,
+          "x": 823,
+          "passes": [
+            "sight",
+            "fire"
+          ]
+        }
+      ],
+      "interiorSlots": [
+        {
+          "x": 756,
+          "y": 161
+        },
+        {
+          "x": 705,
+          "y": 196
+        },
+        {
+          "x": 807,
+          "y": 196
+        },
+        {
+          "x": 756,
+          "y": 230
+        },
+        {
+          "x": 741,
+          "y": 208
+        }
+      ]
+    },
+    {
+      "id": 2,
+      "name": "Östra huset",
+      "footprint": {
+        "x": 965,
+        "y": 170,
+        "w": 107,
+        "h": 89
+      },
+      "interiorCover": 0.78,
+      "doors": [
+        {
+          "wall": "south",
+          "from": 991,
+          "to": 1029,
+          "y": 259,
+          "passes": [
+            "movement",
+            "sight",
+            "fire"
+          ]
+        }
+      ],
+      "windows": [
+        {
+          "wall": "north",
+          "from": 1002.5,
+          "to": 1034.5,
+          "y": 170,
+          "passes": [
+            "sight",
+            "fire"
+          ]
+        },
+        {
+          "wall": "south",
+          "from": 1002.5,
+          "to": 1034.5,
+          "y": 259,
+          "passes": [
+            "sight",
+            "fire"
+          ]
+        },
+        {
+          "wall": "west",
+          "from": 198.5,
+          "to": 230.5,
+          "x": 965,
+          "passes": [
+            "sight",
+            "fire"
+          ]
+        },
+        {
+          "wall": "east",
+          "from": 198.5,
+          "to": 230.5,
+          "x": 1072,
+          "passes": [
+            "sight",
+            "fire"
+          ]
+        }
+      ],
+      "interiorSlots": [
+        {
+          "x": 1018.5,
+          "y": 186
+        },
+        {
+          "x": 981,
+          "y": 214.5
+        },
+        {
+          "x": 1056,
+          "y": 214.5
+        },
+        {
+          "x": 1018.5,
+          "y": 242
+        },
+        {
+          "x": 1003.5,
+          "y": 226.5
+        }
+      ]
+    },
+    {
+      "id": 3,
+      "name": "Ladan",
+      "footprint": {
+        "x": 485,
+        "y": 426,
+        "w": 133,
+        "h": 89
+      },
+      "interiorCover": 0.78,
+      "doors": [
+        {
+          "wall": "south",
+          "from": 531,
+          "to": 569,
+          "y": 515,
+          "passes": [
+            "movement",
+            "sight",
+            "fire"
+          ]
+        }
+      ],
+      "windows": [
+        {
+          "wall": "north",
+          "from": 535.5,
+          "to": 567.5,
+          "y": 426,
+          "passes": [
+            "sight",
+            "fire"
+          ]
+        },
+        {
+          "wall": "south",
+          "from": 535.5,
+          "to": 567.5,
+          "y": 515,
+          "passes": [
+            "sight",
+            "fire"
+          ]
+        },
+        {
+          "wall": "west",
+          "from": 454.5,
+          "to": 486.5,
+          "x": 485,
+          "passes": [
+            "sight",
+            "fire"
+          ]
+        },
+        {
+          "wall": "east",
+          "from": 454.5,
+          "to": 486.5,
+          "x": 618,
+          "passes": [
+            "sight",
+            "fire"
+          ]
+        }
+      ],
+      "interiorSlots": [
+        {
+          "x": 551.5,
+          "y": 442
+        },
+        {
+          "x": 501,
+          "y": 470.5
+        },
+        {
+          "x": 602,
+          "y": 470.5
+        },
+        {
+          "x": 551.5,
+          "y": 498
+        },
+        {
+          "x": 536.5,
+          "y": 482.5
+        }
+      ]
+    },
+    {
+      "id": 4,
+      "name": "Södra huset",
+      "footprint": {
+        "x": 759,
+        "y": 428,
+        "w": 123,
+        "h": 97
+      },
+      "interiorCover": 0.78,
+      "doors": [
+        {
+          "wall": "south",
+          "from": 811,
+          "to": 849,
+          "y": 525,
+          "passes": [
+            "movement",
+            "sight",
+            "fire"
+          ]
+        }
+      ],
+      "windows": [
+        {
+          "wall": "north",
+          "from": 804.5,
+          "to": 836.5,
+          "y": 428,
+          "passes": [
+            "sight",
+            "fire"
+          ]
+        },
+        {
+          "wall": "south",
+          "from": 804.5,
+          "to": 836.5,
+          "y": 525,
+          "passes": [
+            "sight",
+            "fire"
+          ]
+        },
+        {
+          "wall": "west",
+          "from": 460.5,
+          "to": 492.5,
+          "x": 759,
+          "passes": [
+            "sight",
+            "fire"
+          ]
+        },
+        {
+          "wall": "east",
+          "from": 460.5,
+          "to": 492.5,
+          "x": 882,
+          "passes": [
+            "sight",
+            "fire"
+          ]
+        }
+      ],
+      "interiorSlots": [
+        {
+          "x": 820.5,
+          "y": 444
+        },
+        {
+          "x": 775,
+          "y": 476.5
+        },
+        {
+          "x": 866,
+          "y": 476.5
+        },
+        {
+          "x": 820.5,
+          "y": 508
+        },
+        {
+          "x": 805.5,
+          "y": 488.5
+        }
+      ]
+    },
+    {
+      "id": 5,
+      "name": "Magasinet",
+      "footprint": {
+        "x": 983,
+        "y": 443,
+        "w": 104,
+        "h": 115
+      },
+      "interiorCover": 0.78,
+      "doors": [
+        {
+          "wall": "south",
+          "from": 1011,
+          "to": 1049,
+          "y": 558,
+          "passes": [
+            "movement",
+            "sight",
+            "fire"
+          ]
+        }
+      ],
+      "windows": [
+        {
+          "wall": "north",
+          "from": 1019,
+          "to": 1051,
+          "y": 443,
+          "passes": [
+            "sight",
+            "fire"
+          ]
+        },
+        {
+          "wall": "south",
+          "from": 1019,
+          "to": 1051,
+          "y": 558,
+          "passes": [
+            "sight",
+            "fire"
+          ]
+        },
+        {
+          "wall": "west",
+          "from": 484.5,
+          "to": 516.5,
+          "x": 983,
+          "passes": [
+            "sight",
+            "fire"
+          ]
+        },
+        {
+          "wall": "east",
+          "from": 484.5,
+          "to": 516.5,
+          "x": 1087,
+          "passes": [
+            "sight",
+            "fire"
+          ]
+        }
+      ],
+      "interiorSlots": [
+        {
+          "x": 1035,
+          "y": 459
+        },
+        {
+          "x": 999,
+          "y": 500.5
+        },
+        {
+          "x": 1071,
+          "y": 500.5
+        },
+        {
+          "x": 1035,
+          "y": 541
+        },
+        {
+          "x": 1020,
+          "y": 512.5
+        }
+      ]
+    }
+  ]
+}
