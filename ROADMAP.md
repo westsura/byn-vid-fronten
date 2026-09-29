@@ -20,7 +20,7 @@ Status per fas. **Klart** betyder implementerat och verifierat (automatiskt test
 - [x] Soldatanimationerna är bevarade.
 - [ ] Gränssnittets texter granskas mot det faktiska beteendet.
 - [x] En hel strid genomspelad skriptat i Chromium: order via klick, vinst efter 1:36, resultatskärm och omstart utan konsolfel.
-- [ ] Manuell provspelning av Björn.
+- [x] Manuell provspelning av Björn (2026-09-29): in- och utpassering fungerade.
 - [ ] Balans: vinsten räknas i dag trots att två fiendegrupper finns strax utanför målområdet (hör till fas C).
 
 **Byggnadsfelet, orsak och rättning**
