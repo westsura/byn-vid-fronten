@@ -1,0 +1,187 @@
+{
+  "package": "REQUEST_001",
+  "version": 1,
+  "status": "ready-for-integration-review",
+  "assets": [
+    {
+      "id": "soldier-rifleman",
+      "file": "soldier-rifleman-v1.svg",
+      "kind": "svg",
+      "viewBox": [
+        -18,
+        -12,
+        48,
+        24
+      ],
+      "origin": [
+        0,
+        0
+      ],
+      "layer": "units",
+      "states": [
+        "ready",
+        "walk-a",
+        "walk-b",
+        "prone",
+        "crawl-a",
+        "crawl-b",
+        "fire",
+        "fallen"
+      ],
+      "concept": false
+    },
+    {
+      "id": "soldier-rifleman-enemy",
+      "file": "soldier-rifleman-enemy-v1.svg",
+      "kind": "svg",
+      "viewBox": [
+        -18,
+        -12,
+        48,
+        24
+      ],
+      "origin": [
+        0,
+        0
+      ],
+      "layer": "units",
+      "states": [
+        "ready",
+        "walk-a",
+        "walk-b",
+        "prone",
+        "crawl-a",
+        "crawl-b",
+        "fire",
+        "fallen"
+      ],
+      "concept": false
+    },
+    {
+      "id": "house0-interior",
+      "file": "bldg-house0-interior-v1.png",
+      "kind": "raster",
+      "pixelSize": [
+        524,
+        460
+      ],
+      "pxPerUnit": 4,
+      "anchor": {
+        "pixel": [
+          0,
+          0
+        ],
+        "world": [
+          436,
+          112
+        ]
+      },
+      "worldSize": [
+        131,
+        115
+      ],
+      "layer": "interior",
+      "states": null,
+      "concept": false
+    },
+    {
+      "id": "house0-roof",
+      "file": "bldg-house0-roof-v1.png",
+      "kind": "raster",
+      "pixelSize": [
+        524,
+        460
+      ],
+      "pxPerUnit": 4,
+      "anchor": {
+        "pixel": [
+          0,
+          0
+        ],
+        "world": [
+          436,
+          112
+        ]
+      },
+      "worldSize": [
+        131,
+        115
+      ],
+      "layer": "roof",
+      "states": null,
+      "concept": false
+    },
+    {
+      "id": "concept-soldier-sheet-native-v1",
+      "file": "concept-soldier-sheet-native-v1.png",
+      "kind": "raster",
+      "concept": true,
+      "pixelSize": [
+        1000,
+        670
+      ]
+    },
+    {
+      "id": "ui-icons-v1",
+      "file": "ui-icons-v1.svg",
+      "kind": "svg",
+      "concept": false
+    },
+    {
+      "id": "concept-house0-geometry-check-v1",
+      "file": "concept-house0-geometry-check-v1.png",
+      "kind": "raster",
+      "concept": true,
+      "pixelSize": [
+        524,
+        460
+      ]
+    },
+    {
+      "id": "ui-squad-card-v1",
+      "file": "ui-squad-card-v1.html",
+      "kind": "html",
+      "concept": false
+    },
+    {
+      "id": "overview",
+      "file": "overview.png",
+      "kind": "raster",
+      "concept": true,
+      "pixelSize": [
+        1700,
+        1250
+      ]
+    },
+    {
+      "id": "concept-soldier-sheet-v1",
+      "file": "concept-soldier-sheet-v1.png",
+      "kind": "raster",
+      "concept": true,
+      "pixelSize": [
+        1700,
+        1120
+      ]
+    },
+    {
+      "id": "ui-squad-card-v1",
+      "file": "ui-squad-card-v1.png",
+      "kind": "raster",
+      "concept": true,
+      "pixelSize": [
+        514,
+        548
+      ]
+    },
+    {
+      "id": "concept-house0-overview-v1",
+      "file": "concept-house0-overview-v1.png",
+      "kind": "raster",
+      "concept": true,
+      "pixelSize": [
+        1640,
+        620
+      ]
+    }
+  ]
+}
