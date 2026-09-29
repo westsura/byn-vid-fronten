@@ -3,7 +3,7 @@
 import { MISSION_TIME, HOLD_TIME } from './config.js';
 import { objective, startingSquads } from './scenario.js';
 import { random, seedRandom } from './rng.js';
-import { dist, buildingAt, blocked, canWalk, coverAt, los } from './terrain.js';
+import { dist, buildingAt, blocked, canWalk, coverAt, los, interiorSlots } from './terrain.js';
 import { pathTo } from './nav.js';
 
 export const state = {
@@ -42,9 +42,35 @@ function addLog(text) {
   state.logs = state.logs.slice(0, 5);
 }
 
+// ---- Forces ------------------------------------------------------------------
+// A force describes one side's squad organisation. The standard force is the
+// original five-man rifle squad; prototype forces (e.g. the infantry-v1 art test)
+// supply their own soldier lists with role, weapon and sub-unit.
+const STANDARD_SQUAD = Array.from({ length: 5 }, (_, i) => ({
+  role: i === 0 ? 'leader' : 'rifleman',
+  weapon: 'rifle',
+}));
+export const standardForces = { id: 'standard', player: { soldiers: STANDARD_SQUAD }, enemy: { soldiers: STANDARD_SQUAD } };
+let forces = standardForces;
+
+export function setForces(f) {
+  forces = f || standardForces;
+}
+export const currentForces = () => forces;
+
+// Formation offsets for n soldiers: rows of 3 (n <= 6) or 4, spacing 20 × 23.
+// For n = 5 this is exactly the original layout.
+export function formationOffset(i, n) {
+  const cols = n <= 6 ? 3 : 4;
+  const rows = Math.ceil(n / cols);
+  return { x: ((i % cols) - (cols - 1) / 2) * 20, y: (Math.floor(i / cols) - (rows - 1) / 2) * 23 };
+}
+
 function makeSquad({ name, x, y, side }, id) {
+  const roster = (side ? forces.enemy : forces.player).soldiers;
   return {
     id, name, x, y, side,
+    faction: (side ? forces.enemy : forces.player).faction ?? null,
     morale: 100,
     ammo: 150,
     order: 'Avvaktar',
@@ -54,23 +80,29 @@ function makeSquad({ name, x, y, side }, id) {
     lastAI: 0,
     underFire: 0,
     routed: false,
-    men: Array.from({ length: 5 }, (_, i) => ({
-      x: x + ((i % 3) - 1) * 20,
-      y: y + (Math.floor(i / 3) - 0.5) * 23,
-      hp: 100,
-      angle: side ? Math.PI : 0,
-      phase: i * 1.73,
-      stride: 0,
-      moving: false,
-      flash: 0,
-      aim: 0,
-      role: i === 0 ? 'leader' : 'rifleman',
-      coverPoint: null,
-      coverTimer: 0,
-      route: null,
-      routeGoal: null,
-      stuck: 0,
-    })),
+    men: roster.map((def, i) => {
+      const o = formationOffset(i, roster.length);
+      return {
+        x: x + o.x,
+        y: y + o.y,
+        hp: 100,
+        angle: side ? Math.PI : 0,
+        phase: i * 1.73,
+        stride: 0,
+        moving: false,
+        flash: 0,
+        aim: 0,
+        role: def.role,
+        weapon: def.weapon,
+        spriteRole: def.spriteRole ?? null,
+        title: def.title ?? null,
+        coverPoint: null,
+        coverTimer: 0,
+        route: null,
+        routeGoal: null,
+        stuck: 0,
+      };
+    }),
   };
 }
 
@@ -166,7 +198,8 @@ function finish(win, reason) {
   state.paused = true;
   const left = playerSquads().reduce((n, s) => n + alive(s).length, 0);
   addLog(win ? 'Uppdraget är slutfört.' : 'Striden avslutad.');
-  hooks.finished(win, reason + ' ' + left + ' av 15 egna soldater kvar.');
+  const total = playerSquads().reduce((n, s) => n + s.men.length, 0);
+  hooks.finished(win, reason + ' ' + left + ' av ' + total + ' egna soldater kvar.');
   hooks.changed();
 }
 
@@ -227,19 +260,16 @@ function moveSquad(s, dt) {
 }
 
 function soldierTarget(s, m, i) {
-  let tx = s.x + ((i % 3) - 1) * 20;
-  let ty = s.y + (Math.floor(i / 3) - 0.5) * 23;
+  const o = formationOffset(i, s.men.length);
+  let tx = s.x + o.x;
+  let ty = s.y + o.y;
   const home = buildingAt(s.x, s.y);
   if (home && !s.path.length) {
-    const slots = [
-      { x: home.midX, y: home.y + 16 },
-      { x: home.x + 16, y: home.midY },
-      { x: home.x + home.w - 16, y: home.midY },
-      { x: home.midX, y: home.y + home.h - 17 },
-      { x: home.midX - 15, y: home.midY + 12 },
-    ];
-    tx = slots[i].x;
-    ty = slots[i].y;
+    const slot = interiorSlots(home)[i];
+    if (slot) {
+      tx = slot.x;
+      ty = slot.y;
+    }
   }
   if (blocked(tx, ty) || !canWalk(s, { x: tx, y: ty })) {
     tx = s.x;

@@ -1,0 +1,1616 @@
+{
+  "version": 1,
+  "status": "integration-prototype-not-production-approved",
+  "states": [
+    "ready",
+    "walk-a",
+    "walk-b",
+    "prone",
+    "crawl-a",
+    "crawl-b",
+    "fire",
+    "fallen"
+  ],
+  "atlases": {
+    "german": {
+      "file": "german-atlas.png",
+      "pixelSize": [
+        1448,
+        1086
+      ],
+      "roles": [
+        "Gruppenführer",
+        "MG-Schütze",
+        "Assistent-MG-Schütze",
+        "Munitionsträger",
+        "Stellvertreter Gruppenführer",
+        "Schütze"
+      ],
+      "frames": [
+        {
+          "role": 0,
+          "state": "ready",
+          "rect": [
+            32,
+            28,
+            132,
+            138
+          ],
+          "pivot": [
+            56.76,
+            63.48
+          ],
+          "review": "visual-review-required",
+          "pixelsPerUnit": 5.6667
+        },
+        {
+          "role": 0,
+          "state": "walk-a",
+          "rect": [
+            187,
+            29,
+            108,
+            148
+          ],
+          "pivot": [
+            46.44,
+            68.08
+          ],
+          "review": "redraw-required",
+          "pixelsPerUnit": 5.6667
+        },
+        {
+          "role": 0,
+          "state": "walk-b",
+          "rect": [
+            322,
+            18,
+            107,
+            146
+          ],
+          "pivot": [
+            46.01,
+            67.16
+          ],
+          "review": "redraw-required",
+          "pixelsPerUnit": 5.6667
+        },
+        {
+          "role": 0,
+          "state": "prone",
+          "rect": [
+            446,
+            62,
+            242,
+            89
+          ],
+          "pivot": [
+            145.2,
+            42.72
+          ],
+          "review": "visual-review-required",
+          "pixelsPerUnit": 5.6667
+        },
+        {
+          "role": 0,
+          "state": "crawl-a",
+          "rect": [
+            700,
+            53,
+            170,
+            100
+          ],
+          "pivot": [
+            90.1,
+            48.0
+          ],
+          "review": "redraw-required",
+          "pixelsPerUnit": 5.6667
+        },
+        {
+          "role": 0,
+          "state": "crawl-b",
+          "rect": [
+            865,
+            62,
+            191,
+            93
+          ],
+          "pivot": [
+            101.23,
+            44.64
+          ],
+          "review": "redraw-required",
+          "pixelsPerUnit": 5.6667
+        },
+        {
+          "role": 0,
+          "state": "fire",
+          "rect": [
+            1065,
+            60,
+            196,
+            95
+          ],
+          "pivot": [
+            117.6,
+            45.6
+          ],
+          "review": "visual-review-required",
+          "pixelsPerUnit": 5.6667
+        },
+        {
+          "role": 0,
+          "state": "fallen",
+          "rect": [
+            1271,
+            37,
+            168,
+            138
+          ],
+          "pivot": [
+            89.04,
+            66.24
+          ],
+          "review": "visual-review-required",
+          "pixelsPerUnit": 5.6667
+        },
+        {
+          "role": 1,
+          "state": "ready",
+          "rect": [
+            31,
+            193,
+            134,
+            136
+          ],
+          "pivot": [
+            57.62,
+            62.56
+          ],
+          "review": "visual-review-required",
+          "pixelsPerUnit": 5.5833
+        },
+        {
+          "role": 1,
+          "state": "walk-a",
+          "rect": [
+            177,
+            204,
+            111,
+            141
+          ],
+          "pivot": [
+            47.73,
+            64.86
+          ],
+          "review": "redraw-required",
+          "pixelsPerUnit": 5.5833
+        },
+        {
+          "role": 1,
+          "state": "walk-b",
+          "rect": [
+            325,
+            193,
+            112,
+            147
+          ],
+          "pivot": [
+            48.16,
+            67.62
+          ],
+          "review": "redraw-required",
+          "pixelsPerUnit": 5.5833
+        },
+        {
+          "role": 1,
+          "state": "prone",
+          "rect": [
+            443,
+            230,
+            254,
+            106
+          ],
+          "pivot": [
+            152.4,
+            50.88
+          ],
+          "review": "visual-review-required",
+          "pixelsPerUnit": 5.5833
+        },
+        {
+          "role": 1,
+          "state": "crawl-a",
+          "rect": [
+            706,
+            230,
+            160,
+            102
+          ],
+          "pivot": [
+            84.8,
+            48.96
+          ],
+          "review": "redraw-required",
+          "pixelsPerUnit": 5.5833
+        },
+        {
+          "role": 1,
+          "state": "crawl-b",
+          "rect": [
+            861,
+            231,
+            184,
+            96
+          ],
+          "pivot": [
+            97.52,
+            46.08
+          ],
+          "review": "redraw-required",
+          "pixelsPerUnit": 5.5833
+        },
+        {
+          "role": 1,
+          "state": "fire",
+          "rect": [
+            1047,
+            240,
+            215,
+            96
+          ],
+          "pivot": [
+            129.0,
+            46.08
+          ],
+          "review": "visual-review-required",
+          "pixelsPerUnit": 5.5833
+        },
+        {
+          "role": 1,
+          "state": "fallen",
+          "rect": [
+            1234,
+            211,
+            206,
+            139
+          ],
+          "pivot": [
+            109.18,
+            66.72
+          ],
+          "review": "visual-review-required",
+          "pixelsPerUnit": 5.5833
+        },
+        {
+          "role": 2,
+          "state": "ready",
+          "rect": [
+            28,
+            368,
+            108,
+            148
+          ],
+          "pivot": [
+            46.44,
+            68.08
+          ],
+          "review": "visual-review-required",
+          "pixelsPerUnit": 6.0833
+        },
+        {
+          "role": 2,
+          "state": "walk-a",
+          "rect": [
+            185,
+            369,
+            97,
+            156
+          ],
+          "pivot": [
+            41.71,
+            71.76
+          ],
+          "review": "redraw-required",
+          "pixelsPerUnit": 6.0833
+        },
+        {
+          "role": 2,
+          "state": "walk-b",
+          "rect": [
+            328,
+            369,
+            88,
+            148
+          ],
+          "pivot": [
+            37.84,
+            68.08
+          ],
+          "review": "redraw-required",
+          "pixelsPerUnit": 6.0833
+        },
+        {
+          "role": 2,
+          "state": "prone",
+          "rect": [
+            462,
+            408,
+            204,
+            89
+          ],
+          "pivot": [
+            122.4,
+            42.72
+          ],
+          "review": "visual-review-required",
+          "pixelsPerUnit": 6.0833
+        },
+        {
+          "role": 2,
+          "state": "crawl-a",
+          "rect": [
+            696,
+            407,
+            173,
+            93
+          ],
+          "pivot": [
+            91.69,
+            44.64
+          ],
+          "review": "redraw-required",
+          "pixelsPerUnit": 6.0833
+        },
+        {
+          "role": 2,
+          "state": "crawl-b",
+          "rect": [
+            877,
+            407,
+            176,
+            92
+          ],
+          "pivot": [
+            93.28,
+            44.16
+          ],
+          "review": "redraw-required",
+          "pixelsPerUnit": 6.0833
+        },
+        {
+          "role": 2,
+          "state": "fire",
+          "rect": [
+            1063,
+            417,
+            191,
+            83
+          ],
+          "pivot": [
+            114.6,
+            39.84
+          ],
+          "review": "visual-review-required",
+          "pixelsPerUnit": 6.0833
+        },
+        {
+          "role": 2,
+          "state": "fallen",
+          "rect": [
+            1268,
+            388,
+            165,
+            121
+          ],
+          "pivot": [
+            87.45,
+            58.08
+          ],
+          "review": "visual-review-required",
+          "pixelsPerUnit": 6.0833
+        },
+        {
+          "role": 3,
+          "state": "ready",
+          "rect": [
+            24,
+            542,
+            142,
+            152
+          ],
+          "pivot": [
+            61.06,
+            69.92
+          ],
+          "review": "visual-review-required",
+          "pixelsPerUnit": 6.25
+        },
+        {
+          "role": 3,
+          "state": "walk-a",
+          "rect": [
+            186,
+            549,
+            103,
+            145
+          ],
+          "pivot": [
+            44.29,
+            66.7
+          ],
+          "review": "redraw-required",
+          "pixelsPerUnit": 6.25
+        },
+        {
+          "role": 3,
+          "state": "walk-b",
+          "rect": [
+            320,
+            540,
+            117,
+            154
+          ],
+          "pivot": [
+            50.31,
+            70.84
+          ],
+          "review": "redraw-required",
+          "pixelsPerUnit": 6.25
+        },
+        {
+          "role": 3,
+          "state": "prone",
+          "rect": [
+            459,
+            578,
+            236,
+            89
+          ],
+          "pivot": [
+            141.6,
+            42.72
+          ],
+          "review": "visual-review-required",
+          "pixelsPerUnit": 6.25
+        },
+        {
+          "role": 3,
+          "state": "crawl-a",
+          "rect": [
+            712,
+            563,
+            155,
+            111
+          ],
+          "pivot": [
+            82.15,
+            53.28
+          ],
+          "review": "redraw-required",
+          "pixelsPerUnit": 6.25
+        },
+        {
+          "role": 3,
+          "state": "crawl-b",
+          "rect": [
+            875,
+            572,
+            168,
+            94
+          ],
+          "pivot": [
+            89.04,
+            45.12
+          ],
+          "review": "redraw-required",
+          "pixelsPerUnit": 6.25
+        },
+        {
+          "role": 3,
+          "state": "fire",
+          "rect": [
+            1052,
+            591,
+            218,
+            86
+          ],
+          "pivot": [
+            130.8,
+            41.28
+          ],
+          "review": "visual-review-required",
+          "pixelsPerUnit": 6.25
+        },
+        {
+          "role": 3,
+          "state": "fallen",
+          "rect": [
+            1284,
+            551,
+            153,
+            155
+          ],
+          "pivot": [
+            81.09,
+            74.4
+          ],
+          "review": "visual-review-required",
+          "pixelsPerUnit": 6.25
+        },
+        {
+          "role": 4,
+          "state": "ready",
+          "rect": [
+            30,
+            715,
+            135,
+            150
+          ],
+          "pivot": [
+            58.05,
+            69.0
+          ],
+          "review": "visual-review-required",
+          "pixelsPerUnit": 6.1667
+        },
+        {
+          "role": 4,
+          "state": "walk-a",
+          "rect": [
+            186,
+            720,
+            114,
+            152
+          ],
+          "pivot": [
+            49.02,
+            69.92
+          ],
+          "review": "redraw-required",
+          "pixelsPerUnit": 6.1667
+        },
+        {
+          "role": 4,
+          "state": "walk-b",
+          "rect": [
+            322,
+            712,
+            114,
+            154
+          ],
+          "pivot": [
+            49.02,
+            70.84
+          ],
+          "review": "redraw-required",
+          "pixelsPerUnit": 6.1667
+        },
+        {
+          "role": 4,
+          "state": "prone",
+          "rect": [
+            443,
+            754,
+            249,
+            89
+          ],
+          "pivot": [
+            149.4,
+            42.72
+          ],
+          "review": "visual-review-required",
+          "pixelsPerUnit": 6.1667
+        },
+        {
+          "role": 4,
+          "state": "crawl-a",
+          "rect": [
+            700,
+            752,
+            171,
+            98
+          ],
+          "pivot": [
+            90.63,
+            47.04
+          ],
+          "review": "redraw-required",
+          "pixelsPerUnit": 6.1667
+        },
+        {
+          "role": 4,
+          "state": "crawl-b",
+          "rect": [
+            868,
+            754,
+            199,
+            94
+          ],
+          "pivot": [
+            105.47,
+            45.12
+          ],
+          "review": "redraw-required",
+          "pixelsPerUnit": 6.1667
+        },
+        {
+          "role": 4,
+          "state": "fire",
+          "rect": [
+            1071,
+            759,
+            199,
+            90
+          ],
+          "pivot": [
+            119.4,
+            43.2
+          ],
+          "review": "visual-review-required",
+          "pixelsPerUnit": 6.1667
+        },
+        {
+          "role": 4,
+          "state": "fallen",
+          "rect": [
+            1271,
+            736,
+            167,
+            148
+          ],
+          "pivot": [
+            88.51,
+            71.04
+          ],
+          "review": "visual-review-required",
+          "pixelsPerUnit": 6.1667
+        },
+        {
+          "role": 5,
+          "state": "ready",
+          "rect": [
+            31,
+            898,
+            131,
+            149
+          ],
+          "pivot": [
+            56.33,
+            68.54
+          ],
+          "review": "visual-review-required",
+          "pixelsPerUnit": 6.125
+        },
+        {
+          "role": 5,
+          "state": "walk-a",
+          "rect": [
+            186,
+            896,
+            117,
+            160
+          ],
+          "pivot": [
+            50.31,
+            73.6
+          ],
+          "review": "redraw-required",
+          "pixelsPerUnit": 6.125
+        },
+        {
+          "role": 5,
+          "state": "walk-b",
+          "rect": [
+            324,
+            889,
+            116,
+            163
+          ],
+          "pivot": [
+            49.88,
+            74.98
+          ],
+          "review": "redraw-required",
+          "pixelsPerUnit": 6.125
+        },
+        {
+          "role": 5,
+          "state": "prone",
+          "rect": [
+            451,
+            933,
+            241,
+            94
+          ],
+          "pivot": [
+            144.6,
+            45.12
+          ],
+          "review": "visual-review-required",
+          "pixelsPerUnit": 6.125
+        },
+        {
+          "role": 5,
+          "state": "crawl-a",
+          "rect": [
+            704,
+            922,
+            173,
+            102
+          ],
+          "pivot": [
+            91.69,
+            48.96
+          ],
+          "review": "redraw-required",
+          "pixelsPerUnit": 6.125
+        },
+        {
+          "role": 5,
+          "state": "crawl-b",
+          "rect": [
+            877,
+            929,
+            186,
+            99
+          ],
+          "pivot": [
+            98.58,
+            47.52
+          ],
+          "review": "redraw-required",
+          "pixelsPerUnit": 6.125
+        },
+        {
+          "role": 5,
+          "state": "fire",
+          "rect": [
+            1068,
+            935,
+            203,
+            88
+          ],
+          "pivot": [
+            121.8,
+            42.24
+          ],
+          "review": "visual-review-required",
+          "pixelsPerUnit": 6.125
+        },
+        {
+          "role": 5,
+          "state": "fallen",
+          "rect": [
+            1278,
+            907,
+            163,
+            151
+          ],
+          "pivot": [
+            86.39,
+            72.48
+          ],
+          "review": "visual-review-required",
+          "pixelsPerUnit": 6.125
+        }
+      ],
+      "squadRoleIndices": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        5,
+        5,
+        5,
+        5
+      ]
+    },
+    "soviet": {
+      "file": "soviet-atlas.png",
+      "pixelSize": [
+        1448,
+        1086
+      ],
+      "roles": [
+        "Squad Leader",
+        "Machine Gunner",
+        "Assistant Gunner",
+        "Senior Rifleman",
+        "Rifleman · SVT-40",
+        "Rifleman · M1891/30"
+      ],
+      "frames": [
+        {
+          "role": 0,
+          "state": "ready",
+          "rect": [
+            31,
+            84,
+            113,
+            116
+          ],
+          "pivot": [
+            48.59,
+            53.36
+          ],
+          "review": "visual-review-required",
+          "pixelsPerUnit": 4.75
+        },
+        {
+          "role": 0,
+          "state": "walk-a",
+          "rect": [
+            171,
+            73,
+            80,
+            137
+          ],
+          "pivot": [
+            34.4,
+            63.02
+          ],
+          "review": "redraw-required",
+          "pixelsPerUnit": 4.75
+        },
+        {
+          "role": 0,
+          "state": "walk-b",
+          "rect": [
+            292,
+            79,
+            72,
+            131
+          ],
+          "pivot": [
+            30.96,
+            60.26
+          ],
+          "review": "redraw-required",
+          "pixelsPerUnit": 4.75
+        },
+        {
+          "role": 0,
+          "state": "prone",
+          "rect": [
+            413,
+            110,
+            240,
+            80
+          ],
+          "pivot": [
+            144.0,
+            38.4
+          ],
+          "review": "visual-review-required",
+          "pixelsPerUnit": 4.75
+        },
+        {
+          "role": 0,
+          "state": "crawl-a",
+          "rect": [
+            654,
+            98,
+            168,
+            109
+          ],
+          "pivot": [
+            89.04,
+            52.32
+          ],
+          "review": "redraw-required",
+          "pixelsPerUnit": 4.75
+        },
+        {
+          "role": 0,
+          "state": "crawl-b",
+          "rect": [
+            845,
+            113,
+            151,
+            86
+          ],
+          "pivot": [
+            80.03,
+            41.28
+          ],
+          "review": "redraw-required",
+          "pixelsPerUnit": 4.75
+        },
+        {
+          "role": 0,
+          "state": "fire",
+          "rect": [
+            1019,
+            114,
+            211,
+            77
+          ],
+          "pivot": [
+            126.6,
+            36.96
+          ],
+          "review": "visual-review-required",
+          "pixelsPerUnit": 4.75
+        },
+        {
+          "role": 0,
+          "state": "fallen",
+          "rect": [
+            1221,
+            89,
+            210,
+            118
+          ],
+          "pivot": [
+            111.3,
+            56.64
+          ],
+          "review": "visual-review-required",
+          "pixelsPerUnit": 4.75
+        },
+        {
+          "role": 1,
+          "state": "ready",
+          "rect": [
+            32,
+            231,
+            112,
+            124
+          ],
+          "pivot": [
+            48.16,
+            57.04
+          ],
+          "review": "visual-review-required",
+          "pixelsPerUnit": 5.0833
+        },
+        {
+          "role": 1,
+          "state": "walk-a",
+          "rect": [
+            174,
+            231,
+            84,
+            126
+          ],
+          "pivot": [
+            36.12,
+            57.96
+          ],
+          "review": "redraw-required",
+          "pixelsPerUnit": 5.0833
+        },
+        {
+          "role": 1,
+          "state": "walk-b",
+          "rect": [
+            295,
+            232,
+            77,
+            130
+          ],
+          "pivot": [
+            33.11,
+            59.8
+          ],
+          "review": "redraw-required",
+          "pixelsPerUnit": 5.0833
+        },
+        {
+          "role": 1,
+          "state": "prone",
+          "rect": [
+            412,
+            260,
+            258,
+            81
+          ],
+          "pivot": [
+            154.8,
+            38.88
+          ],
+          "review": "visual-review-required",
+          "pixelsPerUnit": 5.0833
+        },
+        {
+          "role": 1,
+          "state": "crawl-a",
+          "rect": [
+            672,
+            251,
+            154,
+            105
+          ],
+          "pivot": [
+            81.62,
+            50.4
+          ],
+          "review": "redraw-required",
+          "pixelsPerUnit": 5.0833
+        },
+        {
+          "role": 1,
+          "state": "crawl-b",
+          "rect": [
+            844,
+            261,
+            154,
+            93
+          ],
+          "pivot": [
+            81.62,
+            44.64
+          ],
+          "review": "redraw-required",
+          "pixelsPerUnit": 5.0833
+        },
+        {
+          "role": 1,
+          "state": "fire",
+          "rect": [
+            1024,
+            269,
+            219,
+            78
+          ],
+          "pivot": [
+            131.4,
+            37.44
+          ],
+          "review": "visual-review-required",
+          "pixelsPerUnit": 5.0833
+        },
+        {
+          "role": 1,
+          "state": "fallen",
+          "rect": [
+            1252,
+            233,
+            188,
+            134
+          ],
+          "pivot": [
+            99.64,
+            64.32
+          ],
+          "review": "visual-review-required",
+          "pixelsPerUnit": 5.0833
+        },
+        {
+          "role": 2,
+          "state": "ready",
+          "rect": [
+            34,
+            392,
+            126,
+            116
+          ],
+          "pivot": [
+            54.18,
+            53.36
+          ],
+          "review": "visual-review-required",
+          "pixelsPerUnit": 4.75
+        },
+        {
+          "role": 2,
+          "state": "walk-a",
+          "rect": [
+            176,
+            387,
+            72,
+            132
+          ],
+          "pivot": [
+            30.96,
+            60.72
+          ],
+          "review": "redraw-required",
+          "pixelsPerUnit": 4.75
+        },
+        {
+          "role": 2,
+          "state": "walk-b",
+          "rect": [
+            294,
+            382,
+            72,
+            138
+          ],
+          "pivot": [
+            30.96,
+            63.48
+          ],
+          "review": "redraw-required",
+          "pixelsPerUnit": 4.75
+        },
+        {
+          "role": 2,
+          "state": "prone",
+          "rect": [
+            411,
+            415,
+            253,
+            80
+          ],
+          "pivot": [
+            151.8,
+            38.4
+          ],
+          "review": "visual-review-required",
+          "pixelsPerUnit": 4.75
+        },
+        {
+          "role": 2,
+          "state": "crawl-a",
+          "rect": [
+            668,
+            399,
+            154,
+            111
+          ],
+          "pivot": [
+            81.62,
+            53.28
+          ],
+          "review": "redraw-required",
+          "pixelsPerUnit": 4.75
+        },
+        {
+          "role": 2,
+          "state": "crawl-b",
+          "rect": [
+            853,
+            414,
+            146,
+            96
+          ],
+          "pivot": [
+            77.38,
+            46.08
+          ],
+          "review": "redraw-required",
+          "pixelsPerUnit": 4.75
+        },
+        {
+          "role": 2,
+          "state": "fire",
+          "rect": [
+            1022,
+            422,
+            234,
+            79
+          ],
+          "pivot": [
+            140.4,
+            37.92
+          ],
+          "review": "visual-review-required",
+          "pixelsPerUnit": 4.75
+        },
+        {
+          "role": 2,
+          "state": "fallen",
+          "rect": [
+            1239,
+            394,
+            186,
+            134
+          ],
+          "pivot": [
+            98.58,
+            64.32
+          ],
+          "review": "visual-review-required",
+          "pixelsPerUnit": 4.75
+        },
+        {
+          "role": 3,
+          "state": "ready",
+          "rect": [
+            33,
+            551,
+            135,
+            122
+          ],
+          "pivot": [
+            58.05,
+            56.12
+          ],
+          "review": "visual-review-required",
+          "pixelsPerUnit": 5.0
+        },
+        {
+          "role": 3,
+          "state": "walk-a",
+          "rect": [
+            176,
+            548,
+            75,
+            134
+          ],
+          "pivot": [
+            32.25,
+            61.64
+          ],
+          "review": "redraw-required",
+          "pixelsPerUnit": 5.0
+        },
+        {
+          "role": 3,
+          "state": "walk-b",
+          "rect": [
+            293,
+            548,
+            75,
+            136
+          ],
+          "pivot": [
+            32.25,
+            62.56
+          ],
+          "review": "redraw-required",
+          "pixelsPerUnit": 5.0
+        },
+        {
+          "role": 3,
+          "state": "prone",
+          "rect": [
+            414,
+            566,
+            264,
+            84
+          ],
+          "pivot": [
+            158.4,
+            40.32
+          ],
+          "review": "visual-review-required",
+          "pixelsPerUnit": 5.0
+        },
+        {
+          "role": 3,
+          "state": "crawl-a",
+          "rect": [
+            661,
+            565,
+            161,
+            105
+          ],
+          "pivot": [
+            85.33,
+            50.4
+          ],
+          "review": "redraw-required",
+          "pixelsPerUnit": 5.0
+        },
+        {
+          "role": 3,
+          "state": "crawl-b",
+          "rect": [
+            841,
+            578,
+            157,
+            87
+          ],
+          "pivot": [
+            83.21,
+            41.76
+          ],
+          "review": "redraw-required",
+          "pixelsPerUnit": 5.0
+        },
+        {
+          "role": 3,
+          "state": "fire",
+          "rect": [
+            1017,
+            581,
+            238,
+            79
+          ],
+          "pivot": [
+            142.8,
+            37.92
+          ],
+          "review": "visual-review-required",
+          "pixelsPerUnit": 5.0
+        },
+        {
+          "role": 3,
+          "state": "fallen",
+          "rect": [
+            1229,
+            568,
+            205,
+            127
+          ],
+          "pivot": [
+            108.65,
+            60.96
+          ],
+          "review": "visual-review-required",
+          "pixelsPerUnit": 5.0
+        },
+        {
+          "role": 4,
+          "state": "ready",
+          "rect": [
+            31,
+            711,
+            137,
+            122
+          ],
+          "pivot": [
+            58.91,
+            56.12
+          ],
+          "review": "visual-review-required",
+          "pixelsPerUnit": 5.0
+        },
+        {
+          "role": 4,
+          "state": "walk-a",
+          "rect": [
+            176,
+            711,
+            78,
+            134
+          ],
+          "pivot": [
+            33.54,
+            61.64
+          ],
+          "review": "redraw-required",
+          "pixelsPerUnit": 5.0
+        },
+        {
+          "role": 4,
+          "state": "walk-b",
+          "rect": [
+            290,
+            712,
+            81,
+            134
+          ],
+          "pivot": [
+            34.83,
+            61.64
+          ],
+          "review": "redraw-required",
+          "pixelsPerUnit": 5.0
+        },
+        {
+          "role": 4,
+          "state": "prone",
+          "rect": [
+            414,
+            735,
+            262,
+            81
+          ],
+          "pivot": [
+            157.2,
+            38.88
+          ],
+          "review": "visual-review-required",
+          "pixelsPerUnit": 5.0
+        },
+        {
+          "role": 4,
+          "state": "crawl-a",
+          "rect": [
+            658,
+            726,
+            162,
+            109
+          ],
+          "pivot": [
+            85.86,
+            52.32
+          ],
+          "review": "redraw-required",
+          "pixelsPerUnit": 5.0
+        },
+        {
+          "role": 4,
+          "state": "crawl-b",
+          "rect": [
+            842,
+            741,
+            157,
+            88
+          ],
+          "pivot": [
+            83.21,
+            42.24
+          ],
+          "review": "redraw-required",
+          "pixelsPerUnit": 5.0
+        },
+        {
+          "role": 4,
+          "state": "fire",
+          "rect": [
+            1022,
+            744,
+            234,
+            78
+          ],
+          "pivot": [
+            140.4,
+            37.44
+          ],
+          "review": "visual-review-required",
+          "pixelsPerUnit": 5.0
+        },
+        {
+          "role": 4,
+          "state": "fallen",
+          "rect": [
+            1236,
+            730,
+            199,
+            127
+          ],
+          "pivot": [
+            105.47,
+            60.96
+          ],
+          "review": "visual-review-required",
+          "pixelsPerUnit": 5.0
+        },
+        {
+          "role": 5,
+          "state": "ready",
+          "rect": [
+            34,
+            884,
+            141,
+            120
+          ],
+          "pivot": [
+            60.63,
+            55.2
+          ],
+          "review": "visual-review-required",
+          "pixelsPerUnit": 4.9167
+        },
+        {
+          "role": 5,
+          "state": "walk-a",
+          "rect": [
+            175,
+            876,
+            76,
+            135
+          ],
+          "pivot": [
+            32.68,
+            62.1
+          ],
+          "review": "redraw-required",
+          "pixelsPerUnit": 4.9167
+        },
+        {
+          "role": 5,
+          "state": "walk-b",
+          "rect": [
+            297,
+            874,
+            69,
+            139
+          ],
+          "pivot": [
+            29.67,
+            63.94
+          ],
+          "review": "redraw-required",
+          "pixelsPerUnit": 4.9167
+        },
+        {
+          "role": 5,
+          "state": "prone",
+          "rect": [
+            414,
+            913,
+            259,
+            79
+          ],
+          "pivot": [
+            155.4,
+            37.92
+          ],
+          "review": "visual-review-required",
+          "pixelsPerUnit": 4.9167
+        },
+        {
+          "role": 5,
+          "state": "crawl-a",
+          "rect": [
+            658,
+            897,
+            163,
+            108
+          ],
+          "pivot": [
+            86.39,
+            51.84
+          ],
+          "review": "redraw-required",
+          "pixelsPerUnit": 4.9167
+        },
+        {
+          "role": 5,
+          "state": "crawl-b",
+          "rect": [
+            840,
+            913,
+            156,
+            86
+          ],
+          "pivot": [
+            82.68,
+            41.28
+          ],
+          "review": "redraw-required",
+          "pixelsPerUnit": 4.9167
+        },
+        {
+          "role": 5,
+          "state": "fire",
+          "rect": [
+            1016,
+            918,
+            234,
+            80
+          ],
+          "pivot": [
+            140.4,
+            38.4
+          ],
+          "review": "visual-review-required",
+          "pixelsPerUnit": 4.9167
+        },
+        {
+          "role": 5,
+          "state": "fallen",
+          "rect": [
+            1239,
+            897,
+            191,
+            133
+          ],
+          "pivot": [
+            101.23,
+            63.84
+          ],
+          "review": "visual-review-required",
+          "pixelsPerUnit": 4.9167
+        }
+      ],
+      "squadRoleIndices": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        5,
+        5,
+        5,
+        5,
+        5
+      ]
+    }
+  },
+  "notes": [
+    "Source images untouched. Rectangles describe sampling regions; alpha bounding boxes measured at threshold16.",
+    "Pivots estimated from anatomical position and need visual calibration.",
+    "Walking/crawling retain generated pose and equipment inconsistencies; do not enable in production."
+  ]
+}

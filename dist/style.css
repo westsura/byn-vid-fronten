@@ -668,3 +668,38 @@ p {
     height:60px;
   }
 }
+
+/* Graphics mode selector and prototype marker */
+.art-select {
+  display:flex;
+  align-items:center;
+  gap:6px;
+  font-size:12px;
+  color:var(--muted);
+}
+.art-select select {
+  font:inherit;
+  font-size:12px;
+  max-width:260px;
+  background:#2c352b;
+  color:var(--text);
+  border:1px solid #495342;
+  border-radius:4px;
+  padding:8px 6px;
+}
+.proto-badge {
+  display:none;
+  position:absolute;
+  top:14px;
+  right:16px;
+  font-size:11px;
+  letter-spacing:1.5px;
+  color:#1b1f18;
+  background:#dfb77e;
+  padding:3px 8px;
+  border-radius:2px;
+  pointer-events:none;
+}
+.prototype-art .proto-badge {
+  display:block;
+}

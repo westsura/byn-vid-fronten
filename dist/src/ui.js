@@ -3,6 +3,8 @@ import { MISSION_TIME, HOLD_TIME } from './config.js';
 import { state, alive, playerSquads, select, issue, defend, setMode, togglePause, reset } from './sim.js';
 import { buildingAt, coverAt } from './terrain.js';
 import { setSound, soundEnabled, resumeAudio } from './audio.js';
+import { MODES, artMode, isPrototype, urlForMode, factionLabel } from './art.js';
+import { squadRadius } from './render.js';
 
 const $ = (id) => document.getElementById(id);
 export let cursor = null;
@@ -33,7 +35,7 @@ function squadCard(s) {
   const morale = s.morale < 25 ? 'Bruten' : s.morale < 55 ? 'Pressad' : 'Stabil';
   const colour = s.morale < 40 ? '#d89b70' : '#a4bd83';
   return `<button class="squad ${s.id === state.selected ? 'selected' : ''}" data-squad="${s.id}" aria-pressed="${s.id === state.selected}" ${n ? '' : 'disabled'}>
-<div class="squad-top"><span class="number">${s.id + 1}</span><strong>${s.name}</strong><span class="count">${n} / 5</span></div>
+<div class="squad-top"><span class="number">${s.id + 1}</span><strong>${s.name}</strong><span class="count">${n} / ${s.men.length}</span></div>
 <div class="squad-bottom"><span>${n ? s.order : 'Utslagen'}</span><span>${morale}</span></div>
 <div class="morale"><span style="width:${Math.round(s.morale)}%;background:${colour}"></span></div></button>`;
 }
@@ -51,7 +53,7 @@ export function renderUI() {
   $('forceCount').textContent = playerSquads().reduce((sum, q) => sum + alive(q).length, 0) + ' man';
   setHTML($('squads'), playerSquads().map(squadCard).join(''));
 
-  $('selectedName').textContent = s.name + ' / Infanteri';
+  $('selectedName').textContent = s.name + ' / ' + (isPrototype() ? factionLabel(s.faction) + ' (' + s.men.length + ')' : 'Infanteri');
   const house = buildingAt(s.x, s.y);
   const cover = coverAt(s.x, s.y);
   $('cover').textContent = house ? house.name : cover > 0.6 ? 'Byggnadsskydd' : cover > 0.3 ? 'Vegetation' : 'Öppen mark';
@@ -90,7 +92,7 @@ export function bindInput(canvas, W, H) {
     const r = canvas.getBoundingClientRect();
     const x = ((e.clientX - r.left) * W) / r.width;
     const y = ((e.clientY - r.top) * H) / r.height;
-    const hit = playerSquads().find((s) => alive(s).length && Math.hypot(s.x - x, s.y - y) < 35);
+    const hit = playerSquads().find((s) => alive(s).length && Math.hypot(s.x - x, s.y - y) < squadRadius(s) - 6);
     if (hit && e.button !== 2) select(hit.id);
     else issue(x, y);
     canvas.focus();
@@ -135,5 +137,20 @@ export function bindInput(canvas, W, H) {
     }
     if (e.key === 'Enter' && cursor) issue(cursor.x, cursor.y);
   });
+  // Graphics mode selector: switching reloads the page with a fresh battle.
+  const sel = $('artMode');
+  if (sel) {
+    sel.innerHTML = Object.entries(MODES)
+      .map(([k, v]) => `<option value="${k}" ${k === artMode() ? 'selected' : ''}>${v.label}</option>`)
+      .join('');
+    sel.onchange = () => {
+      if (state.started && !state.ended && !confirm('Byta grafik startar om striden. Fortsätta?')) {
+        sel.value = artMode();
+        return;
+      }
+      location.search = urlForMode(sel.value);
+    };
+    document.body.classList.toggle('prototype-art', isPrototype());
+  }
   restart();
 }

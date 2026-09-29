@@ -1,0 +1,96 @@
+{
+  "id": "soviet-rifle-squad",
+  "version": 1,
+  "soldierCount": 11,
+  "referencePeriod": "Dec1941–July1942, according to caption in supplied roster image",
+  "subunits": [
+    {
+      "name": "Fire Element",
+      "count": 3
+    },
+    {
+      "name": "Maneuver Element",
+      "count": 8
+    }
+  ],
+  "soldiers": [
+    {
+      "id": "soviet-01",
+      "role": "Squad Leader",
+      "element": "fire",
+      "weapon": "PPSh",
+      "ammunition": null
+    },
+    {
+      "id": "soviet-02",
+      "role": "Machine Gunner",
+      "element": "fire",
+      "weapon": "DP",
+      "ammunition": null
+    },
+    {
+      "id": "soviet-03",
+      "role": "Assistant Gunner",
+      "element": "fire",
+      "weapon": "M1891/30",
+      "ammunition": null
+    },
+    {
+      "id": "soviet-04",
+      "role": "Senior Rifleman",
+      "element": "maneuver",
+      "weapon": "SVT-40",
+      "ammunition": null
+    },
+    {
+      "id": "soviet-05",
+      "role": "Rifleman",
+      "element": "maneuver",
+      "weapon": "SVT-40",
+      "ammunition": null
+    },
+    {
+      "id": "soviet-06",
+      "role": "Rifleman",
+      "element": "maneuver",
+      "weapon": "M1891/30",
+      "ammunition": null
+    },
+    {
+      "id": "soviet-07",
+      "role": "Rifleman",
+      "element": "maneuver",
+      "weapon": "M1891/30",
+      "ammunition": null
+    },
+    {
+      "id": "soviet-08",
+      "role": "Rifleman",
+      "element": "maneuver",
+      "weapon": "M1891/30",
+      "ammunition": null
+    },
+    {
+      "id": "soviet-09",
+      "role": "Rifleman",
+      "element": "maneuver",
+      "weapon": "M1891/30",
+      "ammunition": null
+    },
+    {
+      "id": "soviet-10",
+      "role": "Rifleman",
+      "element": "maneuver",
+      "weapon": "M1891/30",
+      "ammunition": null
+    },
+    {
+      "id": "soviet-11",
+      "role": "Rifleman",
+      "element": "maneuver",
+      "weapon": "M1891/30",
+      "ammunition": null
+    }
+  ],
+  "source": "User-supplied roster image; not a universal historical organization claim"
+}

@@ -1,0 +1,128 @@
+{
+  "id": "german-infantry-squad-10",
+  "version": 1,
+  "supersedes": "Earlier five-soldier organization",
+  "reference": "aqukeb8lw4c21.jpg",
+  "soldierCount": 10,
+  "subunits": [
+    {
+      "id": "mg-trupp",
+      "name": "MG-Trupp",
+      "count": 4
+    },
+    {
+      "id": "gewehrschuetzen-trupp",
+      "name": "Gewehrschützen-Trupp",
+      "count": 6
+    }
+  ],
+  "soldiers": [
+    {
+      "id": "gruppenfuehrer",
+      "name": "Gruppenführer",
+      "subunit": "mg-trupp",
+      "weapons": [
+        "submachine-gun"
+      ],
+      "ammunition": null
+    },
+    {
+      "id": "mg-schuetze",
+      "name": "MG-Schütze",
+      "subunit": "mg-trupp",
+      "weapons": [
+        "mg34",
+        "pistol"
+      ],
+      "ammunition": null
+    },
+    {
+      "id": "assistent-mg-schuetze",
+      "name": "Assistent-MG-Schütze",
+      "subunit": "mg-trupp",
+      "weapons": [
+        "pistol"
+      ],
+      "ammunition": null
+    },
+    {
+      "id": "munitionstraeger",
+      "name": "Munitionsträger",
+      "subunit": "mg-trupp",
+      "weapons": [
+        "kar98k"
+      ],
+      "ammunition": null
+    },
+    {
+      "id": "stellvertreter",
+      "name": "Stellvertreter Gruppenführer",
+      "subunit": "gewehrschuetzen-trupp",
+      "weapons": [
+        "kar98k"
+      ],
+      "ammunition": null
+    },
+    {
+      "id": "schuetze-1",
+      "name": "Schütze",
+      "subunit": "gewehrschuetzen-trupp",
+      "weapons": [
+        "kar98k"
+      ],
+      "ammunition": null
+    },
+    {
+      "id": "schuetze-2",
+      "name": "Schütze",
+      "subunit": "gewehrschuetzen-trupp",
+      "weapons": [
+        "kar98k"
+      ],
+      "ammunition": null
+    },
+    {
+      "id": "schuetze-3",
+      "name": "Schütze",
+      "subunit": "gewehrschuetzen-trupp",
+      "weapons": [
+        "kar98k"
+      ],
+      "ammunition": null
+    },
+    {
+      "id": "schuetze-4",
+      "name": "Schütze",
+      "subunit": "gewehrschuetzen-trupp",
+      "weapons": [
+        "kar98k"
+      ],
+      "ammunition": null
+    },
+    {
+      "id": "schuetze-5",
+      "name": "Schütze",
+      "subunit": "gewehrschuetzen-trupp",
+      "weapons": [
+        "kar98k"
+      ],
+      "ammunition": null
+    }
+  ],
+  "weaponIdentification": {
+    "submachine-gun": {
+      "visualFamily": "MP38/MP40",
+      "exactModelConfirmed": false
+    },
+    "pistol": {
+      "visualFamily": "P08/Luger-like in supplied image",
+      "exactModelConfirmed": false
+    },
+    "mg34": {
+      "basis": "visual interpretation and previous project brief"
+    },
+    "kar98k": {
+      "basis": "visual interpretation and previous project brief"
+    }
+  }
+}

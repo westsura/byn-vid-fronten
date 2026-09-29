@@ -1,9 +1,9 @@
 // Canvas rendering of the map, buildings, squads and effects. Reads state only.
 import { W, H } from './config.js';
 import { buildings, objective } from './scenario.js';
-import { state, alive } from './sim.js';
+import { state, alive, formationOffset } from './sim.js';
 import { buildingAt } from './terrain.js';
-import { drawSoldier } from './soldiers.js';
+import { drawUnit, isPrototype } from './art.js';
 
 const mapImage = new Image();
 let mapLoaded = false;
@@ -112,10 +112,21 @@ function drawObjective(ctx) {
   ctx.restore();
 }
 
+// Radius that encloses the squad's formation (41 for the original five-man squad).
+export function squadRadius(s) {
+  let r = 0;
+  for (let i = 0; i < s.men.length; i++) {
+    const o = formationOffset(i, s.men.length);
+    r = Math.max(r, Math.hypot(o.x, o.y));
+  }
+  return Math.round(r + 18);
+}
+
 function drawSquad(ctx, s) {
+  const R = squadRadius(s);
   if (s.id === state.selected && alive(s).length) {
     ctx.lineWidth = 2;
-    circle(ctx, s.x, s.y, 41, '#e2d29c');
+    circle(ctx, s.x, s.y, R, '#e2d29c');
     if (s.path.length) {
       ctx.beginPath();
       ctx.moveTo(s.x, s.y);
@@ -129,19 +140,19 @@ function drawSquad(ctx, s) {
       circle(ctx, dest.x, dest.y, 8, '#f5e9bd');
     }
   }
-  for (const m of s.men) drawSoldier(ctx, m, s, state.elapsed, 1.12);
+  for (const m of s.men) drawUnit(ctx, m, s, state.elapsed, 1.12);
   if (!alive(s).length) return;
   // Squad tag and morale bar
   ctx.textAlign = 'center';
   ctx.font = 'bold 12px system-ui';
   ctx.fillStyle = s.side ? '#572e26ee' : '#223224ee';
-  ctx.fillRect(s.x - 35, s.y - 49, 70, 21);
+  ctx.fillRect(s.x - 35, s.y - R - 8, 70, 21);
   ctx.fillStyle = s.side ? '#f2b59d' : '#dce8bf';
-  ctx.fillText(s.side ? 'FIENDE' : s.name.toUpperCase(), s.x, s.y - 34);
+  ctx.fillText(s.side ? 'FIENDE' : s.name.toUpperCase(), s.x, s.y - R + 7);
   ctx.fillStyle = '#18221a';
-  ctx.fillRect(s.x - 25, s.y + 29, 50, 4);
+  ctx.fillRect(s.x - 25, s.y + R - 12, 50, 4);
   ctx.fillStyle = s.morale < 40 ? '#ddad74' : '#aaca86';
-  ctx.fillRect(s.x - 25, s.y + 29, s.morale / 2, 4);
+  ctx.fillRect(s.x - 25, s.y + R - 12, s.morale / 2, 4);
 }
 
 function drawEffects(ctx) {
@@ -204,5 +215,5 @@ export function drawPortrait(g) {
   g.clearRect(0, 0, 180, 90);
   const s = state.squads[state.selected];
   const m = alive(s)[0] || s.men[0];
-  drawSoldier(g, { ...m, x: 85, y: 45, angle: -0.55 }, s, state.elapsed, 2.7);
+  drawUnit(g, { ...m, x: 85, y: 45, angle: -0.55 }, s, state.elapsed, isPrototype() ? 1.9 : 2.7);
 }

@@ -1,6 +1,7 @@
 // Entry point: wires simulation, rendering, UI and audio together and runs the loop.
 import { W, H } from './config.js';
-import { hooks, step, pause } from './sim.js';
+import { hooks, step, pause, setForces } from './sim.js';
+import { loadMode, modeFromUrl } from './art.js';
 import { loadMap, drawMap, drawPortrait } from './render.js';
 import { renderUI, toast, showResult, bindInput, cursor } from './ui.js';
 import { fireSound } from './audio.js';
@@ -15,6 +16,14 @@ hooks.shot = fireSound;
 hooks.finished = showResult;
 
 loadMap('map.png', () => toast('Kartbilden kunde inte laddas. Försök ladda om sidan.'));
+try {
+  setForces(await loadMode(modeFromUrl(location.search)));
+} catch (err) {
+  console.error(err);
+  setForces(null);
+  await loadMode('standard');
+  setTimeout(() => toast('Prototypgrafiken kunde inte laddas. Standardgrafik används.'), 500);
+}
 bindInput(canvas, W, H);
 
 document.addEventListener('visibilitychange', () => {

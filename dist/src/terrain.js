@@ -7,6 +7,35 @@ export function buildingAt(x, y) {
   return buildings.find((b) => x > b.x && x < b.x + b.w && y > b.y && y < b.y + b.h);
 }
 
+// Positions soldiers take inside a building. The first five are the original
+// slots (by the windows and the middle); further slots fill a grid over the
+// floor, so a house holds a full 10-11 man squad.
+const slotCache = new Map();
+export function interiorSlots(b) {
+  if (slotCache.has(b)) return slotCache.get(b);
+  const slots = [
+    { x: b.midX, y: b.y + 16 },
+    { x: b.x + 16, y: b.midY },
+    { x: b.x + b.w - 16, y: b.midY },
+    { x: b.midX, y: b.y + b.h - 17 },
+    { x: b.midX - 15, y: b.midY + 12 },
+  ];
+  const m = 15; // clearance from the outer edge
+  const cols = Math.max(2, Math.floor((b.w - 2 * m) / 18) + 1);
+  const rows = Math.max(2, Math.floor((b.h - 2 * m) / 18) + 1);
+  const extra = [];
+  for (let r = 0; r < rows; r++)
+    for (let c = 0; c < cols; c++) {
+      const p = { x: b.x + m + (c * (b.w - 2 * m)) / (cols - 1), y: b.y + m + (r * (b.h - 2 * m)) / (rows - 1) };
+      if (slots.every((q) => Math.hypot(q.x - p.x, q.y - p.y) >= 12)) extra.push(p);
+    }
+  // Fill from the middle outwards so a partly filled house looks natural.
+  extra.sort((p, q) => Math.hypot(p.x - b.midX, p.y - b.midY) - Math.hypot(q.x - b.midX, q.y - b.midY));
+  const all = slots.concat(extra);
+  slotCache.set(b, all);
+  return all;
+}
+
 // ---- Wall geometry ----------------------------------------------------------
 // Each wall is an axis-aligned band from WALL_OUT units outside to WALL_IN units
 // inside the building edge. Doors are gaps for movement, sight and fire; windows
