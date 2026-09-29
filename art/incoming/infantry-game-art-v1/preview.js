@@ -1,0 +1,11 @@
+const canvas=document.querySelector('#view'),ctx=canvas.getContext('2d'),state=document.querySelector('#state'),zoom=document.querySelector('#zoom'),angle=document.querySelector('#angle'),ground=document.querySelector('#ground'),anchors=document.querySelector('#anchors'),play=document.querySelector('#play'),note=document.querySelector('#note');
+for(const s of DATA.states){const o=document.createElement('option');o.value=s;o.textContent=s;state.append(o)}
+const images={};let playing=false,clock=0,last=0,loaded=0;
+for(const side of ['german','soviet']){const im=new Image();images[side]=im;im.onload=()=>{loaded++;draw()};im.src=SOURCES[side]}
+function draw(){if(loaded!==2)return;ctx.fillStyle=ground.value;ctx.fillRect(0,0,1180,820);const z=+zoom.value,rot=+angle.value*Math.PI/180;const pose=playing?(Math.floor(clock/260)%2?'walk-a':'walk-b'):state.value;
+note.textContent=['walk-a','walk-b','crawl-a','crawl-b'].includes(pose)?'OMRITNING KRÄVS: riktning, utrustning och övergångar är inkonsekventa. Visas här för granskning.':'Prototyp: kontrollera skala, rotationspunkt, utrustning och kanter före integration.';
+for(const [side,top]of [['german',0],['soviet',400]]){const a=DATA.atlases[side];ctx.fillStyle='#f4efdc';ctx.font='bold 20px system-ui';ctx.fillText(side==='german'?'Tysk grupp · 10':'Sovjetisk grupp · 11',22,top+30);
+a.squadRoleIndices.forEach((role,i)=>{const col=i%6,row=Math.floor(i/6),x=70+col*192,y=top+110+row*168,f=a.frames.find(f=>f.role===role&&f.state===pose);ctx.save();ctx.translate(x,y);ctx.rotate(rot);const [sx,sy,sw,sh]=f.rect,k=z/f.pixelsPerUnit;ctx.drawImage(images[side],sx,sy,sw,sh,-f.pivot[0]*k,-f.pivot[1]*k,sw*k,sh*k);if(anchors.checked){ctx.strokeStyle='#ffdf66';ctx.beginPath();ctx.moveTo(-5,0);ctx.lineTo(5,0);ctx.moveTo(0,-5);ctx.lineTo(0,5);ctx.stroke()}ctx.restore();ctx.fillStyle='#f1efdd';ctx.font='11px system-ui';ctx.fillText(a.roles[role],Math.max(6,x-55),y+78,180)})}}
+for(const el of [state,zoom,angle,ground,anchors])el.addEventListener('input',draw);
+play.onclick=()=>{playing=!playing;play.textContent=playing?'Pausa':'Spela gångtest';draw()};
+function tick(t){if(last&&playing){clock+=Math.min(t-last,100);draw()}last=t;requestAnimationFrame(tick)}requestAnimationFrame(tick);
