@@ -1,0 +1,131 @@
+{
+  "version": "pilot-v4",
+  "status": "not-approved",
+  "coordinateConvention": "frame-relative pixels; heading radians clockwise, zero east",
+  "frames": {
+    "german-ready": {
+      "file": "german-poses.png",
+      "sourceRect": [
+        0,
+        0,
+        1254,
+        700
+      ],
+      "pivot": [
+        600,
+        390
+      ],
+      "muzzle": [
+        1110,
+        400
+      ],
+      "helmetCenter": [
+        659,
+        385
+      ],
+      "sourceForwardRadians": 0,
+      "pixelsPerUnit": 28.0,
+      "helmetDiameterPixelsEstimate": 124,
+      "contentBoundsAlpha32": [
+        390,
+        245,
+        1113,
+        575
+      ],
+      "registration": "manually estimated shoulder midpoint; not production approved"
+    },
+    "german-prone": {
+      "file": "german-poses.png",
+      "sourceRect": [
+        0,
+        700,
+        1254,
+        554
+      ],
+      "pivot": [
+        645,
+        245
+      ],
+      "muzzle": [
+        1164,
+        250
+      ],
+      "helmetCenter": [
+        714,
+        242
+      ],
+      "sourceForwardRadians": 0,
+      "pixelsPerUnit": 28.0,
+      "helmetDiameterPixelsEstimate": 122,
+      "contentBoundsAlpha32": [
+        60,
+        112,
+        1168,
+        422
+      ],
+      "registration": "manually estimated shoulder midpoint; not production approved"
+    },
+    "soviet-ready": {
+      "file": "soviet-poses.png",
+      "sourceRect": [
+        0,
+        0,
+        1254,
+        700
+      ],
+      "pivot": [
+        587,
+        398
+      ],
+      "muzzle": [
+        1170,
+        450
+      ],
+      "helmetCenter": [
+        647,
+        396
+      ],
+      "sourceForwardRadians": 0,
+      "pixelsPerUnit": 28.0,
+      "helmetDiameterPixelsEstimate": 128,
+      "contentBoundsAlpha32": [
+        402,
+        246,
+        1173,
+        566
+      ],
+      "registration": "manually estimated shoulder midpoint; not production approved"
+    },
+    "soviet-prone": {
+      "file": "soviet-poses.png",
+      "sourceRect": [
+        0,
+        700,
+        1254,
+        554
+      ],
+      "pivot": [
+        628,
+        215
+      ],
+      "muzzle": [
+        1204,
+        253
+      ],
+      "helmetCenter": [
+        684,
+        213
+      ],
+      "sourceForwardRadians": 0,
+      "pixelsPerUnit": 28.0,
+      "helmetDiameterPixelsEstimate": 122,
+      "contentBoundsAlpha32": [
+        46,
+        85,
+        1206,
+        367
+      ],
+      "registration": "manually estimated shoulder midpoint; not production approved"
+    }
+  }
+}
