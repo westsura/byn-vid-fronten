@@ -1,6 +1,9 @@
 // Graphics modes. "standard" is the code-drawn soldier (production fallback).
 // "infantry-v1" is a PROTOTYPE sprite set (German 10-man and Soviet 11-man squads)
 // for evaluation only; it is opt-in via ?art=infantry-v1&side=soviet|german.
+// "pilot-v2" (GRAFIKPROV V2) replaces only the plain riflemen (German Schütze with
+// K98k, Soviet Rifleman with M1891/30) by the rifleman-pilot-v2 images for ready and
+// prone; all other roles and states keep the infantry-v1 sprites.
 import { drawSoldier as drawCodeSoldier } from './soldiers.js';
 import { soldierPose } from './sim.js';
 import { buildingAt } from './terrain.js';
@@ -11,7 +14,16 @@ export const MODES = {
   standard: { label: 'Standardgrafik' },
   'infantry-v1:soviet': { label: 'PROTOTYP infanteri v1 – du leder sovjetisk grupp (11)' },
   'infantry-v1:german': { label: 'PROTOTYP infanteri v1 – du leder tysk grupp (10)' },
+  'pilot-v2:soviet': { label: 'GRAFIKPROV V2 gevärsskytt – du leder sovjetisk grupp (11)' },
+  'pilot-v2:german': { label: 'GRAFIKPROV V2 gevärsskytt – du leder tysk grupp (10)' },
 };
+const PILOT_BASE = 'assets/prototype/rifleman-pilot-v2/';
+let pilot = null; // { 'german-ready': {data, image}, ... }
+export const isPilotV2 = () => mode.startsWith('pilot-v2');
+export const modeBadge = () => (isPilotV2() ? 'GRAFIKPROV V2 – EJ GODKÄNT' : 'PROTOTYPGRAFIK · EJ GODKÄND');
+// Which soldiers the v2 pilot covers: plain riflemen only.
+export const pilotCovers = (faction, m) =>
+  faction === 'german' ? m.title === 'Schütze' && m.weapon === 'kar98k' : m.title === 'Rifleman' && m.weapon === 'M1891/30';
 
 let mode = 'standard';
 let atlases = null; // { german: {data, image}, soviet: {data, image} }
@@ -20,8 +32,9 @@ export const isPrototype = () => mode !== 'standard';
 
 export function modeFromUrl(search) {
   const q = new URLSearchParams(search);
-  if (q.get('art') !== 'infantry-v1') return 'standard';
-  return q.get('side') === 'german' ? 'infantry-v1:german' : 'infantry-v1:soviet';
+  const art = q.get('art');
+  if (art !== 'infantry-v1' && art !== 'pilot-v2') return 'standard';
+  return `${art}:${q.get('side') === 'german' ? 'german' : 'soviet'}`;
 }
 
 export function urlForMode(m) {
@@ -57,18 +70,24 @@ export async function loadMode(m) {
   const [manifest, german, soviet] = await Promise.all(
     ['manifest.json', 'german-squad.json', 'soviet-squad.json'].map((f) => fetch(BASE + f).then((r) => r.json())),
   );
-  const load = (file) =>
+  const load = (file, base = BASE) =>
     new Promise((res, rej) => {
       const im = new Image();
       im.onload = () => res(im);
       im.onerror = () => rej(new Error('Kunde inte ladda ' + file));
-      im.src = BASE + file;
+      im.src = base + file;
     });
   const [gImg, sImg] = await Promise.all([load(manifest.atlases.german.file), load(manifest.atlases.soviet.file)]);
   atlases = {
     german: { data: manifest.atlases.german, image: gImg },
     soviet: { data: manifest.atlases.soviet, image: sImg },
   };
+  if (m.startsWith('pilot-v2')) {
+    const pm = await fetch(PILOT_BASE + 'manifest.json').then((r) => r.json());
+    const keys = ['german-ready', 'german-prone', 'soviet-ready', 'soviet-prone'];
+    const imgs = await Promise.all(keys.map((k) => load(pm.assets[k].file, PILOT_BASE)));
+    pilot = Object.fromEntries(keys.map((k, i) => [k, { data: pm.assets[k], image: imgs[i] }]));
+  }
   const playerFaction = m.endsWith(':german') ? 'german' : 'soviet';
   const enemyFaction = playerFaction === 'german' ? 'soviet' : 'german';
   const defs = { german, soviet };
@@ -114,5 +133,31 @@ export function drawUnit(g, m, s, time, scale = 1.12) {
   g.ellipse(-1 * scale, 2 * scale, (prone ? 15 : 11) * scale, (prone ? 6 : 8) * scale, 0, 0, Math.PI * 2);
   g.fill();
   g.restore();
-  return drawSprite(g, a.image, a.data, { role: m.spriteRole ?? 0, state, x: m.x, y: m.y, angle, scale: scale / 1.12 });
+  const k = scale / 1.12; // world units → drawing units
+  if (pilot && pilotCovers(s.faction, m) && state !== 'fallen') {
+    // v2 pilot: ready / prone only. fire → prone, walk → ready, crawl → prone.
+    const pose = state === 'ready' || state.startsWith('walk') ? 'ready' : 'prone';
+    const p = pilot[`${s.faction}-${pose}`];
+    const d = p.data;
+    const f = k / d.pixelsPerUnit;
+    g.save();
+    g.translate(m.x, m.y);
+    g.rotate(angle - d.sourceForwardRadians);
+    g.drawImage(p.image, -d.pivot[0] * f, -d.pivot[1] * f, p.image.width * f, p.image.height * f);
+    if ((m.flash || 0) > 0) {
+      // Muzzle flash at the supplied muzzle point (manual estimate in the manifest).
+      const mx = (d.muzzle[0] - d.pivot[0]) * f;
+      const my = (d.muzzle[1] - d.pivot[1]) * f;
+      g.fillStyle = '#ffe1a0';
+      g.beginPath();
+      g.moveTo(mx, my - 1.2 * k);
+      g.lineTo(mx + 6 * k, my);
+      g.lineTo(mx, my + 1.2 * k);
+      g.closePath();
+      g.fill();
+    }
+    g.restore();
+    return p;
+  }
+  return drawSprite(g, a.image, a.data, { role: m.spriteRole ?? 0, state, x: m.x, y: m.y, angle, scale: k });
 }

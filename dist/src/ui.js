@@ -3,7 +3,7 @@ import { MISSION_TIME, HOLD_TIME } from './config.js';
 import { state, alive, playerSquads, select, issue, defend, setMode, togglePause, reset } from './sim.js';
 import { buildingAt, coverAt } from './terrain.js';
 import { setSound, soundEnabled, resumeAudio } from './audio.js';
-import { MODES, artMode, isPrototype, urlForMode, factionLabel } from './art.js';
+import { MODES, artMode, isPrototype, urlForMode, factionLabel, modeBadge } from './art.js';
 import { squadRadius } from './render.js';
 
 const $ = (id) => document.getElementById(id);
@@ -151,6 +151,8 @@ export function bindInput(canvas, W, H) {
       location.search = urlForMode(sel.value);
     };
     document.body.classList.toggle('prototype-art', isPrototype());
+    const badge = document.querySelector('.proto-badge');
+    if (badge) badge.textContent = modeBadge();
   }
   restart();
 }
