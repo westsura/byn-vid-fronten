@@ -45,6 +45,7 @@ Resultat: en uppdatering tar cirka 0,8 ms i full strid, mot tidigare 5,4 ms.
 - [ ] Stenmurar, häckar och passager som geometri, med skydd, sikt och hastighet.
 - [ ] Skogsområden som polygoner som följer kartbilden, i stället för cirklar.
 - [ ] Terrängberoende rörelsehastighet.
+- [ ] Formation som vrids efter gruppens riktning, med avstånd anpassade till liggande figurer (se granskning v4).
 - [ ] Bättre gruppsammanhållning. Formationen klumpar ihop sig vid dörrar i dag.
 - [ ] Tydlig skillnad mellan förflytta, försvara och anfalla (en anfallsorder med eget beteende).
 - [ ] Återkoppling när en order inte går att utföra.
@@ -63,7 +64,8 @@ Resultat: en uppdatering tar cirka 0,8 ms i full strid, mot tidigare 5,4 ms.
 - [x] Grafikprototyp infantry-game-art-v1 (tysk grupp 10, sovjetisk 11) valbar i spelet. Granskad, **ej produktionsgodkänd**: se `docs/art/review/infantry-v1/REVIEW.md`.
 - [x] Grafikprov v2 (gevärsskytt redo/liggande) valbart i spelet och speltestat av Claude: se `docs/art/review/rifleman-pilot-v2/REVIEW.md`. **Ej godkänt.**
 - [x] Grafikprov v3 (korrigerad kroppsriktning) valbart och speltestat av Claude: `docs/art/review/rifleman-pilot-v3/REVIEW.md`. **Ej godkänt.**
-- [ ] Björn provspelar prototypgrafiken (v1, v2, v3).
+- [x] Grafikprov v4 (gemensam skala i alla poser) valbart och speltestat av Claude: `docs/art/review/rifleman-pilot-v4/REVIEW.md`. **Ej godkänt.**
+- [ ] Björn provspelar prototypgrafiken (v1–v4).
 - [ ] Integrera REQUEST_001 v1 (SVG-soldat, hus 0, gruppkort) – levererat, ej integrerat.
 - [ ] Zoom och panorering, skärpa på högupplösta skärmar.
 - [ ] Bättre ljud, miljöljud, korta röstmeddelanden.
