@@ -62,7 +62,8 @@ Resultat: en uppdatering tar cirka 0,8 ms i full strid, mot tidigare 5,4 ms.
 
 - [x] Grafikprototyp infantry-game-art-v1 (tysk grupp 10, sovjetisk 11) valbar i spelet. Granskad, **ej produktionsgodkänd**: se `docs/art/review/infantry-v1/REVIEW.md`.
 - [x] Grafikprov v2 (gevärsskytt redo/liggande) valbart i spelet och speltestat av Claude: se `docs/art/review/rifleman-pilot-v2/REVIEW.md`. **Ej godkänt.**
-- [ ] Björn provspelar prototypgrafiken (v1 och v2).
+- [x] Grafikprov v3 (korrigerad kroppsriktning) valbart och speltestat av Claude: `docs/art/review/rifleman-pilot-v3/REVIEW.md`. **Ej godkänt.**
+- [ ] Björn provspelar prototypgrafiken (v1, v2, v3).
 - [ ] Integrera REQUEST_001 v1 (SVG-soldat, hus 0, gruppkort) – levererat, ej integrerat.
 - [ ] Zoom och panorering, skärpa på högupplösta skärmar.
 - [ ] Bättre ljud, miljöljud, korta röstmeddelanden.
