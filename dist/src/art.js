@@ -4,6 +4,9 @@
 // "pilot-v2" (GRAFIKPROV V2) replaces only the plain riflemen (German Schütze with
 // K98k, Soviet Rifleman with M1891/30) by the rifleman-pilot-v2 images for ready and
 // prone; all other roles and states keep the infantry-v1 sprites.
+// "pilot-v3" (GRAFIKPROV V3) is the same scope with the corrected two-pose sheets.
+// URL options for v3 comparisons: &scale=helmet (pixelsPerUnitHelmetMatched instead
+// of pixelsPerUnit) and &shadow=none|small|oval (default small contact shadow).
 import { drawSoldier as drawCodeSoldier } from './soldiers.js';
 import { soldierPose } from './sim.js';
 import { buildingAt } from './terrain.js';
@@ -16,11 +19,19 @@ export const MODES = {
   'infantry-v1:german': { label: 'PROTOTYP infanteri v1 – du leder tysk grupp (10)' },
   'pilot-v2:soviet': { label: 'GRAFIKPROV V2 gevärsskytt – du leder sovjetisk grupp (11)' },
   'pilot-v2:german': { label: 'GRAFIKPROV V2 gevärsskytt – du leder tysk grupp (10)' },
+  'pilot-v3:soviet': { label: 'GRAFIKPROV V3 gevärsskytt – du leder sovjetisk grupp (11)' },
+  'pilot-v3:german': { label: 'GRAFIKPROV V3 gevärsskytt – du leder tysk grupp (10)' },
 };
-const PILOT_BASE = 'assets/prototype/rifleman-pilot-v2/';
-let pilot = null; // { 'german-ready': {data, image}, ... }
+const PILOT_BASE = { 'pilot-v2': 'assets/prototype/rifleman-pilot-v2/', 'pilot-v3': 'assets/prototype/rifleman-pilot-v3/' };
+let pilot = null; // { 'german-ready': {data, image}, ... } normalised: sourceRect-relative pivot/muzzle
+export const pilotOptions = { scale: 'standard', shadow: 'small' };
 export const isPilotV2 = () => mode.startsWith('pilot-v2');
-export const modeBadge = () => (isPilotV2() ? 'GRAFIKPROV V2 – EJ GODKÄNT' : 'PROTOTYPGRAFIK · EJ GODKÄND');
+export const isPilotV3 = () => mode.startsWith('pilot-v3');
+export const modeBadge = () =>
+  isPilotV3()
+    ? 'GRAFIKPROV V3 – EJ GODKÄNT' + (pilotOptions.scale === 'helmet' ? ' · HJÄLMSKALA' : '')
+    : isPilotV2() ? 'GRAFIKPROV V2 – EJ GODKÄNT' : 'PROTOTYPGRAFIK · EJ GODKÄND';
+export const pilotFrame = (key) => pilot?.[key] ?? null;
 // Which soldiers the v2 pilot covers: plain riflemen only.
 export const pilotCovers = (faction, m) =>
   faction === 'german' ? m.title === 'Schütze' && m.weapon === 'kar98k' : m.title === 'Rifleman' && m.weapon === 'M1891/30';
@@ -33,7 +44,9 @@ export const isPrototype = () => mode !== 'standard';
 export function modeFromUrl(search) {
   const q = new URLSearchParams(search);
   const art = q.get('art');
-  if (art !== 'infantry-v1' && art !== 'pilot-v2') return 'standard';
+  if (q.get('scale') === 'helmet') pilotOptions.scale = 'helmet';
+  if (['none', 'small', 'oval'].includes(q.get('shadow'))) pilotOptions.shadow = q.get('shadow');
+  if (!['infantry-v1', 'pilot-v2', 'pilot-v3'].includes(art)) return 'standard';
   return `${art}:${q.get('side') === 'german' ? 'german' : 'soviet'}`;
 }
 
@@ -82,11 +95,21 @@ export async function loadMode(m) {
     german: { data: manifest.atlases.german, image: gImg },
     soviet: { data: manifest.atlases.soviet, image: sImg },
   };
-  if (m.startsWith('pilot-v2')) {
-    const pm = await fetch(PILOT_BASE + 'manifest.json').then((r) => r.json());
+  const pilotKey = m.split(':')[0];
+  if (PILOT_BASE[pilotKey]) {
+    const base = PILOT_BASE[pilotKey];
+    const pm = await fetch(base + 'manifest.json').then((r) => r.json());
     const keys = ['german-ready', 'german-prone', 'soviet-ready', 'soviet-prone'];
-    const imgs = await Promise.all(keys.map((k) => load(pm.assets[k].file, PILOT_BASE)));
-    pilot = Object.fromEntries(keys.map((k, i) => [k, { data: pm.assets[k], image: imgs[i] }]));
+    const table = pm.frames ?? pm.assets; // v3: frames (sourceRect-relative), v2: assets (whole image)
+    const files = [...new Set(keys.map((k) => table[k].file))];
+    const imgs = Object.fromEntries(await Promise.all(files.map(async (f) => [f, await load(f, base)])));
+    pilot = Object.fromEntries(
+      keys.map((k) => {
+        const d = table[k];
+        const img = imgs[d.file];
+        return [k, { image: img, data: { ...d, sourceRect: d.sourceRect ?? [0, 0, img.width, img.height] } }];
+      }),
+    );
   }
   const playerFaction = m.endsWith(':german') ? 'german' : 'soviet';
   const enemyFaction = playerFaction === 'german' ? 'soviet' : 'german';
@@ -123,27 +146,21 @@ export function drawUnit(g, m, s, time, scale = 1.12) {
   const home = m.hp > 0 && !m.moving ? buildingAt(m.x, m.y) : null;
   if (home && (state === 'prone' || state === 'fire')) state = 'ready';
   if (home && !m.aim) angle = Math.atan2(m.y - home.midY, m.x - home.midX);
-  // Soft contact shadow (not part of the sprites).
-  g.save();
-  g.translate(m.x, m.y);
-  g.rotate(angle);
-  g.fillStyle = state === 'fallen' ? '#10160f40' : '#10160f66';
-  g.beginPath();
-  const prone = state !== 'ready' && !state.startsWith('walk');
-  g.ellipse(-1 * scale, 2 * scale, (prone ? 15 : 11) * scale, (prone ? 6 : 8) * scale, 0, 0, Math.PI * 2);
-  g.fill();
-  g.restore();
   const k = scale / 1.12; // world units → drawing units
-  if (pilot && pilotCovers(s.faction, m) && state !== 'fallen') {
-    // v2 pilot: ready / prone only. fire → prone, walk → ready, crawl → prone.
-    const pose = state === 'ready' || state.startsWith('walk') ? 'ready' : 'prone';
-    const p = pilot[`${s.faction}-${pose}`];
+  const usePilot = pilot && pilotCovers(s.faction, m) && state !== 'fallen';
+  const prone = state !== 'ready' && !state.startsWith('walk');
+  drawShadow(g, m, angle, scale, state, usePilot && isPilotV3() ? pilotOptions.shadow : 'oval', prone);
+  if (usePilot) {
+    // Pilot riflemen: ready / prone only. fire → prone, walk → ready, crawl → prone.
+    const p = pilot[`${s.faction}-${prone ? 'prone' : 'ready'}`];
     const d = p.data;
-    const f = k / d.pixelsPerUnit;
+    const ppu = pilotOptions.scale === 'helmet' && d.pixelsPerUnitHelmetMatched ? d.pixelsPerUnitHelmetMatched : d.pixelsPerUnit;
+    const f = k / ppu;
+    const [sx, sy, sw, sh] = d.sourceRect;
     g.save();
     g.translate(m.x, m.y);
-    g.rotate(angle - d.sourceForwardRadians);
-    g.drawImage(p.image, -d.pivot[0] * f, -d.pivot[1] * f, p.image.width * f, p.image.height * f);
+    g.rotate(angle - (d.sourceForwardRadians || 0));
+    g.drawImage(p.image, sx, sy, sw, sh, -d.pivot[0] * f, -d.pivot[1] * f, sw * f, sh * f);
     if ((m.flash || 0) > 0) {
       // Muzzle flash at the supplied muzzle point (manual estimate in the manifest).
       const mx = (d.muzzle[0] - d.pivot[0]) * f;
@@ -160,4 +177,33 @@ export function drawUnit(g, m, s, time, scale = 1.12) {
     return p;
   }
   return drawSprite(g, a.image, a.data, { role: m.spriteRole ?? 0, state, x: m.x, y: m.y, angle, scale: k });
+}
+
+// Ground shadows. 'oval' is the large soft oval used since v1; 'small' is a faint
+// contact shadow close to the body (v3 suggestion); 'none' draws nothing.
+function drawShadow(g, m, angle, scale, state, kind, prone) {
+  if (kind === 'none') return;
+  g.save();
+  g.translate(m.x, m.y);
+  g.rotate(angle);
+  if (kind === 'small') {
+    const rx = (prone ? 10 : 5.5) * scale;
+    const ry = (prone ? 4 : 5) * scale;
+    const cx = (prone ? -4 : -0.5) * scale;
+    g.translate(cx, 0.8 * scale);
+    g.scale(1, ry / rx);
+    const grad = g.createRadialGradient(0, 0, 0, 0, 0, rx);
+    grad.addColorStop(0, '#10160f59');
+    grad.addColorStop(1, '#10160f00');
+    g.fillStyle = grad;
+    g.beginPath();
+    g.arc(0, 0, rx, 0, Math.PI * 2);
+    g.fill();
+  } else {
+    g.fillStyle = state === 'fallen' ? '#10160f40' : '#10160f66';
+    g.beginPath();
+    g.ellipse(-1 * scale, 2 * scale, (prone ? 15 : 11) * scale, (prone ? 6 : 8) * scale, 0, 0, Math.PI * 2);
+    g.fill();
+  }
+  g.restore();
 }
