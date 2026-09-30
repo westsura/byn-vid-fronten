@@ -9,5 +9,6 @@
 | Gevärsskytt redo/liggande tysk + sovjetisk (**GRAFIKPROV V2**) | infantry-rifleman-pilot-v2 | `dist/assets/prototype/rifleman-pilot-v2/` | valbar, ej standard | Endast Schütze/Rifleman M1891/30; övriga roller v1. Granskning: `docs/art/review/rifleman-pilot-v2/REVIEW.md` |
 | Gevärsskytt redo/liggande, korrigerad riktning (**GRAFIKPROV V3**) | infantry-rifleman-pilot-v3 | `dist/assets/prototype/rifleman-pilot-v3/` | valbar, ej standard | Som v2 i omfattning; `&scale=helmet`, `&shadow=none|small|oval`. Granskning: `docs/art/review/rifleman-pilot-v3/REVIEW.md` |
 | Gevärsskytt redo/liggande, gemensam skala 28 px/enhet (**GRAFIKPROV V4**) | infantry-rifleman-pilot-v4 | `dist/assets/prototype/rifleman-pilot-v4/` | valbar, ej standard | `&spacing=wide`, `&shadow=`. Granskning: `docs/art/review/rifleman-pilot-v4/REVIEW.md` |
+| Tysk Schütze, Gruppenführer, MG-Schütze med kortare nackkant (**HJÄLMKORRIGERING 2**) | german-helmet-correction-v2 | `dist/assets/prototype/german-helmet-v2/` (+ `german-helmet-v1-before/` för jämförelse) | valbar (`?art=pilot-h2`), ej standard | Granskning: `docs/art/review/german-helmet-v2/REVIEW.md` |
 
 Levererat men ej integrerat: `REQUEST_001` v1 (SVG-soldat, hus 0, gruppkort) i `art/incoming/REQUEST_001-v1/`.
