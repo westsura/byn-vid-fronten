@@ -1,0 +1,14 @@
+{
+  "rifleman": {
+    "old": "german-helmet-correction-v1/german-rifleman.png",
+    "source": "exec-b593d45c-f0f6-420a-99fe-ebe05b9e2a4d.png"
+  },
+  "leader": {
+    "old": "german-helmet-correction-v1/german-leader.png",
+    "source": "exec-93aa72f9-0921-4a49-a5c9-c73397c19a73.png"
+  },
+  "mg": {
+    "old": "german-helmet-correction-v1/german-mg.png",
+    "source": "exec-d2b42809-0355-4cdc-be5d-168454d1bd87.png"
+  }
+}
