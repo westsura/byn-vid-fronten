@@ -7,6 +7,9 @@
 // "pilot-v3" (GRAFIKPROV V3) is the same scope with the corrected two-pose sheets.
 // URL options for v3 comparisons: &scale=helmet (pixelsPerUnitHelmetMatched instead
 // of pixelsPerUnit) and &shadow=none|small|oval (default small contact shadow).
+// "pilot-h2" = v4 Soviet riflemen + German helmet correction 2 for Schütze,
+// Gruppenführer and MG-Schütze (ready/prone). &helmet=v1 shows the "before"
+// images (helmet correction 1, taken from the supplier's preview) for comparison.
 import { drawSoldier as drawCodeSoldier } from './soldiers.js';
 import { soldierPose } from './sim.js';
 import { buildingAt } from './terrain.js';
@@ -23,27 +26,56 @@ export const MODES = {
   'pilot-v3:german': { label: 'GRAFIKPROV V3 gevärsskytt – du leder tysk grupp (10)' },
   'pilot-v4:soviet': { label: 'GRAFIKPROV V4 gevärsskytt – du leder sovjetisk grupp (11)' },
   'pilot-v4:german': { label: 'GRAFIKPROV V4 gevärsskytt – du leder tysk grupp (10)' },
+  'pilot-h2:soviet': { label: 'GRAFIKPROV V4 + TYSK HJÄLM 2 – du leder sovjetisk grupp (11)' },
+  'pilot-h2:german': { label: 'GRAFIKPROV V4 + TYSK HJÄLM 2 – du leder tysk grupp (10)' },
 };
-const PILOT_BASE = {
-  'pilot-v2': 'assets/prototype/rifleman-pilot-v2/',
-  'pilot-v3': 'assets/prototype/rifleman-pilot-v3/',
-  'pilot-v4': 'assets/prototype/rifleman-pilot-v4/',
+// Pilot sources per mode: which manifest frames become which pilot key
+// (`faction-role-pose`, role = rifleman | leader | mg).
+const P = 'assets/prototype/';
+const RIFLE_MAP = {
+  'german-ready': 'german-rifleman-ready', 'german-prone': 'german-rifleman-prone',
+  'soviet-ready': 'soviet-rifleman-ready', 'soviet-prone': 'soviet-rifleman-prone',
+};
+const SOVIET_ONLY = { 'soviet-ready': 'soviet-rifleman-ready', 'soviet-prone': 'soviet-rifleman-prone' };
+const GERMAN_H = Object.fromEntries(
+  ['rifleman', 'leader', 'mg'].flatMap((r) => ['ready', 'prone'].map((p) => [`german-${r}-${p}`, `german-${r}-${p}`])),
+);
+const PILOT_SOURCES = {
+  'pilot-v2': () => [{ base: P + 'rifleman-pilot-v2/', map: RIFLE_MAP }],
+  'pilot-v3': () => [{ base: P + 'rifleman-pilot-v3/', map: RIFLE_MAP }],
+  'pilot-v4': () => [{ base: P + 'rifleman-pilot-v4/', map: RIFLE_MAP }],
+  'pilot-h2': () => [
+    { base: P + 'rifleman-pilot-v4/', map: SOVIET_ONLY },
+    { base: P + (pilotOptions.helmet === 'v1' ? 'german-helmet-v1-before/' : 'german-helmet-v2/'), map: GERMAN_H },
+  ],
 };
 let pilot = null; // { 'german-ready': {data, image}, ... } normalised: sourceRect-relative pivot/muzzle
-export const pilotOptions = { scale: 'standard', shadow: 'small', spacing: 1 };
+export const pilotOptions = { scale: 'standard', shadow: 'small', spacing: 1, helmet: 'v2' };
 export const isPilotV2 = () => mode.startsWith('pilot-v2');
-export const isPilotV3 = () => mode.startsWith('pilot-v3') || mode.startsWith('pilot-v4'); // v3+ share shadow/scale options
-export const pilotVersion = () => (mode.match(/^pilot-v(\d)/) || [])[1] ?? null;
+export const isPilotV3 = () => /^pilot-(v3|v4|h2)/.test(mode); // v3+ share shadow/scale options
+export const pilotVersion = () => (mode.startsWith('pilot-h2') ? '4 + TYSK HJÄLM ' + (pilotOptions.helmet === 'v1' ? '1 (FÖRE)' : '2') : (mode.match(/^pilot-v(\d)/) || [])[1] ?? null);
 export const modeBadge = () =>
   isPilotV3()
     ? `GRAFIKPROV V${pilotVersion()} – EJ GODKÄNT` +
       (pilotOptions.scale === 'helmet' ? ' · HJÄLMSKALA' : '') +
       (pilotOptions.spacing !== 1 ? ` · AVSTÅND ×${pilotOptions.spacing}` : '')
     : isPilotV2() ? 'GRAFIKPROV V2 – EJ GODKÄNT' : 'PROTOTYPGRAFIK · EJ GODKÄND';
-export const pilotFrame = (key) => pilot?.[key] ?? null;
-// Which soldiers the v2 pilot covers: plain riflemen only.
-export const pilotCovers = (faction, m) =>
-  faction === 'german' ? m.title === 'Schütze' && m.weapon === 'kar98k' : m.title === 'Rifleman' && m.weapon === 'M1891/30';
+// Which pilot role a soldier gets, if the active pilot has frames for it.
+const ROLE_OF = {
+  german: { 'Schütze': 'rifleman', 'Gruppenführer': 'leader', 'MG-Schütze': 'mg' },
+  soviet: { Rifleman: 'rifleman' },
+};
+export function pilotRole(faction, m) {
+  let role = ROLE_OF[faction]?.[m.title];
+  if (faction === 'german' && role === 'rifleman' && m.weapon !== 'kar98k') role = null;
+  if (faction === 'soviet' && role === 'rifleman' && m.weapon !== 'M1891/30') role = null;
+  if (!role) return null;
+  if (pilot && !pilot[`${faction}-${role}-ready`]) return null;
+  return role;
+}
+// Kept for scripts/tests: true for soldiers drawn with pilot graphics.
+export const pilotCovers = (faction, m) => !!pilotRole(faction, m) && (!pilot || !!pilot[`${faction}-${pilotRole(faction, m)}-ready`]);
+export const pilotFrame = (key) => pilot?.[key] ?? pilot?.[key.replace(/^(german|soviet)-(ready|prone)$/, '$1-rifleman-$2')] ?? null;
 
 let mode = 'standard';
 let atlases = null; // { german: {data, image}, soviet: {data, image} }
@@ -56,7 +88,8 @@ export function modeFromUrl(search) {
   if (q.get('scale') === 'helmet') pilotOptions.scale = 'helmet';
   if (['none', 'small', 'oval'].includes(q.get('shadow'))) pilotOptions.shadow = q.get('shadow');
   if (q.get('spacing') === 'wide') pilotOptions.spacing = 1.5;
-  if (!['infantry-v1', 'pilot-v2', 'pilot-v3', 'pilot-v4'].includes(art)) return 'standard';
+  if (q.get('helmet') === 'v1') pilotOptions.helmet = 'v1';
+  if (!['infantry-v1', 'pilot-v2', 'pilot-v3', 'pilot-v4', 'pilot-h2'].includes(art)) return 'standard';
   return `${art}:${q.get('side') === 'german' ? 'german' : 'soviet'}`;
 }
 
@@ -106,20 +139,20 @@ export async function loadMode(m) {
     soviet: { data: manifest.atlases.soviet, image: sImg },
   };
   const pilotKey = m.split(':')[0];
-  if (PILOT_BASE[pilotKey]) {
-    const base = PILOT_BASE[pilotKey];
-    const pm = await fetch(base + 'manifest.json').then((r) => r.json());
-    const keys = ['german-ready', 'german-prone', 'soviet-ready', 'soviet-prone'];
-    const table = pm.frames ?? pm.assets; // v3: frames (sourceRect-relative), v2: assets (whole image)
-    const files = [...new Set(keys.map((k) => table[k].file))];
-    const imgs = Object.fromEntries(await Promise.all(files.map(async (f) => [f, await load(f, base)])));
-    pilot = Object.fromEntries(
-      keys.map((k) => {
+  if (PILOT_SOURCES[pilotKey]) {
+    pilot = {};
+    for (const { base, map } of PILOT_SOURCES[pilotKey]()) {
+      const pm = await fetch(base + 'manifest.json').then((r) => r.json());
+      const table = pm.frames ?? pm.assets; // v3+: frames (sourceRect-relative), v2: assets (whole image)
+      const keys = Object.keys(map).filter((k) => table[k]);
+      const files = [...new Set(keys.map((k) => table[k].file))];
+      const imgs = Object.fromEntries(await Promise.all(files.map(async (f) => [f, await load(f, base)])));
+      for (const k of keys) {
         const d = table[k];
         const img = imgs[d.file];
-        return [k, { image: img, data: { ...d, sourceRect: d.sourceRect ?? [0, 0, img.width, img.height] } }];
-      }),
-    );
+        pilot[map[k]] = { image: img, data: { ...d, sourceRect: d.sourceRect ?? [0, 0, img.width, img.height] } };
+      }
+    }
   }
   const playerFaction = m.endsWith(':german') ? 'german' : 'soviet';
   const enemyFaction = playerFaction === 'german' ? 'soviet' : 'german';
@@ -158,12 +191,13 @@ export function drawUnit(g, m, s, time, scale = 1.12) {
   if (home && (state === 'prone' || state === 'fire')) state = 'ready';
   if (home && !m.aim) angle = Math.atan2(m.y - home.midY, m.x - home.midX);
   const k = scale / 1.12; // world units → drawing units
-  const usePilot = pilot && pilotCovers(s.faction, m) && state !== 'fallen';
+  const role = pilot ? pilotRole(s.faction, m) : null;
+  const usePilot = !!role && state !== 'fallen';
   const prone = state !== 'ready' && !state.startsWith('walk');
   drawShadow(g, m, angle, scale, state, usePilot && isPilotV3() ? pilotOptions.shadow : 'oval', prone);
   if (usePilot) {
     // Pilot riflemen: ready / prone only. fire → prone, walk → ready, crawl → prone.
-    const p = pilot[`${s.faction}-${prone ? 'prone' : 'ready'}`];
+    const p = pilot[`${s.faction}-${role}-${prone ? 'prone' : 'ready'}`];
     const d = p.data;
     const ppu = pilotOptions.scale === 'helmet' && d.pixelsPerUnitHelmetMatched ? d.pixelsPerUnitHelmetMatched : d.pixelsPerUnit;
     const f = k / ppu;
