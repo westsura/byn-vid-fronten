@@ -1,0 +1,65 @@
+[
+  {
+    "file": "soviet-1-normalzoom.jpg",
+    "copiesIdentical": true,
+    "size": [
+      1500,
+      1000
+    ],
+    "frames": 1
+  },
+  {
+    "file": "german-1-normalzoom.jpg",
+    "copiesIdentical": true,
+    "size": [
+      1500,
+      1000
+    ],
+    "frames": 1
+  },
+  {
+    "file": "soviet-3-rotation-poses-4x.jpg",
+    "copiesIdentical": true,
+    "size": [
+      2920,
+      1056
+    ],
+    "frames": 1
+  },
+  {
+    "file": "german-3-rotation-poses-4x.jpg",
+    "copiesIdentical": true,
+    "size": [
+      2920,
+      1056
+    ],
+    "frames": 1
+  },
+  {
+    "file": "soviet-2-own-squad-4x.jpg",
+    "copiesIdentical": true,
+    "size": [
+      560,
+      480
+    ],
+    "frames": 1
+  },
+  {
+    "file": "soviet-combat.gif",
+    "copiesIdentical": true,
+    "size": [
+      540,
+      390
+    ],
+    "frames": 23
+  },
+  {
+    "file": "german-walk.gif",
+    "copiesIdentical": true,
+    "size": [
+      360,
+      240
+    ],
+    "frames": 23
+  }
+]

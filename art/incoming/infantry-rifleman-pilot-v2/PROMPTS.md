@@ -1,0 +1,35 @@
+## german-ready
+Mode: reference-guided generation, transparent_background=true.
+
+Create ONE isolated German Schütze with K98k rifle game sprite on genuine transparent alpha. Reference image is UNIFORM AND MATERIAL only. Do NOT use its elevated 3/4 camera. Strict VERTICAL ORTHOGRAPHIC view straight down90degrees, helmet TOP and shoulders seen, NO face, NO front of chest, NO portrait angle.
+Pose STANDING READY seen straight down: feet beneath torso and slightly LEFT of shoulder center due to slight forward lean, not stretching toward bottom of image. Shoulders run VERTICALLY on image (up-down line); soldier faces RIGHT. Both hands hold aimed rifle EXACTLY HORIZONTAL to RIGHT. Helmet centered above shoulder pivot, barrel parallel to canvas horizontal axis. Compact foreshortened body.
+CRITICAL: Rifle direction must be EXACTLY right (+x), zero diagonal angle. Both barrel endpoints same y. Include complete muzzle, both hands, feet, no cropped parts. One person and one weapon only. Lots of transparent padding on ALL sides: subject contained within central70% of canvas. No other figures, no loose objects, no terrain or contact shadow. No text.
+Uniform: approved olive-gray tailored Feldbluse, subtle narrow shoulder boards separate from leather Y harness, darker cooler gray trousers, correct matte Stahlhelm oval crown with short front visor and longer rear skirt, dark boots, restrained cartridge pouches.
+Detailed realistic painted raster, preserve approved fabric appearance, but optimize silhouette for24px game display. Thin restrained dark edge and slightly brighter helmet/shoulder edges for terrain contrast; no thick cartoon outline. No huge shoulder packs. Soft diffuse top-left light. Weapon orange-brown wood and dark steel. Target image1024square. The sprite will be scaled down, never add presentation framing.
+
+## german-prone
+Mode: reference-guided generation, transparent_background=true.
+
+Create ONE isolated German Schütze with K98k rifle game sprite on genuine transparent alpha. Reference image is UNIFORM AND MATERIAL only. Do NOT use its elevated 3/4 camera. Strict VERTICAL ORTHOGRAPHIC view straight down90degrees, helmet TOP and shoulders seen, NO face, NO front of chest, NO portrait angle.
+Pose PRONE AIMING: head toward RIGHT, body and extended legs horizontally toward LEFT. Shoulders run vertically up-down. Elbows support aimed rifle EXACTLY HORIZONTAL RIGHT, barrel parallel to canvas x-axis. Natural human proportions; no giant backpack. Tight prone silhouette, not long stretched limbs.
+CRITICAL: Rifle direction must be EXACTLY right (+x), zero diagonal angle. Both barrel endpoints same y. Include complete muzzle, both hands, feet, no cropped parts. One person and one weapon only. Lots of transparent padding on ALL sides: subject contained within central70% of canvas. No other figures, no loose objects, no terrain or contact shadow. No text.
+Uniform: approved olive-gray tailored Feldbluse, subtle narrow shoulder boards separate from leather Y harness, darker cooler gray trousers, correct matte Stahlhelm oval crown with short front visor and longer rear skirt, dark boots, restrained cartridge pouches.
+Detailed realistic painted raster, preserve approved fabric appearance, but optimize silhouette for24px game display. Thin restrained dark edge and slightly brighter helmet/shoulder edges for terrain contrast; no thick cartoon outline. No huge shoulder packs. Soft diffuse top-left light. Weapon orange-brown wood and dark steel. Target image1024square. The sprite will be scaled down, never add presentation framing.
+
+## soviet-ready
+Mode: reference-guided generation, transparent_background=true.
+
+Create ONE isolated Soviet rifleman with Mosin M1891/30 rifle game sprite on genuine transparent alpha. Reference image is UNIFORM AND MATERIAL only. Do NOT use its elevated 3/4 camera. Strict VERTICAL ORTHOGRAPHIC view straight down90degrees, helmet TOP and shoulders seen, NO face, NO front of chest, NO portrait angle.
+Pose STANDING READY seen straight down: feet beneath torso and slightly LEFT of shoulder center due to slight forward lean, not stretching toward bottom of image. Shoulders run VERTICALLY on image (up-down line); soldier faces RIGHT. Both hands hold aimed rifle EXACTLY HORIZONTAL to RIGHT. Helmet centered above shoulder pivot, barrel parallel to canvas horizontal axis. Compact foreshortened body.
+CRITICAL: Rifle direction must be EXACTLY right (+x), zero diagonal angle. Both barrel endpoints same y. Include complete muzzle, both hands, feet, no cropped parts. One person and one weapon only. Lots of transparent padding on ALL sides: subject contained within central70% of canvas. No other figures, no loose objects, no terrain or contact shadow. No text.
+Uniform: khaki olive pull-over tunic, brown belt and cartridge pouches, NO German shoulder boards, Soviet rounded matte olive steel helmet, khaki trousers, dark boots, restrained small cloth pack.
+Detailed realistic painted raster, preserve approved fabric appearance, but optimize silhouette for24px game display. Thin restrained dark edge and slightly brighter helmet/shoulder edges for terrain contrast; no thick cartoon outline. No huge shoulder packs. Soft diffuse top-left light. Weapon orange-brown wood and dark steel. Target image1024square. The sprite will be scaled down, never add presentation framing.
+
+## soviet-prone
+Mode: reference-guided generation, transparent_background=true.
+
+Create ONE isolated Soviet rifleman with Mosin M1891/30 rifle game sprite on genuine transparent alpha. Reference image is UNIFORM AND MATERIAL only. Do NOT use its elevated 3/4 camera. Strict VERTICAL ORTHOGRAPHIC view straight down90degrees, helmet TOP and shoulders seen, NO face, NO front of chest, NO portrait angle.
+Pose PRONE AIMING: head toward RIGHT, body and extended legs horizontally toward LEFT. Shoulders run vertically up-down. Elbows support aimed rifle EXACTLY HORIZONTAL RIGHT, barrel parallel to canvas x-axis. Natural human proportions; no giant backpack. Tight prone silhouette, not long stretched limbs.
+CRITICAL: Rifle direction must be EXACTLY right (+x), zero diagonal angle. Both barrel endpoints same y. Include complete muzzle, both hands, feet, no cropped parts. One person and one weapon only. Lots of transparent padding on ALL sides: subject contained within central70% of canvas. No other figures, no loose objects, no terrain or contact shadow. No text.
+Uniform: khaki olive pull-over tunic, brown belt and cartridge pouches, NO German shoulder boards, Soviet rounded matte olive steel helmet, khaki trousers, dark boots, restrained small cloth pack.
+Detailed realistic painted raster, preserve approved fabric appearance, but optimize silhouette for24px game display. Thin restrained dark edge and slightly brighter helmet/shoulder edges for terrain contrast; no thick cartoon outline. No huge shoulder packs. Soft diffuse top-left light. Weapon orange-brown wood and dark steel. Target image1024square. The sprite will be scaled down, never add presentation framing.
