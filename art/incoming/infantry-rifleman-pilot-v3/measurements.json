@@ -1,0 +1,34 @@
+[
+  {
+    "frame": "german-ready",
+    "widthUnits": 27.14,
+    "helmetDiameterUnits": 6.59,
+    "muzzleForwardUnits": 20.22,
+    "helmetForwardUnits": 2.24,
+    "helmetMatchedWidthUnits": 18.52
+  },
+  {
+    "frame": "german-prone",
+    "widthUnits": 32.09,
+    "helmetDiameterUnits": 5.23,
+    "muzzleForwardUnits": 15.29,
+    "helmetForwardUnits": 1.74,
+    "helmetMatchedWidthUnits": 27.61
+  },
+  {
+    "frame": "soviet-ready",
+    "widthUnits": 25.29,
+    "helmetDiameterUnits": 4.92,
+    "muzzleForwardUnits": 19.23,
+    "helmetForwardUnits": 1.67,
+    "helmetMatchedWidthUnits": 23.13
+  },
+  {
+    "frame": "soviet-prone",
+    "widthUnits": 32.0,
+    "helmetDiameterUnits": 3.82,
+    "muzzleForwardUnits": 16.35,
+    "helmetForwardUnits": 1.47,
+    "helmetMatchedWidthUnits": 37.73
+  }
+]

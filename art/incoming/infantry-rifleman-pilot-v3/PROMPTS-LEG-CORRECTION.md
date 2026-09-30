@@ -1,0 +1,10 @@
+
+## german – leg correction
+Built-in image_gen edit, transparent background.
+
+Use case: precise-object-edit. Edit the TOP standing-ready figure ONLY in this two-row transparent sprite sheet. USER CORRECTION: the protruding backward boot/leg is anatomically wrong. This is a STANDING aiming soldier viewed from directly overhead, NOT a crouching, kneeling or lunging soldier. His legs are vertically below his torso, so they are OCCLUDED by his torso from this camera. REMOVE both dramatically sticking-out boots and projecting legs behind the top figure. At most a tiny boot toe edge may peek immediately under the left/back edge of his torso; no long visible thigh, shin or isolated boot. Preserve the upper figure's helmet, torso, hands, rifle, gear, colors, pixel scale and exact position. Preserve the entire LOWER prone figure exactly unchanged. Preserve canvas size and transparency. Two figures, same placement and padding, no labels or ground or shadow. The only intended change is occluding the standing figure's legs and boots naturally beneath his torso.
+
+## soviet – leg correction
+Built-in image_gen edit, transparent background.
+
+Use case: precise-object-edit. Edit the TOP standing-ready figure ONLY in this two-row transparent sprite sheet. USER CORRECTION: the protruding backward boot/leg is anatomically wrong. This is a STANDING aiming soldier viewed from directly overhead, NOT a crouching, kneeling or lunging soldier. His legs are vertically below his torso, so they are OCCLUDED by his torso from this camera. REMOVE both dramatically sticking-out boots and projecting legs behind the top figure. At most a tiny boot toe edge may peek immediately under the left/back edge of his torso; no long visible thigh, shin or isolated boot. Preserve the upper figure's helmet, torso, hands, rifle, gear, colors, pixel scale and exact position. Preserve the entire LOWER prone figure exactly unchanged. Preserve canvas size and transparency. Two figures, same placement and padding, no labels or ground or shadow. The only intended change is occluding the standing figure's legs and boots naturally beneath his torso.
