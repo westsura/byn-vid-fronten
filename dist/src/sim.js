@@ -58,12 +58,14 @@ export function setForces(f) {
 }
 export const currentForces = () => forces;
 
-// Formation offsets for n soldiers: rows of 3 (n <= 6) or 4, spacing 20 × 23.
-// For n = 5 this is exactly the original layout.
+// Formation offsets for n soldiers: rows of 3 (n <= 6) or 4, spacing 20 × 23
+// times the force's spacing factor (1 unless a prototype asks for wider spacing).
+// For n = 5 and factor 1 this is exactly the original layout.
 export function formationOffset(i, n) {
+  const f = forces.spacing ?? 1;
   const cols = n <= 6 ? 3 : 4;
   const rows = Math.ceil(n / cols);
-  return { x: ((i % cols) - (cols - 1) / 2) * 20, y: (Math.floor(i / cols) - (rows - 1) / 2) * 23 };
+  return { x: ((i % cols) - (cols - 1) / 2) * 20 * f, y: (Math.floor(i / cols) - (rows - 1) / 2) * 23 * f };
 }
 
 function makeSquad({ name, x, y, side }, id) {

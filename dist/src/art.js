@@ -21,15 +21,24 @@ export const MODES = {
   'pilot-v2:german': { label: 'GRAFIKPROV V2 gevärsskytt – du leder tysk grupp (10)' },
   'pilot-v3:soviet': { label: 'GRAFIKPROV V3 gevärsskytt – du leder sovjetisk grupp (11)' },
   'pilot-v3:german': { label: 'GRAFIKPROV V3 gevärsskytt – du leder tysk grupp (10)' },
+  'pilot-v4:soviet': { label: 'GRAFIKPROV V4 gevärsskytt – du leder sovjetisk grupp (11)' },
+  'pilot-v4:german': { label: 'GRAFIKPROV V4 gevärsskytt – du leder tysk grupp (10)' },
 };
-const PILOT_BASE = { 'pilot-v2': 'assets/prototype/rifleman-pilot-v2/', 'pilot-v3': 'assets/prototype/rifleman-pilot-v3/' };
+const PILOT_BASE = {
+  'pilot-v2': 'assets/prototype/rifleman-pilot-v2/',
+  'pilot-v3': 'assets/prototype/rifleman-pilot-v3/',
+  'pilot-v4': 'assets/prototype/rifleman-pilot-v4/',
+};
 let pilot = null; // { 'german-ready': {data, image}, ... } normalised: sourceRect-relative pivot/muzzle
-export const pilotOptions = { scale: 'standard', shadow: 'small' };
+export const pilotOptions = { scale: 'standard', shadow: 'small', spacing: 1 };
 export const isPilotV2 = () => mode.startsWith('pilot-v2');
-export const isPilotV3 = () => mode.startsWith('pilot-v3');
+export const isPilotV3 = () => mode.startsWith('pilot-v3') || mode.startsWith('pilot-v4'); // v3+ share shadow/scale options
+export const pilotVersion = () => (mode.match(/^pilot-v(\d)/) || [])[1] ?? null;
 export const modeBadge = () =>
   isPilotV3()
-    ? 'GRAFIKPROV V3 – EJ GODKÄNT' + (pilotOptions.scale === 'helmet' ? ' · HJÄLMSKALA' : '')
+    ? `GRAFIKPROV V${pilotVersion()} – EJ GODKÄNT` +
+      (pilotOptions.scale === 'helmet' ? ' · HJÄLMSKALA' : '') +
+      (pilotOptions.spacing !== 1 ? ` · AVSTÅND ×${pilotOptions.spacing}` : '')
     : isPilotV2() ? 'GRAFIKPROV V2 – EJ GODKÄNT' : 'PROTOTYPGRAFIK · EJ GODKÄND';
 export const pilotFrame = (key) => pilot?.[key] ?? null;
 // Which soldiers the v2 pilot covers: plain riflemen only.
@@ -46,7 +55,8 @@ export function modeFromUrl(search) {
   const art = q.get('art');
   if (q.get('scale') === 'helmet') pilotOptions.scale = 'helmet';
   if (['none', 'small', 'oval'].includes(q.get('shadow'))) pilotOptions.shadow = q.get('shadow');
-  if (!['infantry-v1', 'pilot-v2', 'pilot-v3'].includes(art)) return 'standard';
+  if (q.get('spacing') === 'wide') pilotOptions.spacing = 1.5;
+  if (!['infantry-v1', 'pilot-v2', 'pilot-v3', 'pilot-v4'].includes(art)) return 'standard';
   return `${art}:${q.get('side') === 'german' ? 'german' : 'soviet'}`;
 }
 
@@ -116,6 +126,7 @@ export async function loadMode(m) {
   const defs = { german, soviet };
   return {
     id: m,
+    spacing: pilotOptions.spacing,
     player: { faction: playerFaction, soldiers: rosterFrom(playerFaction, defs[playerFaction], atlases[playerFaction].data) },
     enemy: { faction: enemyFaction, soldiers: rosterFrom(enemyFaction, defs[enemyFaction], atlases[enemyFaction].data) },
   };
