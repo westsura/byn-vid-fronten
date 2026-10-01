@@ -1,0 +1,30 @@
+[
+  {
+    "role": "soviet-leader",
+    "helmetDeltaUnits": 0.25,
+    "muzzleForwardDeltaUnits": 0.10714285714285714,
+    "muzzleSideDeltaUnits": -0.14285714285714285,
+    "pass": true
+  },
+  {
+    "role": "soviet-mg",
+    "helmetDeltaUnits": 0.3051429909041975,
+    "muzzleForwardDeltaUnits": -0.7142857142857143,
+    "muzzleSideDeltaUnits": 0.0,
+    "pass": true
+  },
+  {
+    "role": "soviet-assistant",
+    "helmetDeltaUnits": 0.32142857142857145,
+    "muzzleForwardDeltaUnits": -0.03571428571428571,
+    "muzzleSideDeltaUnits": -0.14285714285714285,
+    "pass": true
+  },
+  {
+    "role": "soviet-svt",
+    "helmetDeltaUnits": 0.43594841484763225,
+    "muzzleForwardDeltaUnits": -0.9642857142857143,
+    "muzzleSideDeltaUnits": -0.03571428571428571,
+    "pass": true
+  }
+]

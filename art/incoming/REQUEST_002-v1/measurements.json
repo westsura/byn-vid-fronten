@@ -1,0 +1,122 @@
+[
+  {
+    "frame": "soviet-leader-ready",
+    "widthUnits": 25.071,
+    "heightUnits": 11.5,
+    "muzzleForwardUnits": 18.25,
+    "muzzleSideUnits": -0.071,
+    "helmetDiameterUnits": 4.571,
+    "helmetDiameterMethod": "manual approximate visible shell diameter",
+    "helmetDiameterUncertaintyUnits": 0.25
+  },
+  {
+    "frame": "soviet-leader-prone",
+    "widthUnits": 39.25,
+    "heightUnits": 10.286,
+    "muzzleForwardUnits": 18.357,
+    "muzzleSideUnits": -0.214,
+    "helmetDiameterUnits": 4.357,
+    "helmetDiameterMethod": "manual approximate visible shell diameter",
+    "helmetDiameterUncertaintyUnits": 0.25
+  },
+  {
+    "frame": "soviet-mg-ready",
+    "widthUnits": 27.786,
+    "heightUnits": 11.571,
+    "muzzleForwardUnits": 21.143,
+    "muzzleSideUnits": -0.036,
+    "helmetDiameterUnits": 4.571,
+    "helmetDiameterMethod": "manual approximate visible shell diameter",
+    "helmetDiameterUncertaintyUnits": 0.25
+  },
+  {
+    "frame": "soviet-mg-prone",
+    "widthUnits": 40.964,
+    "heightUnits": 10.321,
+    "muzzleForwardUnits": 20.429,
+    "muzzleSideUnits": -0.036,
+    "helmetDiameterUnits": 4.357,
+    "helmetDiameterMethod": "manual approximate visible shell diameter",
+    "helmetDiameterUncertaintyUnits": 0.25
+  },
+  {
+    "frame": "soviet-assistant-ready",
+    "widthUnits": 27.464,
+    "heightUnits": 11.679,
+    "muzzleForwardUnits": 20.821,
+    "muzzleSideUnits": 0.214,
+    "helmetDiameterUnits": 4.571,
+    "helmetDiameterMethod": "manual approximate visible shell diameter",
+    "helmetDiameterUncertaintyUnits": 0.25
+  },
+  {
+    "frame": "soviet-assistant-prone",
+    "widthUnits": 41.679,
+    "heightUnits": 10.857,
+    "muzzleForwardUnits": 20.786,
+    "muzzleSideUnits": 0.071,
+    "helmetDiameterUnits": 4.357,
+    "helmetDiameterMethod": "manual approximate visible shell diameter",
+    "helmetDiameterUncertaintyUnits": 0.25
+  },
+  {
+    "frame": "soviet-svt-ready",
+    "widthUnits": 29.429,
+    "heightUnits": 11.571,
+    "muzzleForwardUnits": 22.714,
+    "muzzleSideUnits": 0.143,
+    "helmetDiameterUnits": 4.571,
+    "helmetDiameterMethod": "manual approximate visible shell diameter",
+    "helmetDiameterUncertaintyUnits": 0.25
+  },
+  {
+    "frame": "soviet-svt-prone",
+    "widthUnits": 42.107,
+    "heightUnits": 10.286,
+    "muzzleForwardUnits": 21.75,
+    "muzzleSideUnits": 0.107,
+    "helmetDiameterUnits": 4.357,
+    "helmetDiameterMethod": "manual approximate visible shell diameter",
+    "helmetDiameterUncertaintyUnits": 0.25
+  },
+  {
+    "frame": "german-fallen-a",
+    "widthUnits": 33.643,
+    "heightUnits": 17.464,
+    "muzzleForwardUnits": null,
+    "muzzleSideUnits": null,
+    "helmetDiameterUnits": 5.5,
+    "helmetDiameterMethod": "manual approximate visible shell diameter",
+    "helmetDiameterUncertaintyUnits": 0.25
+  },
+  {
+    "frame": "german-fallen-b",
+    "widthUnits": 28.321,
+    "heightUnits": 15.179,
+    "muzzleForwardUnits": null,
+    "muzzleSideUnits": null,
+    "helmetDiameterUnits": 5.5,
+    "helmetDiameterMethod": "manual approximate visible shell diameter",
+    "helmetDiameterUncertaintyUnits": 0.25
+  },
+  {
+    "frame": "soviet-fallen-a",
+    "widthUnits": 30.821,
+    "heightUnits": 15.286,
+    "muzzleForwardUnits": null,
+    "muzzleSideUnits": null,
+    "helmetDiameterUnits": 4.464,
+    "helmetDiameterMethod": "manual approximate visible shell diameter",
+    "helmetDiameterUncertaintyUnits": 0.25
+  },
+  {
+    "frame": "soviet-fallen-b",
+    "widthUnits": 29.25,
+    "heightUnits": 14.179,
+    "muzzleForwardUnits": null,
+    "muzzleSideUnits": null,
+    "helmetDiameterUnits": 4.286,
+    "helmetDiameterMethod": "manual approximate visible shell diameter",
+    "helmetDiameterUncertaintyUnits": 0.25
+  }
+]
