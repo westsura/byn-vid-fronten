@@ -13,3 +13,7 @@
 | Tyska stödroller: Assistent-MG-Schütze, Munitionsträger, Stellvertreter (**STÖDROLLER 1**) | german-support-roles-v1 | `dist/assets/prototype/german-support-v1/` | valbar (`?art=pilot-s1`), ej standard | Hela tyska gruppen i v4-stil. Granskning: `docs/art/review/german-support-v1/REVIEW.md` |
 
 Levererat men ej integrerat: `REQUEST_001` v1 (SVG-soldat, hus 0, gruppkort) i `art/incoming/REQUEST_001-v1/`.
+
+**Björns provspelning 2026-10-01:** v4-stilen godkänd som grund (gevärsskytt v4, tysk hjälmkorrigering 2, tyska stödroller 1). Lägena är fortfarande valbara prov, inte standardgrafik; märket i spelet står kvar tills helheten (utslagna, specialister, animationer) är på plats.
+
+Beställt: `REQUEST_002` (sovjetiska specialister, utslagna, sovjetisk mynningspunkt), `REQUEST_003` (gångcykelpilot, tysk gevärsskytt).

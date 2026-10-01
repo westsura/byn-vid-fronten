@@ -2,6 +2,8 @@
 
 Datum: 2026-10-01 · Granskat av: Claude · Status: **EJ GODKÄNT.** Björn har inte provspelat.
 
+**Uppdatering 2026-10-01:** Björn har provspelat och godkänt stilen som grund för fortsatt grafik. Läget är fortfarande ett valbart prov; produktionsgodkännande av helheten väntar på utslagna, sovjetiska specialister och animationer.
+
 ## Så provas det
 
 Öppna `?art=pilot-s1&side=german` (eller `&side=soviet`). Märket lyder "GRAFIKPROV V4 · TYSK GRUPP MED STÖDROLLER 1 – EJ GODKÄNT". Lägg till `&spacing=wide` för formationsavstånd × 1,5.

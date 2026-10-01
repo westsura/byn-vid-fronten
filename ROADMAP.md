@@ -67,8 +67,10 @@ Resultat: en uppdatering tar cirka 0,8 ms i full strid, mot tidigare 5,4 ms.
 - [x] Grafikprov v4 (gemensam skala i alla poser) valbart och speltestat av Claude: `docs/art/review/rifleman-pilot-v4/REVIEW.md`. **Ej godkänt.**
 - [x] Tysk hjälmkorrigering 2 (Schütze, Gruppenführer, MG-Schütze) valbar och speltestad av Claude: `docs/art/review/german-helmet-v2/REVIEW.md`. **Ej godkänd.**
 - [x] Tyska stödroller 1 valbara (`pilot-s1`): hela tyska gruppen i v4-stil. Speltestad av Claude: `docs/art/review/german-support-v1/REVIEW.md`. **Ej godkänd.**
-- [ ] Björn provspelar prototypgrafiken (v1–v4, hjälm 2, stödroller 1).
-- [ ] Sovjetiska specialister i v4-stil (gruppchef, kulspruteskytt, assistent, äldre skytt/SVT).
+- [x] Björn provspelade prototypgrafiken 2026-10-01 och godkände v4-stilen (gevärsskytt v4, tysk hjälm 2, tyska stödroller 1) som grund för fortsatt grafik. Färdig produktionsgrafik kräver fortfarande utslagna, sovjetiska specialister och animationer.
+- [ ] `REQUEST_002`: sovjetiska specialister i v4-stil, utslagna båda sidor, rättad sovjetisk mynningspunkt. Beställd 2026-10-01.
+- [ ] `REQUEST_003`: gångcykel, pilot med tysk gevärsskytt (8 rutor, sträckstyrd). Beställd 2026-10-01.
+- [ ] Efter godkänd pilot: gång för alla roller, krypcykel.
 - [ ] Integrera REQUEST_001 v1 (SVG-soldat, hus 0, gruppkort) – levererat, ej integrerat.
 - [ ] Zoom och panorering, skärpa på högupplösta skärmar.
 - [ ] Bättre ljud, miljöljud, korta röstmeddelanden.

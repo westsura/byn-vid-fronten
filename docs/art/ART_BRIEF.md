@@ -156,6 +156,8 @@ Markeringar i texten:
 
 ## E. Soldater och animation
 
+> **Gäller från 2026-10-01:** soldaterna levereras som rasterbilder med manifest (28 källpixlar per spelenhet, axelmitt som `pivot`, mynning och hjälmcentrum angivna), enligt grafikprov v4. Björn har godkänt v4-stilen. SVG-formatet nedan gäller inte längre för soldater. Se `REQUEST_002.md` och `REQUEST_003.md`.
+
 **Nuläge** [STÖDS]
 
 - Soldaterna ritas med kod på canvas (`dist/src/soldiers.js`), inte med bilder.

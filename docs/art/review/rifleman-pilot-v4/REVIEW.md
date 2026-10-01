@@ -2,6 +2,8 @@
 
 Datum: 2026-10-01 · Granskat av: Claude · Status: **GRAFIKPROV V4 – EJ GODKÄNT.** Björn har inte provspelat.
 
+**Uppdatering 2026-10-01:** Björn har provspelat och godkänt stilen som grund för fortsatt grafik. Läget är fortfarande ett valbart prov; produktionsgodkännande av helheten väntar på utslagna, sovjetiska specialister och animationer.
+
 ## Så provas det
 
 Välj *GRAFIKPROV V4 gevärsskytt* i grafikväljaren, eller öppna en av adresserna:

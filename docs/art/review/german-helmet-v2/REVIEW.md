@@ -2,6 +2,8 @@
 
 Datum: 2026-10-01 · Granskat av: Claude · Status: **EJ GODKÄNT.** Björn har inte provspelat.
 
+**Uppdatering 2026-10-01:** Björn har provspelat och godkänt stilen som grund för fortsatt grafik. Läget är fortfarande ett valbart prov; produktionsgodkännande av helheten väntar på utslagna, sovjetiska specialister och animationer.
+
 ## Så provas det
 
 - `?art=pilot-h2&side=german` (eller `&side=soviet`) visar den nya versionen. Märket lyder "GRAFIKPROV V4 + TYSK HJÄLM 2 – EJ GODKÄNT".
