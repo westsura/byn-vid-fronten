@@ -68,7 +68,8 @@ Resultat: en uppdatering tar cirka 0,8 ms i full strid, mot tidigare 5,4 ms.
 - [x] Tysk hjälmkorrigering 2 (Schütze, Gruppenführer, MG-Schütze) valbar och speltestad av Claude: `docs/art/review/german-helmet-v2/REVIEW.md`. **Ej godkänd.**
 - [x] Tyska stödroller 1 valbara (`pilot-s1`): hela tyska gruppen i v4-stil. Speltestad av Claude: `docs/art/review/german-support-v1/REVIEW.md`. **Ej godkänd.**
 - [x] Björn provspelade prototypgrafiken 2026-10-01 och godkände v4-stilen (gevärsskytt v4, tysk hjälm 2, tyska stödroller 1) som grund för fortsatt grafik. Färdig produktionsgrafik kräver fortfarande utslagna, sovjetiska specialister och animationer.
-- [ ] `REQUEST_002`: sovjetiska specialister i v4-stil, utslagna båda sidor, rättad sovjetisk mynningspunkt. Beställd 2026-10-01.
+- [x] `REQUEST_002` v1 levererat och valbart (`pilot-r2`): sovjetiska specialister, utslagna båda sidor, rättad sovjetisk registrering. Speltestat av Claude: `docs/art/review/request-002-v1/REVIEW.md`. **Ej godkänt.** Kvar: tysk utslagen har för stor hjälm.
+- [ ] Björn provspelar `pilot-r2`.
 - [ ] `REQUEST_003`: gångcykel, pilot med tysk gevärsskytt (8 rutor, sträckstyrd). Beställd 2026-10-01.
 - [ ] Efter godkänd pilot: gång för alla roller, krypcykel.
 - [ ] Integrera REQUEST_001 v1 (SVG-soldat, hus 0, gruppkort) – levererat, ej integrerat.

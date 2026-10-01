@@ -1,0 +1,67 @@
+{
+  "version": "REQUEST_002-v1",
+  "frames": {
+    "soviet-ready": {
+      "file": "soviet-poses.png",
+      "sourceRect": [
+        0,
+        0,
+        1254,
+        700
+      ],
+      "pivot": [
+        587,
+        444
+      ],
+      "muzzle": [
+        1170,
+        450
+      ],
+      "helmetCenter": [
+        647,
+        396
+      ],
+      "sourceForwardRadians": 0,
+      "pixelsPerUnit": 28.0,
+      "helmetDiameterPixelsEstimate": 128,
+      "contentBoundsAlpha32": [
+        402,
+        246,
+        1173,
+        566
+      ],
+      "registration": "weapon-axis registration offset, not anatomical shoulder midpoint; image unchanged"
+    },
+    "soviet-prone": {
+      "file": "soviet-poses.png",
+      "sourceRect": [
+        0,
+        700,
+        1254,
+        554
+      ],
+      "pivot": [
+        624,
+        255
+      ],
+      "muzzle": [
+        1204,
+        253
+      ],
+      "helmetCenter": [
+        684,
+        213
+      ],
+      "sourceForwardRadians": 0,
+      "pixelsPerUnit": 28.0,
+      "helmetDiameterPixelsEstimate": 122,
+      "contentBoundsAlpha32": [
+        46,
+        85,
+        1206,
+        367
+      ],
+      "registration": "weapon-axis registration offset, not anatomical shoulder midpoint; image unchanged"
+    }
+  }
+}

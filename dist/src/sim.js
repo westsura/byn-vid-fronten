@@ -90,6 +90,7 @@ function makeSquad({ name, x, y, side }, id) {
         hp: 100,
         angle: side ? Math.PI : 0,
         phase: i * 1.73,
+        idx: i,
         stride: 0,
         moving: false,
         flash: 0,

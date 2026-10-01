@@ -1,0 +1,365 @@
+{
+  "version": "REQUEST_002-v1",
+  "frames": {
+    "soviet-leader-ready": {
+      "file": "soviet-leader.png",
+      "sourceRect": [
+        0,
+        0,
+        1254,
+        700
+      ],
+      "pivot": [
+        587,
+        440
+      ],
+      "muzzle": [
+        1098,
+        438
+      ],
+      "helmetCenter": [
+        647,
+        395
+      ],
+      "pixelsPerUnit": 28,
+      "sourceForwardRadians": 0,
+      "contentBoundsAlpha32": [
+        399,
+        244,
+        1101,
+        566
+      ],
+      "status": "new-role-not-approved",
+      "registration": "manual visual landmarks; weapon-axis anchor for live poses, torso center for fallen"
+    },
+    "soviet-leader-prone": {
+      "file": "soviet-leader.png",
+      "sourceRect": [
+        0,
+        700,
+        1254,
+        554
+      ],
+      "pivot": [
+        628,
+        251
+      ],
+      "muzzle": [
+        1142,
+        245
+      ],
+      "helmetCenter": [
+        688,
+        213
+      ],
+      "pixelsPerUnit": 28,
+      "sourceForwardRadians": 0,
+      "contentBoundsAlpha32": [
+        45,
+        82,
+        1144,
+        370
+      ],
+      "status": "new-role-not-approved",
+      "registration": "manual visual landmarks; weapon-axis anchor for live poses, torso center for fallen"
+    },
+    "soviet-mg-ready": {
+      "file": "soviet-mg.png",
+      "sourceRect": [
+        0,
+        0,
+        1254,
+        700
+      ],
+      "pivot": [
+        587,
+        442
+      ],
+      "muzzle": [
+        1179,
+        441
+      ],
+      "helmetCenter": [
+        647,
+        396
+      ],
+      "pixelsPerUnit": 28,
+      "sourceForwardRadians": 0,
+      "contentBoundsAlpha32": [
+        402,
+        242,
+        1180,
+        566
+      ],
+      "status": "new-role-not-approved",
+      "registration": "manual visual landmarks; weapon-axis anchor for live poses, torso center for fallen"
+    },
+    "soviet-mg-prone": {
+      "file": "soviet-mg.png",
+      "sourceRect": [
+        0,
+        700,
+        1254,
+        554
+      ],
+      "pivot": [
+        621,
+        251
+      ],
+      "muzzle": [
+        1193,
+        250
+      ],
+      "helmetCenter": [
+        684,
+        213
+      ],
+      "pixelsPerUnit": 28,
+      "sourceForwardRadians": 0,
+      "contentBoundsAlpha32": [
+        46,
+        81,
+        1193,
+        370
+      ],
+      "status": "new-role-not-approved",
+      "registration": "manual visual landmarks; weapon-axis anchor for live poses, torso center for fallen"
+    },
+    "soviet-assistant-ready": {
+      "file": "soviet-assistant.png",
+      "sourceRect": [
+        0,
+        0,
+        1254,
+        700
+      ],
+      "pivot": [
+        593,
+        447
+      ],
+      "muzzle": [
+        1176,
+        453
+      ],
+      "helmetCenter": [
+        653,
+        402
+      ],
+      "pixelsPerUnit": 28,
+      "sourceForwardRadians": 0,
+      "contentBoundsAlpha32": [
+        411,
+        244,
+        1180,
+        571
+      ],
+      "status": "new-role-not-approved",
+      "registration": "manual visual landmarks; weapon-axis anchor for live poses, torso center for fallen"
+    },
+    "soviet-assistant-prone": {
+      "file": "soviet-assistant.png",
+      "sourceRect": [
+        0,
+        700,
+        1254,
+        554
+      ],
+      "pivot": [
+        627,
+        251
+      ],
+      "muzzle": [
+        1209,
+        253
+      ],
+      "helmetCenter": [
+        687,
+        215
+      ],
+      "pixelsPerUnit": 28,
+      "sourceForwardRadians": 0,
+      "contentBoundsAlpha32": [
+        44,
+        64,
+        1211,
+        368
+      ],
+      "status": "new-role-not-approved",
+      "registration": "manual visual landmarks; weapon-axis anchor for live poses, torso center for fallen"
+    },
+    "soviet-svt-ready": {
+      "file": "soviet-svt.png",
+      "sourceRect": [
+        0,
+        0,
+        1254,
+        700
+      ],
+      "pivot": [
+        587,
+        440
+      ],
+      "muzzle": [
+        1223,
+        444
+      ],
+      "helmetCenter": [
+        647,
+        396
+      ],
+      "pixelsPerUnit": 28,
+      "sourceForwardRadians": 0,
+      "contentBoundsAlpha32": [
+        402,
+        243,
+        1226,
+        567
+      ],
+      "status": "new-role-not-approved",
+      "registration": "manual visual landmarks; weapon-axis anchor for live poses, torso center for fallen"
+    },
+    "soviet-svt-prone": {
+      "file": "soviet-svt.png",
+      "sourceRect": [
+        0,
+        700,
+        1254,
+        554
+      ],
+      "pivot": [
+        614,
+        250
+      ],
+      "muzzle": [
+        1223,
+        253
+      ],
+      "helmetCenter": [
+        684,
+        213
+      ],
+      "pixelsPerUnit": 28,
+      "sourceForwardRadians": 0,
+      "contentBoundsAlpha32": [
+        47,
+        81,
+        1226,
+        369
+      ],
+      "status": "new-role-not-approved",
+      "registration": "manual visual landmarks; weapon-axis anchor for live poses, torso center for fallen"
+    },
+    "german-fallen-a": {
+      "file": "german-fallen.png",
+      "sourceRect": [
+        0,
+        0,
+        1254,
+        700
+      ],
+      "pivot": [
+        700,
+        355
+      ],
+      "muzzle": null,
+      "helmetCenter": [
+        811,
+        402
+      ],
+      "pixelsPerUnit": 28,
+      "sourceForwardRadians": 0,
+      "contentBoundsAlpha32": [
+        157,
+        179,
+        1099,
+        668
+      ],
+      "status": "new-role-not-approved",
+      "registration": "manual visual landmarks; weapon-axis anchor for live poses, torso center for fallen"
+    },
+    "german-fallen-b": {
+      "file": "german-fallen.png",
+      "sourceRect": [
+        0,
+        700,
+        1254,
+        554
+      ],
+      "pivot": [
+        730,
+        230
+      ],
+      "muzzle": null,
+      "helmetCenter": [
+        842,
+        275
+      ],
+      "pixelsPerUnit": 28,
+      "sourceForwardRadians": 0,
+      "contentBoundsAlpha32": [
+        262,
+        66,
+        1055,
+        491
+      ],
+      "status": "new-role-not-approved",
+      "registration": "manual visual landmarks; weapon-axis anchor for live poses, torso center for fallen"
+    },
+    "soviet-fallen-a": {
+      "file": "soviet-fallen.png",
+      "sourceRect": [
+        0,
+        0,
+        1254,
+        730
+      ],
+      "pivot": [
+        732,
+        410
+      ],
+      "muzzle": null,
+      "helmetCenter": [
+        847,
+        457
+      ],
+      "pixelsPerUnit": 28,
+      "sourceForwardRadians": 0,
+      "contentBoundsAlpha32": [
+        210,
+        285,
+        1073,
+        713
+      ],
+      "status": "new-role-not-approved",
+      "registration": "manual visual landmarks; weapon-axis anchor for live poses, torso center for fallen"
+    },
+    "soviet-fallen-b": {
+      "file": "soviet-fallen.png",
+      "sourceRect": [
+        0,
+        730,
+        1254,
+        524
+      ],
+      "pivot": [
+        771,
+        170
+      ],
+      "muzzle": null,
+      "helmetCenter": [
+        894,
+        203
+      ],
+      "pixelsPerUnit": 28,
+      "sourceForwardRadians": 0,
+      "contentBoundsAlpha32": [
+        218,
+        49,
+        1037,
+        446
+      ],
+      "status": "new-role-not-approved",
+      "registration": "manual visual landmarks; weapon-axis anchor for live poses, torso center for fallen"
+    }
+  }
+}

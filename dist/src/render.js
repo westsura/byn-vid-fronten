@@ -140,7 +140,7 @@ function drawSquad(ctx, s) {
       circle(ctx, dest.x, dest.y, 8, '#f5e9bd');
     }
   }
-  for (const m of s.men) drawUnit(ctx, m, s, state.elapsed, 1.12);
+  for (const m of s.men) if (m.hp > 0) drawUnit(ctx, m, s, state.elapsed, 1.12);
   if (!alive(s).length) return;
   // Squad tag and morale bar
   ctx.textAlign = 'center';
@@ -193,6 +193,8 @@ export function drawMap(ctx, cursor) {
     ctx.setLineDash([]);
   }
   drawObjective(ctx);
+  // Fallen soldiers first, so they lie under every living soldier.
+  for (const s of state.squads) if (!s.side || s.visible) for (const m of s.men) if (m.hp <= 0) drawUnit(ctx, m, s, state.elapsed, 1.12);
   for (const s of state.squads) if (!s.side || s.visible) drawSquad(ctx, s);
   drawEffects(ctx);
 
