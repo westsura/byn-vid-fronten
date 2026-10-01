@@ -1,0 +1,192 @@
+{
+  "version": "german-support-roles-v1",
+  "base": "german-helmet-correction-v2",
+  "frames": {
+    "german-assistant-ready": {
+      "file": "german-assistant.png",
+      "sourceRect": [
+        0,
+        0,
+        1254,
+        700
+      ],
+      "pivot": [
+        635,
+        390
+      ],
+      "muzzle": [
+        975,
+        370
+      ],
+      "helmetCenter": [
+        696,
+        385
+      ],
+      "pixelsPerUnit": 28,
+      "sourceForwardRadians": 0,
+      "contentBoundsAlpha32": [
+        422,
+        236,
+        977,
+        576
+      ],
+      "status": "new-role-not-approved",
+      "registration": "manual approximate shoulder and muzzle landmarks"
+    },
+    "german-assistant-prone": {
+      "file": "german-assistant.png",
+      "sourceRect": [
+        0,
+        700,
+        1254,
+        554
+      ],
+      "pivot": [
+        695,
+        245
+      ],
+      "muzzle": [
+        1060,
+        234
+      ],
+      "helmetCenter": [
+        770,
+        246
+      ],
+      "pixelsPerUnit": 28,
+      "sourceForwardRadians": 0,
+      "contentBoundsAlpha32": [
+        57,
+        97,
+        1062,
+        428
+      ],
+      "status": "new-role-not-approved",
+      "registration": "manual approximate shoulder and muzzle landmarks"
+    },
+    "german-ammo-ready": {
+      "file": "german-ammo.png",
+      "sourceRect": [
+        0,
+        0,
+        1254,
+        700
+      ],
+      "pivot": [
+        600,
+        390
+      ],
+      "muzzle": [
+        1117,
+        400
+      ],
+      "helmetCenter": [
+        659,
+        385
+      ],
+      "pixelsPerUnit": 28,
+      "sourceForwardRadians": 0,
+      "contentBoundsAlpha32": [
+        417,
+        243,
+        1120,
+        578
+      ],
+      "status": "new-role-not-approved",
+      "registration": "manual approximate shoulder and muzzle landmarks"
+    },
+    "german-ammo-prone": {
+      "file": "german-ammo.png",
+      "sourceRect": [
+        0,
+        700,
+        1254,
+        554
+      ],
+      "pivot": [
+        645,
+        245
+      ],
+      "muzzle": [
+        1170,
+        250
+      ],
+      "helmetCenter": [
+        714,
+        242
+      ],
+      "pixelsPerUnit": 28,
+      "sourceForwardRadians": 0,
+      "contentBoundsAlpha32": [
+        56,
+        110,
+        1173,
+        425
+      ],
+      "status": "new-role-not-approved",
+      "registration": "manual approximate shoulder and muzzle landmarks"
+    },
+    "german-deputy-ready": {
+      "file": "german-deputy.png",
+      "sourceRect": [
+        0,
+        0,
+        1254,
+        700
+      ],
+      "pivot": [
+        600,
+        390
+      ],
+      "muzzle": [
+        1117,
+        400
+      ],
+      "helmetCenter": [
+        659,
+        385
+      ],
+      "pixelsPerUnit": 28,
+      "sourceForwardRadians": 0,
+      "contentBoundsAlpha32": [
+        409,
+        245,
+        1120,
+        576
+      ],
+      "status": "new-role-not-approved",
+      "registration": "manual approximate shoulder and muzzle landmarks"
+    },
+    "german-deputy-prone": {
+      "file": "german-deputy.png",
+      "sourceRect": [
+        0,
+        700,
+        1254,
+        554
+      ],
+      "pivot": [
+        645,
+        245
+      ],
+      "muzzle": [
+        1170,
+        250
+      ],
+      "helmetCenter": [
+        714,
+        242
+      ],
+      "pixelsPerUnit": 28,
+      "sourceForwardRadians": 0,
+      "contentBoundsAlpha32": [
+        57,
+        111,
+        1174,
+        423
+      ],
+      "status": "new-role-not-approved",
+      "registration": "manual approximate shoulder and muzzle landmarks"
+    }
+  }
+}

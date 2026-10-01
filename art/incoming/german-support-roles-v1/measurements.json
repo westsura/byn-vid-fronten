@@ -1,0 +1,38 @@
+[
+  {
+    "frame": "german-assistant-ready",
+    "widthUnits": 19.82,
+    "muzzleForwardUnits": 12.14,
+    "muzzleSideUnits": -0.71
+  },
+  {
+    "frame": "german-assistant-prone",
+    "widthUnits": 35.89,
+    "muzzleForwardUnits": 13.04,
+    "muzzleSideUnits": -0.39
+  },
+  {
+    "frame": "german-ammo-ready",
+    "widthUnits": 25.11,
+    "muzzleForwardUnits": 18.46,
+    "muzzleSideUnits": 0.36
+  },
+  {
+    "frame": "german-ammo-prone",
+    "widthUnits": 39.89,
+    "muzzleForwardUnits": 18.75,
+    "muzzleSideUnits": 0.18
+  },
+  {
+    "frame": "german-deputy-ready",
+    "widthUnits": 25.39,
+    "muzzleForwardUnits": 18.46,
+    "muzzleSideUnits": 0.36
+  },
+  {
+    "frame": "german-deputy-prone",
+    "widthUnits": 39.89,
+    "muzzleForwardUnits": 18.75,
+    "muzzleSideUnits": 0.18
+  }
+]
