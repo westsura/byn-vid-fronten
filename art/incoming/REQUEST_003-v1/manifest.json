@@ -1,0 +1,391 @@
+{
+  "version": "german-rifleman-walk-pilot-v1",
+  "base": "german-helmet-correction-v2",
+  "frames": {
+    "german-rifleman-walk-0": {
+      "file": "german-rifleman-walk.png",
+      "sourceRect": [
+        0,
+        0,
+        1254,
+        700
+      ],
+      "pivot": [
+        600,
+        390
+      ],
+      "muzzle": [
+        1115,
+        400
+      ],
+      "helmetCenter": [
+        659,
+        385
+      ],
+      "plantedFoot": [
+        780,
+        285
+      ],
+      "plantedFootSide": "left",
+      "feet": {
+        "left": [
+          780,
+          285
+        ],
+        "right": [
+          388,
+          505
+        ]
+      },
+      "pixelsPerUnit": 28,
+      "sourceForwardRadians": 0,
+      "contentBoundsAlpha32": [
+        348,
+        245,
+        1117,
+        575
+      ],
+      "status": "animation-pilot-not-approved",
+      "registration": "fixed unchanged ready overlay; plantedFoot is boot sole center on ground plane"
+    },
+    "german-rifleman-walk-1": {
+      "file": "german-rifleman-walk.png",
+      "sourceRect": [
+        1254,
+        0,
+        1254,
+        700
+      ],
+      "pivot": [
+        600,
+        390
+      ],
+      "muzzle": [
+        1115,
+        400
+      ],
+      "helmetCenter": [
+        659,
+        385
+      ],
+      "plantedFoot": [
+        682,
+        285
+      ],
+      "plantedFootSide": "left",
+      "feet": {
+        "left": [
+          682,
+          285
+        ],
+        "right": [
+          449.25,
+          505
+        ]
+      },
+      "pixelsPerUnit": 28,
+      "sourceForwardRadians": 0,
+      "contentBoundsAlpha32": [
+        392,
+        245,
+        1117,
+        575
+      ],
+      "status": "animation-pilot-not-approved",
+      "registration": "fixed unchanged ready overlay; plantedFoot is boot sole center on ground plane"
+    },
+    "german-rifleman-walk-2": {
+      "file": "german-rifleman-walk.png",
+      "sourceRect": [
+        2508,
+        0,
+        1254,
+        700
+      ],
+      "pivot": [
+        600,
+        390
+      ],
+      "muzzle": [
+        1115,
+        400
+      ],
+      "helmetCenter": [
+        659,
+        385
+      ],
+      "plantedFoot": [
+        584,
+        285
+      ],
+      "plantedFootSide": "left",
+      "feet": {
+        "left": [
+          584,
+          285
+        ],
+        "right": [
+          584,
+          505
+        ]
+      },
+      "pixelsPerUnit": 28,
+      "sourceForwardRadians": 0,
+      "contentBoundsAlpha32": [
+        392,
+        245,
+        1117,
+        575
+      ],
+      "status": "animation-pilot-not-approved",
+      "registration": "fixed unchanged ready overlay; plantedFoot is boot sole center on ground plane"
+    },
+    "german-rifleman-walk-3": {
+      "file": "german-rifleman-walk.png",
+      "sourceRect": [
+        3762,
+        0,
+        1254,
+        700
+      ],
+      "pivot": [
+        600,
+        390
+      ],
+      "muzzle": [
+        1115,
+        400
+      ],
+      "helmetCenter": [
+        659,
+        385
+      ],
+      "plantedFoot": [
+        486,
+        285
+      ],
+      "plantedFootSide": "left",
+      "feet": {
+        "left": [
+          486,
+          285
+        ],
+        "right": [
+          718.75,
+          505
+        ]
+      },
+      "pixelsPerUnit": 28,
+      "sourceForwardRadians": 0,
+      "contentBoundsAlpha32": [
+        392,
+        245,
+        1117,
+        575
+      ],
+      "status": "animation-pilot-not-approved",
+      "registration": "fixed unchanged ready overlay; plantedFoot is boot sole center on ground plane"
+    },
+    "german-rifleman-walk-4": {
+      "file": "german-rifleman-walk.png",
+      "sourceRect": [
+        0,
+        700,
+        1254,
+        700
+      ],
+      "pivot": [
+        600,
+        390
+      ],
+      "muzzle": [
+        1115,
+        400
+      ],
+      "helmetCenter": [
+        659,
+        385
+      ],
+      "plantedFoot": [
+        780,
+        505
+      ],
+      "plantedFootSide": "right",
+      "feet": {
+        "left": [
+          388,
+          285
+        ],
+        "right": [
+          780,
+          505
+        ]
+      },
+      "pixelsPerUnit": 28,
+      "sourceForwardRadians": 0,
+      "contentBoundsAlpha32": [
+        345,
+        245,
+        1117,
+        575
+      ],
+      "status": "animation-pilot-not-approved",
+      "registration": "fixed unchanged ready overlay; plantedFoot is boot sole center on ground plane"
+    },
+    "german-rifleman-walk-5": {
+      "file": "german-rifleman-walk.png",
+      "sourceRect": [
+        1254,
+        700,
+        1254,
+        700
+      ],
+      "pivot": [
+        600,
+        390
+      ],
+      "muzzle": [
+        1115,
+        400
+      ],
+      "helmetCenter": [
+        659,
+        385
+      ],
+      "plantedFoot": [
+        682,
+        505
+      ],
+      "plantedFootSide": "right",
+      "feet": {
+        "left": [
+          449.25,
+          285
+        ],
+        "right": [
+          682,
+          505
+        ]
+      },
+      "pixelsPerUnit": 28,
+      "sourceForwardRadians": 0,
+      "contentBoundsAlpha32": [
+        392,
+        245,
+        1117,
+        575
+      ],
+      "status": "animation-pilot-not-approved",
+      "registration": "fixed unchanged ready overlay; plantedFoot is boot sole center on ground plane"
+    },
+    "german-rifleman-walk-6": {
+      "file": "german-rifleman-walk.png",
+      "sourceRect": [
+        2508,
+        700,
+        1254,
+        700
+      ],
+      "pivot": [
+        600,
+        390
+      ],
+      "muzzle": [
+        1115,
+        400
+      ],
+      "helmetCenter": [
+        659,
+        385
+      ],
+      "plantedFoot": [
+        584,
+        505
+      ],
+      "plantedFootSide": "right",
+      "feet": {
+        "left": [
+          584,
+          285
+        ],
+        "right": [
+          584,
+          505
+        ]
+      },
+      "pixelsPerUnit": 28,
+      "sourceForwardRadians": 0,
+      "contentBoundsAlpha32": [
+        392,
+        245,
+        1117,
+        575
+      ],
+      "status": "animation-pilot-not-approved",
+      "registration": "fixed unchanged ready overlay; plantedFoot is boot sole center on ground plane"
+    },
+    "german-rifleman-walk-7": {
+      "file": "german-rifleman-walk.png",
+      "sourceRect": [
+        3762,
+        700,
+        1254,
+        700
+      ],
+      "pivot": [
+        600,
+        390
+      ],
+      "muzzle": [
+        1115,
+        400
+      ],
+      "helmetCenter": [
+        659,
+        385
+      ],
+      "plantedFoot": [
+        486,
+        505
+      ],
+      "plantedFootSide": "right",
+      "feet": {
+        "left": [
+          718.75,
+          285
+        ],
+        "right": [
+          486,
+          505
+        ]
+      },
+      "pixelsPerUnit": 28,
+      "sourceForwardRadians": 0,
+      "contentBoundsAlpha32": [
+        392,
+        245,
+        1117,
+        575
+      ],
+      "status": "animation-pilot-not-approved",
+      "registration": "fixed unchanged ready overlay; plantedFoot is boot sole center on ground plane"
+    }
+  },
+  "animations": {
+    "german-rifleman-walk": {
+      "frames": [
+        "german-rifleman-walk-0",
+        "german-rifleman-walk-1",
+        "german-rifleman-walk-2",
+        "german-rifleman-walk-3",
+        "german-rifleman-walk-4",
+        "german-rifleman-walk-5",
+        "german-rifleman-walk-6",
+        "german-rifleman-walk-7"
+      ],
+      "cycleDistanceUnits": 28,
+      "loop": true,
+      "drive": "distance"
+    }
+  }
+}

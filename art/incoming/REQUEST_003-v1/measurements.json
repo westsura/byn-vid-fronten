@@ -1,0 +1,317 @@
+[
+  {
+    "frame": 0,
+    "pivotDeviationUnits": [
+      0,
+      0
+    ],
+    "helmetDeviationUnits": [
+      0,
+      0
+    ],
+    "muzzleDeviationUnits": [
+      0,
+      0
+    ],
+    "plantedFootSide": "left",
+    "plantedFoot": [
+      780,
+      285
+    ],
+    "plantedFootDeltaFromPreviousSameSideUnits": null,
+    "contactSwitch": true,
+    "expectedStanceDeltaUnits": [
+      -3.5,
+      0
+    ],
+    "sameFootWorldResidualUnits": [
+      0,
+      0
+    ],
+    "opaqueReferencePixelsChanged": 0,
+    "hiddenPlantedFootAllowed": true,
+    "sameFootWorldResidualToNextUnits": [
+      0.0,
+      0.0
+    ]
+  },
+  {
+    "frame": 1,
+    "pivotDeviationUnits": [
+      0,
+      0
+    ],
+    "helmetDeviationUnits": [
+      0,
+      0
+    ],
+    "muzzleDeviationUnits": [
+      0,
+      0
+    ],
+    "plantedFootSide": "left",
+    "plantedFoot": [
+      682,
+      285
+    ],
+    "plantedFootDeltaFromPreviousSameSideUnits": [
+      -3.5,
+      0
+    ],
+    "contactSwitch": false,
+    "expectedStanceDeltaUnits": [
+      -3.5,
+      0
+    ],
+    "sameFootWorldResidualUnits": [
+      0,
+      0
+    ],
+    "opaqueReferencePixelsChanged": 0,
+    "hiddenPlantedFootAllowed": true,
+    "sameFootWorldResidualToNextUnits": [
+      0.0,
+      0.0
+    ]
+  },
+  {
+    "frame": 2,
+    "pivotDeviationUnits": [
+      0,
+      0
+    ],
+    "helmetDeviationUnits": [
+      0,
+      0
+    ],
+    "muzzleDeviationUnits": [
+      0,
+      0
+    ],
+    "plantedFootSide": "left",
+    "plantedFoot": [
+      584,
+      285
+    ],
+    "plantedFootDeltaFromPreviousSameSideUnits": [
+      -3.5,
+      0
+    ],
+    "contactSwitch": false,
+    "expectedStanceDeltaUnits": [
+      -3.5,
+      0
+    ],
+    "sameFootWorldResidualUnits": [
+      0,
+      0
+    ],
+    "opaqueReferencePixelsChanged": 0,
+    "hiddenPlantedFootAllowed": true,
+    "sameFootWorldResidualToNextUnits": [
+      0.0,
+      0.0
+    ]
+  },
+  {
+    "frame": 3,
+    "pivotDeviationUnits": [
+      0,
+      0
+    ],
+    "helmetDeviationUnits": [
+      0,
+      0
+    ],
+    "muzzleDeviationUnits": [
+      0,
+      0
+    ],
+    "plantedFootSide": "left",
+    "plantedFoot": [
+      486,
+      285
+    ],
+    "plantedFootDeltaFromPreviousSameSideUnits": [
+      -3.5,
+      0
+    ],
+    "contactSwitch": false,
+    "expectedStanceDeltaUnits": [
+      -3.5,
+      0
+    ],
+    "sameFootWorldResidualUnits": [
+      0,
+      0
+    ],
+    "opaqueReferencePixelsChanged": 0,
+    "hiddenPlantedFootAllowed": true,
+    "sameFootWorldResidualToNextUnits": [
+      0.0,
+      0.0
+    ]
+  },
+  {
+    "frame": 4,
+    "pivotDeviationUnits": [
+      0,
+      0
+    ],
+    "helmetDeviationUnits": [
+      0,
+      0
+    ],
+    "muzzleDeviationUnits": [
+      0,
+      0
+    ],
+    "plantedFootSide": "right",
+    "plantedFoot": [
+      780,
+      505
+    ],
+    "plantedFootDeltaFromPreviousSameSideUnits": null,
+    "contactSwitch": true,
+    "expectedStanceDeltaUnits": [
+      -3.5,
+      0
+    ],
+    "sameFootWorldResidualUnits": [
+      0,
+      0
+    ],
+    "opaqueReferencePixelsChanged": 0,
+    "hiddenPlantedFootAllowed": true,
+    "sameFootWorldResidualToNextUnits": [
+      0.0,
+      0.0
+    ]
+  },
+  {
+    "frame": 5,
+    "pivotDeviationUnits": [
+      0,
+      0
+    ],
+    "helmetDeviationUnits": [
+      0,
+      0
+    ],
+    "muzzleDeviationUnits": [
+      0,
+      0
+    ],
+    "plantedFootSide": "right",
+    "plantedFoot": [
+      682,
+      505
+    ],
+    "plantedFootDeltaFromPreviousSameSideUnits": [
+      -3.5,
+      0
+    ],
+    "contactSwitch": false,
+    "expectedStanceDeltaUnits": [
+      -3.5,
+      0
+    ],
+    "sameFootWorldResidualUnits": [
+      0,
+      0
+    ],
+    "opaqueReferencePixelsChanged": 0,
+    "hiddenPlantedFootAllowed": true,
+    "sameFootWorldResidualToNextUnits": [
+      0.0,
+      0.0
+    ]
+  },
+  {
+    "frame": 6,
+    "pivotDeviationUnits": [
+      0,
+      0
+    ],
+    "helmetDeviationUnits": [
+      0,
+      0
+    ],
+    "muzzleDeviationUnits": [
+      0,
+      0
+    ],
+    "plantedFootSide": "right",
+    "plantedFoot": [
+      584,
+      505
+    ],
+    "plantedFootDeltaFromPreviousSameSideUnits": [
+      -3.5,
+      0
+    ],
+    "contactSwitch": false,
+    "expectedStanceDeltaUnits": [
+      -3.5,
+      0
+    ],
+    "sameFootWorldResidualUnits": [
+      0,
+      0
+    ],
+    "opaqueReferencePixelsChanged": 0,
+    "hiddenPlantedFootAllowed": true,
+    "sameFootWorldResidualToNextUnits": [
+      0.0,
+      0.0
+    ]
+  },
+  {
+    "frame": 7,
+    "pivotDeviationUnits": [
+      0,
+      0
+    ],
+    "helmetDeviationUnits": [
+      0,
+      0
+    ],
+    "muzzleDeviationUnits": [
+      0,
+      0
+    ],
+    "plantedFootSide": "right",
+    "plantedFoot": [
+      486,
+      505
+    ],
+    "plantedFootDeltaFromPreviousSameSideUnits": [
+      -3.5,
+      0
+    ],
+    "contactSwitch": false,
+    "expectedStanceDeltaUnits": [
+      -3.5,
+      0
+    ],
+    "sameFootWorldResidualUnits": [
+      0,
+      0
+    ],
+    "opaqueReferencePixelsChanged": 0,
+    "hiddenPlantedFootAllowed": true,
+    "sameFootWorldResidualToNextUnits": [
+      0.0,
+      0.0
+    ]
+  },
+  {
+    "summary": {
+      "cycleDistanceUnits": 28,
+      "distancePerFrameUnits": 3.5,
+      "sampledFootContactsPass": true,
+      "continuousFootLockVerified": false,
+      "reason": "continuous translation of a held sprite can drift between frame updates"
+    }
+  }
+]
