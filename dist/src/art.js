@@ -15,6 +15,8 @@
 // "pilot-r2" = pilot-s1 plus REQUEST_002: Soviet specialists (leader, MG,
 // assistant, SVT riflemen), fallen figures for both sides and corrected Soviet
 // rifleman registration. &reg=v4 uses the old v4 registration for comparison.
+// "pilot-w1" = pilot-r2 plus REQUEST_003: 8-frame walk cycle for the German
+// Schütze (K98k), stepped by distance walked (m.walked), not by time.
 import { drawSoldier as drawCodeSoldier } from './soldiers.js';
 import { soldierPose } from './sim.js';
 import { buildingAt } from './terrain.js';
@@ -37,6 +39,8 @@ export const MODES = {
   'pilot-s1:soviet': { label: 'GRAFIKPROV TYSK GRUPP KOMPLETT (stödroller 1) – du leder sovjetisk grupp (11)' },
   'pilot-r2:soviet': { label: 'GRAFIKPROV BÅDA GRUPPERNA + UTSLAGNA (REQUEST_002) – du leder sovjetisk grupp (11)' },
   'pilot-r2:german': { label: 'GRAFIKPROV BÅDA GRUPPERNA + UTSLAGNA (REQUEST_002) – du leder tysk grupp (10)' },
+  'pilot-w1:german': { label: 'GRAFIKPROV GÅNGCYKEL tysk gevärsskytt (REQUEST_003) – du leder tysk grupp (10)' },
+  'pilot-w1:soviet': { label: 'GRAFIKPROV GÅNGCYKEL tysk gevärsskytt (REQUEST_003) – du leder sovjetisk grupp (11)' },
 };
 // Pilot sources per mode: which manifest frames become which pilot key
 // (`faction-role-pose`, role = rifleman | leader | mg).
@@ -59,7 +63,9 @@ const FALLEN = Object.fromEntries(
   ['german', 'soviet'].flatMap((f) => ['a', 'b'].map((v) => [`${f}-fallen-${v}`, `${f}-fallen-${v}`])),
 );
 const R2 = P + 'request-002-v1/';
+const WALK = Object.fromEntries([...Array(8)].map((_, i) => [`german-rifleman-walk-${i}`, `german-rifleman-walk-${i}`]));
 const PILOT_SOURCES = {
+  'pilot-w1': () => [...PILOT_SOURCES['pilot-r2'](), { base: P + 'walk-pilot-v1/', map: WALK }],
   'pilot-r2': () => [
     // Same v4 image; registration from REQUEST_002 unless &reg=v4.
     { base: P + 'rifleman-pilot-v4/', manifest: pilotOptions.reg === 'v4' ? null : R2 + 'soviet-rifleman-registration.json', map: SOVIET_ONLY },
@@ -80,11 +86,12 @@ const PILOT_SOURCES = {
     { base: P + (pilotOptions.helmet === 'v1' ? 'german-helmet-v1-before/' : 'german-helmet-v2/'), map: GERMAN_H },
   ],
 };
+let pilotAnim = {}; // animation name → { frames, cycleDistanceUnits } from supplier manifests
 let pilot = null; // { 'german-ready': {data, image}, ... } normalised: sourceRect-relative pivot/muzzle
 export const pilotOptions = { scale: 'standard', shadow: 'small', spacing: 1, helmet: 'v2', reg: 'r2' };
 export const isPilotV2 = () => mode.startsWith('pilot-v2');
-export const isPilotV3 = () => /^pilot-(v3|v4|h2|s1|r2)/.test(mode); // v3+ share shadow/scale options
-export const pilotVersion = () => (mode.startsWith('pilot-r2') ? '4 · BÅDA GRUPPERNA + UTSLAGNA (REQUEST_002)' + (pilotOptions.reg === 'v4' ? ' · V4-REGISTRERING' : '') : mode.startsWith('pilot-s1') ? '4 · TYSK GRUPP MED STÖDROLLER 1' : mode.startsWith('pilot-h2') ? '4 + TYSK HJÄLM ' + (pilotOptions.helmet === 'v1' ? '1 (FÖRE)' : '2') : (mode.match(/^pilot-v(\d)/) || [])[1] ?? null);
+export const isPilotV3 = () => /^pilot-(v3|v4|h2|s1|r2|w1)/.test(mode); // v3+ share shadow/scale options
+export const pilotVersion = () => (mode.startsWith('pilot-w1') ? '4 · GÅNGCYKEL TYSK GEVÄRSSKYTT (REQUEST_003)' : mode.startsWith('pilot-r2') ? '4 · BÅDA GRUPPERNA + UTSLAGNA (REQUEST_002)' + (pilotOptions.reg === 'v4' ? ' · V4-REGISTRERING' : '') : mode.startsWith('pilot-s1') ? '4 · TYSK GRUPP MED STÖDROLLER 1' : mode.startsWith('pilot-h2') ? '4 + TYSK HJÄLM ' + (pilotOptions.helmet === 'v1' ? '1 (FÖRE)' : '2') : (mode.match(/^pilot-v(\d)/) || [])[1] ?? null);
 export const modeBadge = () =>
   isPilotV3()
     ? `GRAFIKPROV V${pilotVersion()} – EJ GODKÄNT` +
@@ -127,7 +134,7 @@ export function modeFromUrl(search) {
   if (q.get('spacing') === 'wide') pilotOptions.spacing = 1.5;
   if (q.get('helmet') === 'v1') pilotOptions.helmet = 'v1';
   if (q.get('reg') === 'v4') pilotOptions.reg = 'v4';
-  if (!['infantry-v1', 'pilot-v2', 'pilot-v3', 'pilot-v4', 'pilot-h2', 'pilot-s1', 'pilot-r2'].includes(art)) return 'standard';
+  if (!['infantry-v1', 'pilot-v2', 'pilot-v3', 'pilot-v4', 'pilot-h2', 'pilot-s1', 'pilot-r2', 'pilot-w1'].includes(art)) return 'standard';
   return `${art}:${q.get('side') === 'german' ? 'german' : 'soviet'}`;
 }
 
@@ -179,8 +186,10 @@ export async function loadMode(m) {
   const pilotKey = m.split(':')[0];
   if (PILOT_SOURCES[pilotKey]) {
     pilot = {};
+    pilotAnim = {};
     for (const { base, map, manifest: url } of PILOT_SOURCES[pilotKey]()) {
       const pm = await fetch(url ?? base + 'manifest.json').then((r) => r.json());
+      Object.assign(pilotAnim, pm.animations ?? {});
       const table = pm.frames ?? pm.assets; // v3+: frames (sourceRect-relative), v2: assets (whole image)
       const keys = Object.keys(map).filter((k) => table[k]);
       const files = [...new Set(keys.map((k) => table[k].file))];
@@ -236,7 +245,7 @@ export function drawUnit(g, m, s, time, scale = 1.12) {
   drawShadow(g, m, angle, scale, state, usePilot && isPilotV3() ? pilotOptions.shadow : 'oval', prone);
   if (usePilot) {
     // Pilot riflemen: ready / prone only. fire → prone, walk → ready, crawl → prone.
-    const p = pilot[`${s.faction}-${role}-${prone ? 'prone' : 'ready'}`];
+    const p = (!prone && state.startsWith('walk') && walkFrame(s.faction, role, m)) || pilot[`${s.faction}-${role}-${prone ? 'prone' : 'ready'}`];
     const d = p.data;
     const ppu = pilotOptions.scale === 'helmet' && d.pixelsPerUnitHelmetMatched ? d.pixelsPerUnitHelmetMatched : d.pixelsPerUnit;
     const f = k / ppu;
@@ -261,6 +270,17 @@ export function drawUnit(g, m, s, time, scale = 1.12) {
     return p;
   }
   return drawSprite(g, a.image, a.data, { role: m.spriteRole ?? 0, state, x: m.x, y: m.y, angle, scale: k });
+}
+
+// Walk cycle frame for this soldier, if the active pilot has one for the role.
+// Frame = floor((walked mod cycle) / cycle * frames): stepped by distance, so it
+// stops when the soldier stops and when the game is paused.
+export function walkFrame(faction, role, m) {
+  const a = pilotAnim[`${faction}-${role}-walk`];
+  if (!a) return null;
+  const c = a.cycleDistanceUnits;
+  const i = Math.floor(((((m.walked ?? 0) % c) + c) % c) / c * a.frames.length);
+  return pilot[a.frames[i]] ?? null;
 }
 
 // Fallen figure (REQUEST_002): variant a/b alternates within the squad so

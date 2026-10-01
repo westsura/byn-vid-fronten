@@ -92,6 +92,7 @@ function makeSquad({ name, x, y, side }, id) {
         phase: i * 1.73,
         idx: i,
         stride: 0,
+        walked: (i * 11) % 28, // distance walked (units); drives sprite walk cycles, offset so men are out of step
         moving: false,
         flash: 0,
         aim: 0,
@@ -391,6 +392,7 @@ function moveSoldiers(s, dt) {
     if (ok) {
       m.x += ok[0];
       m.y += ok[1];
+      if (m.moving) m.walked += Math.hypot(ok[0], ok[1]);
       if (m.moving) m.stride += Math.hypot(mx, my) * 0.42;
     }
     if (m.moving) m.stuck = ok && ok !== tries[2] ? Math.max(0, m.stuck - dt) : m.stuck + dt;

@@ -70,7 +70,8 @@ Resultat: en uppdatering tar cirka 0,8 ms i full strid, mot tidigare 5,4 ms.
 - [x] Björn provspelade prototypgrafiken 2026-10-01 och godkände v4-stilen (gevärsskytt v4, tysk hjälm 2, tyska stödroller 1) som grund för fortsatt grafik. Färdig produktionsgrafik kräver fortfarande utslagna, sovjetiska specialister och animationer.
 - [x] `REQUEST_002` v1 levererat och valbart (`pilot-r2`): sovjetiska specialister, utslagna båda sidor, rättad sovjetisk registrering. Speltestat av Claude: `docs/art/review/request-002-v1/REVIEW.md`. **Ej godkänt.** Kvar: tysk utslagen har för stor hjälm.
 - [ ] Björn provspelar `pilot-r2`.
-- [ ] `REQUEST_003`: gångcykel, pilot med tysk gevärsskytt (8 rutor, sträckstyrd). Beställd 2026-10-01.
+- [x] `REQUEST_003` v1 levererat och valbart (`pilot-w1`): gångcykel för tysk gevärsskytt, styrd av gången sträcka. Speltestat av Claude: `docs/art/review/request-003-v1/REVIEW.md`. **Ej godkänt.** Kvar: fotglidning mellan rutor (förslag: ben som eget lager), lite synlig rörelse vid normal zoom.
+- [ ] Björn provspelar `pilot-w1` och avgör hur tydlig gången ska vara.
 - [ ] Efter godkänd pilot: gång för alla roller, krypcykel.
 - [ ] Integrera REQUEST_001 v1 (SVG-soldat, hus 0, gruppkort) – levererat, ej integrerat.
 - [ ] Zoom och panorering, skärpa på högupplösta skärmar.
