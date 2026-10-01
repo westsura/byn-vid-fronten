@@ -10,6 +10,8 @@
 // "pilot-h2" = v4 Soviet riflemen + German helmet correction 2 for Schütze,
 // Gruppenführer and MG-Schütze (ready/prone). &helmet=v1 shows the "before"
 // images (helmet correction 1, taken from the supplier's preview) for comparison.
+// "pilot-s1" = pilot-h2 plus German support roles 1 (Assistent-MG-Schütze,
+// Munitionsträger, Stellvertreter): the whole German 10-man squad in v4 style.
 import { drawSoldier as drawCodeSoldier } from './soldiers.js';
 import { soldierPose } from './sim.js';
 import { buildingAt } from './terrain.js';
@@ -28,6 +30,8 @@ export const MODES = {
   'pilot-v4:german': { label: 'GRAFIKPROV V4 gevärsskytt – du leder tysk grupp (10)' },
   'pilot-h2:soviet': { label: 'GRAFIKPROV V4 + TYSK HJÄLM 2 – du leder sovjetisk grupp (11)' },
   'pilot-h2:german': { label: 'GRAFIKPROV V4 + TYSK HJÄLM 2 – du leder tysk grupp (10)' },
+  'pilot-s1:german': { label: 'GRAFIKPROV TYSK GRUPP KOMPLETT (stödroller 1) – du leder tysk grupp (10)' },
+  'pilot-s1:soviet': { label: 'GRAFIKPROV TYSK GRUPP KOMPLETT (stödroller 1) – du leder sovjetisk grupp (11)' },
 };
 // Pilot sources per mode: which manifest frames become which pilot key
 // (`faction-role-pose`, role = rifleman | leader | mg).
@@ -40,7 +44,15 @@ const SOVIET_ONLY = { 'soviet-ready': 'soviet-rifleman-ready', 'soviet-prone': '
 const GERMAN_H = Object.fromEntries(
   ['rifleman', 'leader', 'mg'].flatMap((r) => ['ready', 'prone'].map((p) => [`german-${r}-${p}`, `german-${r}-${p}`])),
 );
+const GERMAN_SUPPORT = Object.fromEntries(
+  ['assistant', 'ammo', 'deputy'].flatMap((r) => ['ready', 'prone'].map((p) => [`german-${r}-${p}`, `german-${r}-${p}`])),
+);
 const PILOT_SOURCES = {
+  'pilot-s1': () => [
+    { base: P + 'rifleman-pilot-v4/', map: SOVIET_ONLY },
+    { base: P + 'german-helmet-v2/', map: GERMAN_H },
+    { base: P + 'german-support-v1/', map: GERMAN_SUPPORT },
+  ],
   'pilot-v2': () => [{ base: P + 'rifleman-pilot-v2/', map: RIFLE_MAP }],
   'pilot-v3': () => [{ base: P + 'rifleman-pilot-v3/', map: RIFLE_MAP }],
   'pilot-v4': () => [{ base: P + 'rifleman-pilot-v4/', map: RIFLE_MAP }],
@@ -52,8 +64,8 @@ const PILOT_SOURCES = {
 let pilot = null; // { 'german-ready': {data, image}, ... } normalised: sourceRect-relative pivot/muzzle
 export const pilotOptions = { scale: 'standard', shadow: 'small', spacing: 1, helmet: 'v2' };
 export const isPilotV2 = () => mode.startsWith('pilot-v2');
-export const isPilotV3 = () => /^pilot-(v3|v4|h2)/.test(mode); // v3+ share shadow/scale options
-export const pilotVersion = () => (mode.startsWith('pilot-h2') ? '4 + TYSK HJÄLM ' + (pilotOptions.helmet === 'v1' ? '1 (FÖRE)' : '2') : (mode.match(/^pilot-v(\d)/) || [])[1] ?? null);
+export const isPilotV3 = () => /^pilot-(v3|v4|h2|s1)/.test(mode); // v3+ share shadow/scale options
+export const pilotVersion = () => (mode.startsWith('pilot-s1') ? '4 · TYSK GRUPP MED STÖDROLLER 1' : mode.startsWith('pilot-h2') ? '4 + TYSK HJÄLM ' + (pilotOptions.helmet === 'v1' ? '1 (FÖRE)' : '2') : (mode.match(/^pilot-v(\d)/) || [])[1] ?? null);
 export const modeBadge = () =>
   isPilotV3()
     ? `GRAFIKPROV V${pilotVersion()} – EJ GODKÄNT` +
@@ -62,7 +74,10 @@ export const modeBadge = () =>
     : isPilotV2() ? 'GRAFIKPROV V2 – EJ GODKÄNT' : 'PROTOTYPGRAFIK · EJ GODKÄND';
 // Which pilot role a soldier gets, if the active pilot has frames for it.
 const ROLE_OF = {
-  german: { 'Schütze': 'rifleman', 'Gruppenführer': 'leader', 'MG-Schütze': 'mg' },
+  german: {
+    'Schütze': 'rifleman', 'Gruppenführer': 'leader', 'MG-Schütze': 'mg',
+    'Assistent-MG-Schütze': 'assistant', 'Munitionsträger': 'ammo', 'Stellvertreter Gruppenführer': 'deputy',
+  },
   soviet: { Rifleman: 'rifleman' },
 };
 export function pilotRole(faction, m) {
@@ -89,7 +104,7 @@ export function modeFromUrl(search) {
   if (['none', 'small', 'oval'].includes(q.get('shadow'))) pilotOptions.shadow = q.get('shadow');
   if (q.get('spacing') === 'wide') pilotOptions.spacing = 1.5;
   if (q.get('helmet') === 'v1') pilotOptions.helmet = 'v1';
-  if (!['infantry-v1', 'pilot-v2', 'pilot-v3', 'pilot-v4', 'pilot-h2'].includes(art)) return 'standard';
+  if (!['infantry-v1', 'pilot-v2', 'pilot-v3', 'pilot-v4', 'pilot-h2', 'pilot-s1'].includes(art)) return 'standard';
   return `${art}:${q.get('side') === 'german' ? 'german' : 'soviet'}`;
 }
 
