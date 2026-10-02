@@ -86,7 +86,7 @@ h1 {
   color:var(--accent);
 }
 
-.scenario span {
+.scenario span:not(.theatre) {
   display:block;
   color:var(--muted);
   letter-spacing:0;
@@ -172,7 +172,7 @@ canvas {
   pointer-events:none;
 }
 
-.mapcaption span {
+.mapcaption span:not(.sector) {
   display:block;
   font-size:17px;
   letter-spacing:3px;
@@ -452,7 +452,7 @@ p {
   background:#ead5a3;
 }
 
-.primary span {
+.primary span:last-child {
   float:right;
 }
 
@@ -548,7 +548,7 @@ p {
     top:10px;
     left:10px;
   }
-  .mapcaption span {
+  .mapcaption span:not(.sector) {
     font-size:12px;
   }
   .maplegend {

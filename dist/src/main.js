@@ -1,9 +1,11 @@
 // Entry point: wires simulation, rendering, UI and audio together and runs the loop.
 import { W, H } from './config.js';
 import { hooks, step, pause, setForces } from './sim.js';
+import { loadData, validate, buildSide } from './data.js';
+import { setText, t } from './text.js';
 import { loadMode, modeFromUrl } from './art.js';
 import { loadMap, drawMap, drawPortrait } from './render.js';
-import { renderUI, toast, showResult, bindInput, cursor } from './ui.js';
+import { renderUI, toast, showResult, bindInput, applyStaticText, cursor } from './ui.js';
 import { fireSound } from './audio.js';
 
 const canvas = document.getElementById('map');
@@ -15,14 +17,22 @@ hooks.toast = toast;
 hooks.shot = fireSound;
 hooks.finished = showResult;
 
-loadMap('map.png', () => toast('Kartbilden kunde inte laddas. Försök ladda om sidan.'));
+// Game data (units, people, weapons, ranks, text) from dist/data. Problems in the
+// data are reported in the console; the game still starts with what loaded.
+const db = await loadData((path) => fetch('data/' + path).then((r) => r.json()));
+setText(db.text);
+applyStaticText();
+const problems = validate(db);
+if (problems.length) console.warn('Data problems:', problems);
+setForces({ player: buildSide(db, 'player'), enemy: buildSide(db, 'enemy') });
+
+loadMap('map.png', () => toast(t('toast.mapFailed')));
 try {
-  setForces(await loadMode(modeFromUrl(location.search)));
+  await loadMode(modeFromUrl(location.search));
 } catch (err) {
   console.error(err);
-  setForces(null);
-  await loadMode('standard');
-  setTimeout(() => toast('Prototypgrafiken kunde inte laddas. Standardgrafik används.'), 500);
+  await loadMode('code');
+  setTimeout(() => toast(t('toast.graphicsFailed')), 500);
 }
 bindInput(canvas, W, H);
 

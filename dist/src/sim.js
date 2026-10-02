@@ -1,7 +1,9 @@
 // Battle simulation: squads, orders, movement, combat, morale and mission end.
 // No DOM access here — the UI listens to events emitted through `hooks`.
 import { MISSION_TIME, HOLD_TIME } from './config.js';
-import { objective, startingSquads } from './scenario.js';
+import { objective } from './scenario.js';
+import { t } from './text.js';
+const tr = t; // `t` is shadowed by target squads in fire()
 import { random, seedRandom } from './rng.js';
 import { dist, buildingAt, blocked, canWalk, coverAt, los, interiorSlots } from './terrain.js';
 import { pathTo } from './nav.js';
@@ -33,7 +35,7 @@ export const playerSquads = () => state.squads.filter((s) => !s.side);
 
 export function soldierPose(m, s) {
   if (m.hp <= 0) return 'fallen';
-  if (!s.routed && (s.underFire > 0 || s.order === 'Försvarar' || s.morale < 40)) return 'prone';
+  if (!s.routed && (s.underFire > 0 || s.order === 'defend' || s.morale < 40)) return 'prone';
   return m.moving ? 'walk' : 'ready';
 }
 
@@ -43,39 +45,46 @@ function addLog(text) {
 }
 
 // ---- Forces ------------------------------------------------------------------
-// A force describes one side's squad organisation. The standard force is the
-// original five-man rifle squad; prototype forces (e.g. the infantry-v1 art test)
-// supply their own soldier lists with role, weapon and sub-unit.
-const STANDARD_SQUAD = Array.from({ length: 5 }, (_, i) => ({
-  role: i === 0 ? 'leader' : 'rifleman',
-  weapon: 'rifle',
-}));
-export const standardForces = { id: 'standard', player: { soldiers: STANDARD_SQUAD }, enemy: { soldiers: STANDARD_SQUAD } };
-let forces = standardForces;
+// A force is one side as built from the data files (see data.js buildSide):
+// { nation, formation, name, units: [{ id, name, kind, x, y, hotkey, men: [...] }] }.
+let forces = null;
 
 export function setForces(f) {
-  forces = f || standardForces;
+  forces = f;
 }
 export const currentForces = () => forces;
+
+// Order states are keys; the interface text comes from data/text/en.json.
+export const orderText = (s) => t('orders.' + s.order, { house: s.orderHouse != null ? houseName(s.orderHouse) : '' });
+export const houseName = (id) => t('map.buildings')?.[id] ?? `#${id}`;
 
 // Formation offsets for n soldiers: rows of 3 (n <= 6) or 4, spacing 20 × 23
 // times the force's spacing factor (1 unless a prototype asks for wider spacing).
 // For n = 5 and factor 1 this is exactly the original layout.
 export function formationOffset(i, n) {
-  const f = forces.spacing ?? 1;
+  const f = forces?.spacing ?? 1;
   const cols = n <= 6 ? 3 : 4;
   const rows = Math.ceil(n / cols);
   return { x: ((i % cols) - (cols - 1) / 2) * 20 * f, y: (Math.floor(i / cols) - (rows - 1) / 2) * 23 * f };
 }
 
-function makeSquad({ name, x, y, side }, id) {
-  const roster = (side ? forces.enemy : forces.player).soldiers;
+function makeSquad(unit, id, side) {
+  const { x, y } = unit;
+  const roster = unit.men;
   return {
-    id, name, x, y, side,
-    faction: (side ? forces.enemy : forces.player).faction ?? null,
+    id, x, y, side,
+    name: unit.name,
+    unitId: unit.id,
+    kind: unit.kind,
+    hotkey: unit.hotkey ?? null,
+    teams: unit.teams ?? null,
+    split: unit.split ?? false,
+    nation: side ? forces.enemy.nation : forces.player.nation,
+    faction: (side ? forces.enemy.nation : forces.player.nation) === 'de' ? 'german' : 'soviet',
     morale: 100,
     ammo: 150,
-    order: 'Avvaktar',
+    order: 'hold',
+    orderHouse: null,
     path: [],
     cooldown: 2 + id * 0.7,
     visible: !side,
@@ -98,8 +107,14 @@ function makeSquad({ name, x, y, side }, id) {
         aim: 0,
         role: def.role,
         weapon: def.weapon,
-        spriteRole: def.spriteRole ?? null,
-        title: def.title ?? null,
+        sprite: def.sprite ?? null,
+        personId: def.personId ?? null,
+        name: def.name ?? null,
+        last: def.last ?? null,
+        rank: def.rank ?? null,
+        title: def.position ?? null,
+        slot: def.slot ?? null,
+        team: def.team ?? null,
         coverPoint: null,
         coverTimer: 0,
         route: null,
@@ -113,8 +128,8 @@ function makeSquad({ name, x, y, side }, id) {
 export function reset() {
   seedRandom(12345);
   Object.assign(state, {
-    squads: startingSquads.map(makeSquad),
-    selected: 0,
+    squads: [...forces.player.units.map((u, i) => makeSquad(u, i, 0)), ...forces.enemy.units.map((u, i) => makeSquad(u, forces.player.units.length + i, 1))],
+    selected: Math.max(0, forces.player.units.findIndex((u) => u.hotkey === '1')),
     paused: true,
     started: false,
     ended: false,
@@ -125,7 +140,7 @@ export function reset() {
     logs: [],
     mode: 'move',
   });
-  addLog('Tre grupper redo. Ge order och börja striden.');
+  addLog(t('log.ready', { units: forces.player.units.length }));
   hooks.changed();
 }
 
@@ -145,7 +160,7 @@ export function issue(x, y) {
   const s = state.squads[state.selected];
   if (state.ended || !s || !alive(s).length) return false;
   if (s.routed) {
-    hooks.toast('Gruppen återhämtar sig och kan inte ta order.');
+    hooks.toast(t('toast.recovering'));
     return false;
   }
   x = Math.max(10, Math.min(1190, x));
@@ -157,16 +172,15 @@ export function issue(x, y) {
   }
   const path = pathTo(s, x, y);
   if (!path) {
-    hooks.toast('Det går inte att nå platsen. Välj mark eller mitten av ett hus.');
+    hooks.toast(t('toast.unreachable'));
     return false;
   }
   s.path = path;
   s.destinationHouse = house?.id ?? null;
-  s.order = house
-    ? 'Går in i ' + house.name.toLowerCase()
-    : state.mode === 'defend' ? 'Tar försvarsställning' : 'Förflyttar';
+  s.order = house ? 'enter' : state.mode === 'defend' ? 'position' : 'move';
+  s.orderHouse = house?.id ?? null;
   s.defendAtEnd = !!house || state.mode === 'defend';
-  addLog(house ? s.name + ': tar ställning i ' + house.name.toLowerCase() + '.' : s.name + ': ny förflyttningsorder.');
+  addLog(house ? t('log.enterOrder', { unit: s.name, house: houseName(house.id) }) : t('log.moveOrder', { unit: s.name }));
   state.effects.push({ kind: 'order', x, y, life: 1.5 });
   hooks.changed();
   return true;
@@ -176,9 +190,9 @@ export function defend() {
   const s = state.squads[state.selected];
   if (state.ended || !s || !alive(s).length || s.routed) return;
   s.path = [];
-  s.order = 'Försvarar';
+  s.order = 'defend';
   state.mode = 'defend';
-  addLog(s.name + ' intar försvarsställning.');
+  addLog(t('log.defend', { unit: s.name }));
   hooks.changed();
 }
 
@@ -201,9 +215,9 @@ function finish(win, reason) {
   state.won = win;
   state.paused = true;
   const left = playerSquads().reduce((n, s) => n + alive(s).length, 0);
-  addLog(win ? 'Uppdraget är slutfört.' : 'Striden avslutad.');
+  addLog(t(win ? 'log.won' : 'log.ended'));
   const total = playerSquads().reduce((n, s) => n + s.men.length, 0);
-  hooks.finished(win, reason + ' ' + left + ' av ' + total + ' egna soldater kvar.');
+  hooks.finished(win, reason + ' ' + t('result.left', { left, total }));
   hooks.changed();
 }
 
@@ -222,12 +236,12 @@ function updateMorale(s, dt) {
   if (s.morale < 22 && !s.routed) {
     s.routed = true;
     s.path = pathTo(s, s.side ? 1130 : 70, s.y) || [];
-    s.order = 'Drar sig tillbaka';
-    addLog((s.side ? 'Fiende' : s.name) + ' drar sig tillbaka.');
+    s.order = 'retreat';
+    addLog(t(s.side ? 'log.enemyRetreat' : 'log.retreat', { unit: s.name }));
   }
   if (s.routed && s.morale > 48) {
     s.routed = false;
-    s.order = 'Avvaktar';
+    s.order = 'hold';
     s.path = [];
   }
 }
@@ -240,10 +254,11 @@ function updateEnemyAI(s) {
     .sort((a, b) => dist(a, s) - dist(b, s))[0];
   if (target && dist(target, s) < 245) {
     s.path = [];
-    s.order = 'Försvarar';
+    s.order = 'defend';
   } else {
-    s.path = pathTo(s, 820 + (s.id - 3) * 50, 330 + (s.id - 3) * 80) || [];
-    s.order = 'Förflyttar';
+    const e = s.id - playerSquads().length; // index among enemy units
+    s.path = pathTo(s, 820 + e * 50, 330 + e * 80) || [];
+    s.order = 'move';
   }
 }
 
@@ -259,7 +274,7 @@ function moveSquad(s, dt) {
   }
   if (d < 2) {
     s.path.shift();
-    if (!s.path.length) s.order = s.defendAtEnd ? 'Försvarar' : 'Avvaktar';
+    if (!s.path.length) s.order = s.defendAtEnd ? 'defend' : 'hold';
   }
 }
 
@@ -280,7 +295,7 @@ function soldierTarget(s, m, i) {
     ty = s.y;
   }
   // A defending or suppressed soldier uses nearby cover without leaving the squad.
-  if (!home && !s.path.length && !s.routed && (s.underFire > 0 || s.order === 'Försvarar')) {
+  if (!home && !s.path.length && !s.routed && (s.underFire > 0 || s.order === 'defend')) {
     if (m.coverTimer <= 0 || !m.coverPoint) {
       let best = { x: tx, y: ty };
       let score = coverAt(tx, ty);
@@ -425,7 +440,7 @@ function fire(s, dt) {
   if (random() < (0.35 - dist(s, t) / 1400) * (1 - cover) * (s.path.length ? 0.5 : 1)) {
     victim.hp -= 45 + random() * 35;
     if (victim.hp <= 0) {
-      addLog((t.side ? 'Fiende' : t.name) + ' förlorar en soldat.');
+      addLog(tr(t.side ? 'log.enemyCasualty' : 'log.casualty', { unit: t.name }));
       t.morale = Math.max(0, t.morale - 9);
     }
   }
@@ -439,9 +454,9 @@ function updateObjective(dt) {
   if (friends && !enemies) state.capture = Math.min(HOLD_TIME, state.capture + dt);
   else if (enemies) state.capture = Math.max(0, state.capture - dt * 0.6);
 
-  if (state.capture >= HOLD_TIME) finish(true, 'Du höll målet i 20 sekunder.');
-  else if (!playerSquads().some((s) => alive(s).length)) finish(false, 'Alla egna grupper är utslagna.');
-  else if (state.elapsed >= MISSION_TIME) finish(false, 'Tiden tog slut innan målet säkrades.');
+  if (state.capture >= HOLD_TIME) finish(true, t('result.held', { hold: HOLD_TIME }));
+  else if (!playerSquads().some((s) => alive(s).length)) finish(false, t('result.wiped'));
+  else if (state.elapsed >= MISSION_TIME) finish(false, t('result.timeout'));
 }
 
 // Advance the battle unless it is paused or over. The frame loop calls this.

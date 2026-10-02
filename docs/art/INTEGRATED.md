@@ -21,3 +21,5 @@ Levererat men ej integrerat: `REQUEST_001` v1 (SVG-soldat, hus 0, gruppkort) i `
 **Björns provspelning 2026-10-01:** v4-stilen godkänd som grund (gevärsskytt v4, tysk hjälmkorrigering 2, tyska stödroller 1). Lägena är fortfarande valbara prov, inte standardgrafik; märket i spelet står kvar tills helheten (utslagna, specialister, animationer) är på plats.
 
 Beställt: `REQUEST_002` (levererat och integrerat som prov `pilot-r2`), `REQUEST_003` (levererat och integrerat som prov `pilot-w1`), `REQUEST_004` (levererat och integrerat som prov `pilot-w2`).
+
+**2026-10-02 (steg 1):** Spelet har två grafiklägen: *Sprites* (standard: v4-figurerna med hjälm 2, stödroller 1, REQUEST_002, tysk utslagen v2 och gångcykel v2 i lager) och *Code-drawn* (reserv). Äldre prov (v1, v2, v3, hjälm 1, gångcykel v1) är borttagna ur `dist/` men finns kvar i `art/incoming/`, i granskningarna och i git-historiken. Vilken figur en soldat får styrs av befattningen i `dist/data/units/`.

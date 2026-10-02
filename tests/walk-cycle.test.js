@@ -5,23 +5,6 @@ import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
 import { sim, state, player, run } from './helpers.js';
 
-const m = JSON.parse(readFileSync(new URL('../dist/assets/prototype/walk-pilot-v1/manifest.json', import.meta.url)));
-
-test('walk manifest: 8 frames, 28 px/unit, fixed pivot, helmet and muzzle', () => {
-  const a = m.animations['german-rifleman-walk'];
-  assert.equal(a.frames.length, 8);
-  assert.equal(a.drive, 'distance');
-  assert.ok(a.cycleDistanceUnits >= 20 && a.cycleDistanceUnits <= 28);
-  const f0 = m.frames[a.frames[0]];
-  for (const k of a.frames) {
-    const f = m.frames[k];
-    assert.equal(f.pixelsPerUnit, 28);
-    assert.deepEqual(f.pivot, f0.pivot);
-    assert.deepEqual(f.helmetCenter, f0.helmetCenter);
-    assert.deepEqual(f.muzzle, f0.muzzle);
-  }
-});
-
 test('walked distance grows with movement and stops when the squad stops or the game is paused', () => {
   sim.reset();
   sim.select(0);

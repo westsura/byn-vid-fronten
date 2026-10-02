@@ -3,13 +3,14 @@ import { STEP } from './config.js';
 
 export const objective = { x: 755, y: 290, radius: 68, enemyRadius: 100 };
 
+// `name` is an internal label; the interface shows map.buildings[id] from data/text/en.json.
 export const buildings = [
-  { name: 'Västra huset', x: 444, y: 120, w: 115, h: 99 },
-  { name: 'Gårdshuset', x: 689, y: 145, w: 134, h: 102 },
-  { name: 'Östra huset', x: 965, y: 170, w: 107, h: 89 },
-  { name: 'Ladan', x: 485, y: 426, w: 133, h: 89 },
-  { name: 'Södra huset', x: 759, y: 428, w: 123, h: 97 },
-  { name: 'Magasinet', x: 983, y: 443, w: 104, h: 115 },
+  { name: 'West house', x: 444, y: 120, w: 115, h: 99 },
+  { name: 'Farmhouse', x: 689, y: 145, w: 134, h: 102 },
+  { name: 'East house', x: 965, y: 170, w: 107, h: 89 },
+  { name: 'Barn', x: 485, y: 426, w: 133, h: 89 },
+  { name: 'South house', x: 759, y: 428, w: 123, h: 97 },
+  { name: 'Storehouse', x: 983, y: 443, w: 104, h: 115 },
 ];
 buildings.forEach((b, i) => {
   b.id = i;
@@ -25,14 +26,4 @@ export const woods = [
   { x: 610, y: 610, r: 60 },
   { x: 1110, y: 80, r: 70 },
   { x: 925, y: 590, r: 60 },
-];
-
-// side 0 = player, side 1 = enemy
-export const startingSquads = [
-  { name: 'Alfa', x: 130, y: 250, side: 0 },
-  { name: 'Bravo', x: 115, y: 415, side: 0 },
-  { name: 'Charlie', x: 145, y: 600, side: 0 },
-  { name: 'Nord', x: 865, y: 335, side: 1 },
-  { name: 'Öst', x: 1060, y: 430, side: 1 },
-  { name: 'Syd', x: 875, y: 670, side: 1 },
 ];

@@ -5,10 +5,15 @@ import { objective } from '../dist/src/scenario.js';
 import { blocked, dist } from '../dist/src/terrain.js';
 import { pathTo } from '../dist/src/nav.js';
 
-test('initial state: six squads, paused', () => {
+test('initial state: Zugtrupp + three Gruppen against the Soviet vzvod, 1. Gruppe selected, paused', () => {
   sim.reset();
-  assert.equal(state.squads.length, 6);
+  const own = state.squads.filter((s) => !s.side);
+  assert.deepEqual(own.map((s) => s.name), ['Zugtrupp', '1. Gruppe', '2. Gruppe', '3. Gruppe']);
+  assert.deepEqual(own.map((s) => s.men.length), [6, 10, 10, 10]);
+  assert.equal(state.squads.filter((s) => s.side).length, 5);
+  assert.equal(player().name, '1. Gruppe');
   assert.equal(state.paused, true);
+  assert.ok(state.squads.every((s) => s.men.every((m) => !blocked(m.x, m.y))), 'nobody starts inside a wall');
 });
 
 test('path to the objective exists; building walls are obstacles', () => {
@@ -54,7 +59,7 @@ test('reset restores a fresh battle', () => {
   sim.reset();
   run(100);
   sim.reset();
-  assert.ok(!state.ended && state.elapsed === 0 && state.paused && sim.alive(player()).length === 5);
+  assert.ok(!state.ended && state.elapsed === 0 && state.paused && sim.alive(player()).length === 10);
 });
 
 test('postures: defend and suppression make soldiers prone, then recover', () => {

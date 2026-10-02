@@ -1,12 +1,15 @@
 import { readFileSync } from 'node:fs';
 import * as sim from '../dist/src/sim.js';
-import { loadData } from '../dist/src/data.js';
+import { loadData, buildSide } from '../dist/src/data.js';
 
 const dataDir = new URL('../dist/data/', import.meta.url);
 export const db = await loadData(async (p) => JSON.parse(readFileSync(new URL(p, dataDir))));
+export const forces = { player: buildSide(db, 'player'), enemy: buildSide(db, 'enemy') };
+sim.setForces(forces);
 export { sim };
 export const { state } = sim;
-export const player = (i = 0) => state.squads[i];
+// The selected unit (1. Gruppe after reset), or squad i.
+export const player = (i) => state.squads[i ?? state.selected];
 
 export function run(steps, dt = 0.05) {
   for (let i = 0; i < steps && !state.ended; i++) sim.update(dt);

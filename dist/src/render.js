@@ -1,9 +1,10 @@
 // Canvas rendering of the map, buildings, squads and effects. Reads state only.
 import { W, H } from './config.js';
 import { buildings, objective } from './scenario.js';
-import { state, alive, formationOffset } from './sim.js';
+import { state, alive, formationOffset, houseName } from './sim.js';
 import { buildingAt } from './terrain.js';
 import { drawUnit, isPrototype } from './art.js';
+import { t } from './text.js';
 
 const mapImage = new Image();
 let mapLoaded = false;
@@ -83,7 +84,7 @@ function drawBuildings(ctx) {
       ctx.font = 'bold 10px system-ui';
       ctx.textAlign = 'center';
       ctx.fillStyle = '#f4ecd5';
-      ctx.fillText(b.name.toUpperCase(), b.midX, b.y - 9);
+      ctx.fillText(houseName(b.id).toUpperCase(), b.midX, b.y - 9);
     }
   }
 }
@@ -100,7 +101,7 @@ function drawObjective(ctx) {
   ctx.fillStyle = '#efe4bd';
   ctx.font = 'bold 12px system-ui';
   ctx.textAlign = 'center';
-  ctx.fillText('◈  GÅRDSPLANEN', x, y - 16);
+  ctx.fillText('◈  ' + t('map.objective'), x, y - 16);
   ctx.strokeStyle = '#ecd79b';
   ctx.lineWidth = 3;
   ctx.beginPath();
@@ -145,10 +146,12 @@ function drawSquad(ctx, s) {
   // Squad tag and morale bar
   ctx.textAlign = 'center';
   ctx.font = 'bold 12px system-ui';
+  const tag = s.side ? t('map.enemy') : s.name.toUpperCase();
+  const tw = Math.max(70, ctx.measureText(tag).width + 16);
   ctx.fillStyle = s.side ? '#572e26ee' : '#223224ee';
-  ctx.fillRect(s.x - 35, s.y - R - 8, 70, 21);
+  ctx.fillRect(s.x - tw / 2, s.y - R - 8, tw, 21);
   ctx.fillStyle = s.side ? '#f2b59d' : '#dce8bf';
-  ctx.fillText(s.side ? 'FIENDE' : s.name.toUpperCase(), s.x, s.y - R + 7);
+  ctx.fillText(tag, s.x, s.y - R + 7);
   ctx.fillStyle = '#18221a';
   ctx.fillRect(s.x - 25, s.y + R - 12, 50, 4);
   ctx.fillStyle = s.morale < 40 ? '#ddad74' : '#aaca86';
@@ -209,7 +212,7 @@ export function drawMap(ctx, cursor) {
     ctx.fillStyle = '#eee7ca';
     ctx.font = 'bold 18px system-ui';
     ctx.textAlign = 'center';
-    ctx.fillText('PAUSAD — GE DINA ORDER', W / 2, 50);
+    ctx.fillText(t('map.pausedBanner'), W / 2, 50);
   }
 }
 

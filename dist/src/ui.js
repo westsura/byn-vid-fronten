@@ -1,9 +1,10 @@
 // DOM side panel, overlays and input handling.
 import { MISSION_TIME, HOLD_TIME } from './config.js';
-import { state, alive, playerSquads, select, issue, defend, setMode, togglePause, reset } from './sim.js';
+import { state, alive, playerSquads, select, issue, defend, setMode, togglePause, reset, orderText, houseName } from './sim.js';
 import { buildingAt, coverAt } from './terrain.js';
 import { setSound, soundEnabled, resumeAudio } from './audio.js';
-import { MODES, artMode, isPrototype, urlForMode, factionLabel, modeBadge } from './art.js';
+import { MODES, artMode, isPrototype, urlForMode, modeBadge } from './art.js';
+import { t } from './text.js';
 import { squadRadius } from './render.js';
 
 const $ = (id) => document.getElementById(id);
@@ -21,7 +22,7 @@ export function toast(text) {
 
 export function showResult(win, text) {
   $('result').hidden = false;
-  $('resultTitle').textContent = win ? 'Gårdsplanen är säkrad.' : 'Anfallet har stannat av.';
+  $('resultTitle').textContent = t(win ? 'brief.won' : 'brief.lost');
   $('resultText').textContent = text;
 }
 
@@ -32,44 +33,43 @@ function setHTML(el, html) {
 
 function squadCard(s) {
   const n = alive(s).length;
-  const morale = s.morale < 25 ? 'Bruten' : s.morale < 55 ? 'Pressad' : 'Stabil';
+  const morale = t(s.morale < 25 ? 'morale.broken' : s.morale < 55 ? 'morale.shaken' : 'morale.steady');
   const colour = s.morale < 40 ? '#d89b70' : '#a4bd83';
   return `<button class="squad ${s.id === state.selected ? 'selected' : ''}" data-squad="${s.id}" aria-pressed="${s.id === state.selected}" ${n ? '' : 'disabled'}>
-<div class="squad-top"><span class="number">${s.id + 1}</span><strong>${s.name}</strong><span class="count">${n} / ${s.men.length}</span></div>
-<div class="squad-bottom"><span>${n ? s.order : 'Utslagen'}</span><span>${morale}</span></div>
+<div class="squad-top"><span class="number">${s.hotkey ?? ''}</span><strong>${s.name}</strong><span class="count">${n} / ${s.men.length}</span></div>
+<div class="squad-bottom"><span>${n ? orderText(s) : t('panel.out')}</span><span>${morale}</span></div>
 <div class="morale"><span style="width:${Math.round(s.morale)}%;background:${colour}"></span></div></button>`;
 }
 
 export function renderUI() {
   const s = state.squads[state.selected];
   const n = alive(s).length;
-  $('phase').textContent = state.ended ? 'AVSLUTAD' : state.paused ? (state.started ? 'PAUSAD' : 'PLANERING') : 'STRID PÅGÅR';
-  $('pause').textContent = state.paused ? (state.started ? '▶ Fortsätt' : '▶ Börja striden') : 'Ⅱ Pausa';
+  $('phase').textContent = t(state.ended ? 'phase.ended' : state.paused ? (state.started ? 'phase.paused' : 'phase.planning') : 'phase.running');
+  $('pause').textContent = t(state.paused ? (state.started ? 'buttons.resume' : 'buttons.begin') : 'buttons.pause');
   $('pause').disabled = state.ended;
   $('clock').textContent = clock(Math.max(0, Math.ceil(MISSION_TIME - state.elapsed)));
   $('captureBar').style.width = (state.capture / HOLD_TIME) * 100 + '%';
   $('captureTime').textContent = Math.floor(state.capture) + ' / ' + HOLD_TIME + ' s';
-  $('captureText').textContent = state.capture > 0 ? 'Säkrar området' : 'Ingen kontroll';
-  $('forceCount').textContent = playerSquads().reduce((sum, q) => sum + alive(q).length, 0) + ' man';
+  $('captureText').textContent = t(state.capture > 0 ? 'panel.securing' : 'panel.noControl');
+  $('forceCount').textContent = t('panel.men', { n: playerSquads().reduce((sum, q) => sum + alive(q).length, 0) });
   setHTML($('squads'), playerSquads().map(squadCard).join(''));
 
-  $('selectedName').textContent = s.name + ' / ' + (isPrototype() ? factionLabel(s.faction) + ' (' + s.men.length + ')' : 'Infanteri');
+  const lead = s.men[0];
+  $('selectedName').textContent = s.name + (lead?.rank ? ' · ' + lead.rank.abbr + ' ' + lead.last : '');
   const house = buildingAt(s.x, s.y);
   const cover = coverAt(s.x, s.y);
-  $('cover').textContent = house ? house.name : cover > 0.6 ? 'Byggnadsskydd' : cover > 0.3 ? 'Vegetation' : 'Öppen mark';
+  $('cover').textContent = house ? houseName(house.id) : t(cover > 0.6 ? 'cover.building' : cover > 0.3 ? 'cover.vegetation' : 'cover.open');
   $('ammo').textContent = Math.round((s.ammo / 150) * 100) + ' %';
-  $('currentOrder').textContent = n ? s.order : 'Utslagen';
-  $('posture').textContent = !n
-    ? 'Utslagen'
-    : s.underFire > 0 ? 'Nedtryckt · tar skydd'
-    : s.order === 'Försvarar' ? 'Liggande · försvar'
-    : s.path.length ? 'Förflyttning' : 'Redo';
+  $('currentOrder').textContent = n ? orderText(s) : t('panel.out');
+  $('posture').textContent = t(
+    !n ? 'posture.out'
+    : s.underFire > 0 ? 'posture.pinned'
+    : s.order === 'defend' ? 'posture.defending'
+    : s.path.length ? 'posture.moving' : 'posture.ready',
+  );
   $('move').classList.toggle('active', state.mode === 'move');
   $('defend').classList.toggle('active', state.mode === 'defend');
-  $('orderHelp').textContent =
-    state.mode === 'move'
-      ? 'Klicka på mark för förflyttning eller på ett hus för att gå in genom dörren.'
-      : 'Gruppen håller sin position och får bättre skydd. Klicka på kartan för en ny försvarsställning.';
+  $('orderHelp').textContent = t(state.mode === 'move' ? 'panel.helpMove' : 'panel.helpDefend');
   setHTML($('log'), state.logs.map((l) => `<li><time>${clock(l.t)}</time>${l.text}</li>`).join(''));
 }
 
@@ -84,6 +84,16 @@ function restart() {
   reset();
   $('intro').hidden = false;
   $('result').hidden = true;
+}
+
+// Static interface text: elements with data-t="key" get their text from en.json,
+// data-t-aria / data-t-title set attributes.
+export function applyStaticText() {
+  document.documentElement.lang = 'en';
+  document.title = t('meta.title');
+  document.querySelector('meta[name="description"]')?.setAttribute('content', t('meta.description'));
+  for (const el of document.querySelectorAll('[data-t]')) el.textContent = t(el.dataset.t, { hold: HOLD_TIME });
+  for (const el of document.querySelectorAll('[data-t-aria]')) el.setAttribute('aria-label', t(el.dataset.tAria));
 }
 
 export function bindInput(canvas, W, H) {
@@ -108,11 +118,11 @@ export function bindInput(canvas, W, H) {
   $('begin').onclick = startOrToggle;
   $('again').onclick = restart;
   $('restart').onclick = () => {
-    if (!state.started || state.ended || confirm('Avsluta den här striden och börja om?')) restart();
+    if (!state.started || state.ended || confirm(t('toast.confirmRestart'))) restart();
   };
   $('sound').onclick = () => {
     setSound(!soundEnabled());
-    $('sound').textContent = soundEnabled() ? 'Ljud på' : 'Ljud av';
+    $('sound').textContent = t(soundEnabled() ? 'header.soundOn' : 'header.soundOff');
     $('sound').setAttribute('aria-pressed', String(soundEnabled()));
   };
 
@@ -122,7 +132,8 @@ export function bindInput(canvas, W, H) {
       e.preventDefault();
       startOrToggle();
     }
-    if (['1', '2', '3'].includes(e.key)) select(+e.key - 1);
+    const hot = playerSquads().find((q) => q.hotkey === e.key);
+    if (hot) select(hot.id);
     if (e.key.toLowerCase() === 'd') defend();
     if (e.key.startsWith('Arrow')) {
       e.preventDefault();
@@ -141,10 +152,10 @@ export function bindInput(canvas, W, H) {
   const sel = $('artMode');
   if (sel) {
     sel.innerHTML = Object.entries(MODES)
-      .map(([k, v]) => `<option value="${k}" ${k === artMode() ? 'selected' : ''}>${v.label}</option>`)
+      .map(([k, v]) => `<option value="${k}" ${k === artMode() ? 'selected' : ''}>${v.label()}</option>`)
       .join('');
     sel.onchange = () => {
-      if (state.started && !state.ended && !confirm('Byta grafik startar om striden. Fortsätta?')) {
+      if (state.started && !state.ended && !confirm(t('toast.confirmGraphics'))) {
         sel.value = artMode();
         return;
       }

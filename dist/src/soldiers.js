@@ -1,7 +1,7 @@
 /* Shared, resolution-independent infantry renderer. Local +X is facing. */
 import { soldierPose } from './sim.js';
 
-// Muted uniform colours per side: 0 = player (olive), 1 = enemy (field grey).
+// Muted uniform colours: 0 = olive/khaki (Soviet), 1 = field grey (German).
 const PALETTES = [
   { coat: '#8a8b54', light: '#b9b887', dark: '#555b35', helmet: '#6d7943', rim: '#bbc18b', web: '#b2a479', pack: '#797552' },
   { coat: '#788079', light: '#a7aea0', dark: '#484f4c', helmet: '#626d64', rim: '#a7b1a0', web: '#5b5544', pack: '#5b665d' },
@@ -9,7 +9,7 @@ const PALETTES = [
 
 export function drawSoldier(g, m, s, time, scale = 1) {
   const pose=soldierPose(m,s),prone=pose==='prone',fallen=pose==='fallen';
-  const p = PALETTES[s.side];
+  const p = PALETTES[s.nation ? (s.nation === 'de' ? 1 : 0) : s.side];
   const gait=m.moving?Math.sin((m.stride||0)+m.phase)*1.9:0;
   const kick=(m.flash||0)>0?-1.2:0;
   g.save();g.translate(m.x,m.y);g.rotate(m.angle);g.scale(scale,scale);
