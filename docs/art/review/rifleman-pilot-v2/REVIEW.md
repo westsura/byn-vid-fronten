@@ -77,3 +77,5 @@ Kartan märks **GRAFIKPROV V2 – EJ GODKÄNT**. Standardgrafiken och prototypen
 | `4-skala-mot-hus-och-dorr-4x.jpg` | Gevärsskyttar redo och liggande bredvid Västra husets dörr (38 enheter bred) |
 | `5-byte-redo-liggande.gif` | Byte mellan redo och liggande med markerad pivot, båda sidor |
 | `6-strid-tysk-normalzoom.jpg`, `6-strid-vagkorsning-2x.jpg` | Tysk sida i en pågående strid |
+
+> **2026-10-02:** GIF-inspelningarna som nämns här är borttagna ur repot för att hålla nere storleken. De skickades till Björn i chatten. Nya GIF-filer läggs inte i repot.

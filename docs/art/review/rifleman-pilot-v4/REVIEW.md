@@ -99,3 +99,5 @@ Hjälmbredden är cirka 4,4–4,6 enheter i alla poser enligt leverantörens mä
 | `4b-skuggor-ingen-liten-oval-4x.jpg` | Skuggvarianter uppifrån: ingen, liten, oval |
 | `5-byte-redo-liggande-4x.jpg`, `5-byte-redo-liggande.gif` | Byte med fast axelpunkt, markerade punkter |
 | `6-strid-tysk-normalzoom.jpg` | Tysk sida i pågående strid |
+
+> **2026-10-02:** GIF-inspelningarna som nämns här är borttagna ur repot för att hålla nere storleken. De skickades till Björn i chatten. Nya GIF-filer läggs inte i repot.

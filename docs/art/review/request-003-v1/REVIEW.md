@@ -94,3 +94,5 @@ Se ovan.
 | `4-grupp-gar-4x-gangcykel.gif`, `4-grupp-gar-4x-utan-gangcykel.gif` | Hel tiomannagrupp som går, 4×, med och utan gångcykel |
 | `4-grupp-gar-normalzoom-gangcykel.gif` | Samma grupp i normal zoom |
 | `5-normalzoom-tysk.jpg` | Spelet i normal zoom i läget `pilot-w1` |
+
+> **2026-10-02:** GIF-inspelningarna som nämns här är borttagna ur repot för att hålla nere storleken. De skickades till Björn i chatten. Nya GIF-filer läggs inte i repot.

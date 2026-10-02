@@ -4,3 +4,5 @@ node_modules/
 *.zip
 *.tgz
 .openai/
+# Rörelseinspelningar skickas i chatten, inte i repot (beslut 2026-10-02)
+*.gif

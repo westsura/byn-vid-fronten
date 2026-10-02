@@ -128,3 +128,5 @@ Min gräns på 0,5 enheter i beställningen var striktare än spelet behöver. D
 | `6-utslagna-normalzoom.jpg`, `6-4x-…` | Grupper med fyra utslagna bland levande, båda sidor |
 | `7-strid-soviet-normalzoom.jpg`, `7-strid-*-2x.jpg`, `7-strid-*.gif` | Pågående strid med förluster, båda sidor. GIF-filerna är korta rörelseinspelningar |
 | `8-utslagna-mot-levande-kalla.jpg` | Källbilderna i samma skala: levande gevärsskytt till vänster, utslagna a och b till höger |
+
+> **2026-10-02:** GIF-inspelningarna som nämns här är borttagna ur repot för att hålla nere storleken. De skickades till Björn i chatten. Nya GIF-filer läggs inte i repot.

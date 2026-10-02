@@ -71,3 +71,5 @@ Standardgrafiken, v1 och v2 finns kvar oförändrade.
 | `4-skuggor-ingen-liten-oval-4x.jpg` | Skuggvarianter uppifrån: ingen, liten, oval (väg till vänster, vegetation till höger) |
 | `5-byte-redo-liggande.gif` | Byte mellan redo och liggande med pivot, hjälmcentrum och mynning markerade |
 | `6-strid-*.jpg` | Tysk sida i pågående strid |
+
+> **2026-10-02:** GIF-inspelningarna som nämns här är borttagna ur repot för att hålla nere storleken. De skickades till Björn i chatten. Nya GIF-filer läggs inte i repot.

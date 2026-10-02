@@ -101,3 +101,5 @@ Skärmbilder och inspelningar i den här mappen:
 - Ingen produktionsmärkning. Standardgrafiken är fortfarande förvald.
 - Inga ändringar i gång- och krypspärren.
 - Ingen retusch av leverantörens bilder.
+
+> **2026-10-02:** GIF-inspelningarna som nämns här är borttagna ur repot för att hålla nere storleken. De skickades till Björn i chatten. Nya GIF-filer läggs inte i repot.

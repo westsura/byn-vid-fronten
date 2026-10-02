@@ -95,3 +95,5 @@ Samma lagerupplägg för övriga roller, båda sidor, och därefter krypning.
 | `3-stodfot-med-fotlasning.json`, `…-utan-…` | Stödfotens markposition per spelsteg: steg, sträcka, ben, x, y |
 | `4-grupp-gar-4x.gif` | Hel tiomannagrupp som går, 4× |
 | `4-grupp-gar-normalzoom-2x.gif` | Gruppen i spelets normalzoom, förstorad 2× för visning |
+
+> **2026-10-02:** GIF-inspelningarna som nämns här är borttagna ur repot för att hålla nere storleken. De skickades till Björn i chatten. Nya GIF-filer läggs inte i repot.
