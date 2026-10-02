@@ -1,6 +1,6 @@
 # Byn vid fronten – speldesign
 
-Senast uppdaterad 2026-10-02. Källa: designdokumentet i claude.ai-projektet "Close Combat".
+Senast uppdaterad 2026-10-02 (beslut efter steg 0 införda). Källa: designdokumentet i claude.ai-projektet "Close Combat".
 
 ## Grundläge
 
@@ -23,13 +23,13 @@ Spelarens styrka är en tysk skyttepluton (Schützenzug) byggd på faktisk organ
 **Plutonen**
 
 - Plutonsledning (Zugtrupp): plutonchef, ställföreträdare eller Zugtruppführer, ordonnanser, bårbärare.
-- Tre eller fyra skyttegrupper beroende på år. 1942: fyra grupper om tio man, ofta med lätt granatkastare. 1944: tre grupper om nio man, ingen granatkastare.
+- Tre eller fyra skyttegrupper beroende på år. 1942: fyra grupper om tio man, ofta med lätt granatkastare. 1943 (prototypen): tre grupper om tio man; scenarier kan underbemanna. 1944: tre grupper om nio man, ingen granatkastare.
 - Östfronten: förbanden var nästan alltid underbemannade. Scenarier kan ge en sliten pluton med flit.
 
 **Gruppen**
 
 - Gruppchef, ställföreträdare, kulsprutetrupp (skytt 1–3) och skyttar.
-- Kulsprutan (MG34/MG42) är gruppens huvudvapen. Skyttarna anfaller med stöd av den eller skyddar och försörjer den.
+- Kulsprutan (MG34/MG42) är gruppens huvudvapen. Prototypen använder MG34. Skyttarna anfaller med stöd av den eller skyddar och försörjer den.
 - Gruppen är **delbar vid behov** i kulsprutetrupp och skyttetrupp. Gruppchefen följer ena delen, ställföreträdaren den andra. Odelad grupp är grundläget.
 - Saknas underofficer leder ställföreträdaren, och gruppen kan då inte delas med ledare i båda delar.
 
@@ -195,7 +195,9 @@ Prototypen är en pluton mot en sovjetisk motståndare i en by, år 1943, med en
 7. Köpskärm: fast kärna, budget och tre förstärkningar (extra grupp, tung kulspruta, granatkastare). **Avstämning.**
 8. Ett scenario (förslag: motanfall mot en byggnad) med segervillkor på stridsdugliga. **Avstämning.**
 
-Utanför prototypen: fordon, kampanj, multiplayer, spelbar sovjetisk eller allierad sida, ytbekämpning, pipbyte och inkallat artilleri (kan läggas till efter steg 5).
+Pipbyte ingår i prototypen (steg 3).
+
+Utanför prototypen: fordon, kampanj, multiplayer, spelbar sovjetisk eller allierad sida, ytbekämpning och inkallat artilleri (kan läggas till efter steg 5).
 
 ## Grafik och effekter
 
@@ -243,7 +245,7 @@ Händelseförloppet ska vara läsbart: eld avges, nedslag, gruppen reagerar, res
 
 ## Öppna frågor och senare utbyggnad
 
-- [ ] Bekräfta två ledare på plutonsnivå (plutonchef + ställföreträdare) eller en.
+- [x] Två ledare på plutonsnivå: plutonchef och Zugtruppführer (beslut 2026-10-02).
 - [ ] Grundsituation i första scenariot: anfall, försvar eller båda.
 
 Senare: fordon och pansarvärn, målprioritering, konvojscenarier, spelbar sovjetisk eller allierad sida, multiplayer.

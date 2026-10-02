@@ -212,3 +212,18 @@ En enda målad bild räcker inte för både en stor karta och skärpa vid gruppn
 - Vid översiktsnivån används förminskade versioner, så att kartan inte flimrar.
 - Kartgrafiken påverkar inte steg 1–3. Kameran byggs i steg 4, och en första testkarta kan byggas med dagens bild som mark tills grafiken finns.
 
+## 7. Björns beslut 2026-10-02
+
+| Fråga | Beslut |
+|---|---|
+| Pipbyte | Byggs i prototypen (steg 3). DESIGN.md uppdaterad. |
+| Ytbekämpning | Inte i prototypen. |
+| Gruppstorlek 1943 | Tre grupper om tio man; scenarier kan underbemanna. DESIGN.md uppdaterad. |
+| Kulspruta | MG34 i prototypen, både som figur och som vapen i datan. Pipbyte gäller MG34. DESIGN.md uppdaterad. |
+| Plutonsledning | Två ledare: plutonchef och Zugtruppführer. DESIGN.md uppdaterad. |
+| GIF-filer | Oanvända GIF-filer är borttagna ur repot (cirka 58 MB). Nya GIF-filer skickas bara i chatten; `.gitignore` stoppar `*.gif`. |
+| Kartstorlek | Kartan kan vara större än skärmbilden; kameran panorerar (se risk 7). |
+| Skarp karta | Två alternativ i avsnitt 6. Väntar på val. |
+
+Repots historik (`.git`) innehåller fortfarande de borttagna GIF-filerna. Den krymper bara om historiken skrivs om och tvingas upp till GitHub, vilket inte är gjort.
+
