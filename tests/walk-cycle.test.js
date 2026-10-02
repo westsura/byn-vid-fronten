@@ -45,3 +45,35 @@ test('walked distance grows with movement and stops when the squad stops or the 
   assert.ok(!m0.moving);
   assert.equal(m0.walked, w2);
 });
+
+const m2 = JSON.parse(readFileSync(new URL('../dist/assets/prototype/walk-v2-layers/manifest.json', import.meta.url)));
+
+test('walk v2: three layers per frame, planted leg left in 0-3 and right in 4-7', () => {
+  const a = m2.animations['german-rifleman-walk'];
+  assert.equal(a.frames.length, 8);
+  a.frames.forEach((k, i) => {
+    const f = m2.frames[k];
+    assert.deepEqual(Object.keys(f.layers).sort(), ['leg-left', 'leg-right', 'upper']);
+    assert.deepEqual(f.pivot, [600, 390]);
+    assert.equal(f.plantedLeg, i < 4 ? 'left' : 'right');
+    // muzzle within 1 unit of the ready muzzle (helmet correction 2: [1115, 400])
+    assert.ok(Math.abs(f.muzzle[0] - 1115) / 28 <= 1 && Math.abs(f.muzzle[1] - 400) / 28 <= 1, k);
+  });
+});
+
+test('walk v2: with the engine shift the planted foot stays put on the ground during each stance', () => {
+  const a = m2.animations['german-rifleman-walk'];
+  const c = a.cycleDistanceUnits;
+  const per = c / a.frames.length;
+  for (const stance of [0, 1]) {
+    const ground = [];
+    for (let d = stance * c / 2; d < (stance + 1) * c / 2 - 1e-9; d += 0.25) {
+      const i = Math.floor(d / per);
+      const f = m2.frames[a.frames[i]];
+      const within = d - i * per; // same rule as art.js walkFrame
+      ground.push(d + (f.plantedFoot[0] - f.pivot[0]) / f.pixelsPerUnit - within);
+    }
+    const spread = Math.max(...ground) - Math.min(...ground);
+    assert.ok(spread < 0.01, `stance ${stance}: foot moves ${spread} units`);
+  }
+});

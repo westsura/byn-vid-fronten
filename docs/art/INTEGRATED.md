@@ -14,9 +14,10 @@
 | Sovjetiska specialister (gruppchef, kulspruteskytt, assistent, SVT), utslagna båda sidor, rättad sovjetisk registrering (**REQUEST_002 v1**) | REQUEST_002-v1 | `dist/assets/prototype/request-002-v1/` | valbar (`?art=pilot-r2`, `&reg=v4` för jämförelse), ej standard | Alla 21 soldater i v4-stil. Granskning: `docs/art/review/request-002-v1/REVIEW.md` |
 | Tyska utslagna, rättad hjälm och anatomi (**REQUEST_002 tysk utslagen v2**) | REQUEST_002-german-fallen-v2 | `dist/assets/prototype/request-002-german-fallen-v2/` | används i `pilot-r2`/`pilot-w1` (`&fallen=v1` för jämförelse), ej standard | Granskning: `docs/art/review/request-002-german-fallen-v2/REVIEW.md` |
 | Gångcykel, pilot: tysk Schütze K98k, 8 rutor, sträckstyrd (**REQUEST_003 v1**) | REQUEST_003-v1 | `dist/assets/prototype/walk-pilot-v1/` | valbar (`?art=pilot-w1`), ej standard | Motorn: `walked` per soldat. Granskning: `docs/art/review/request-003-v1/REVIEW.md` |
+| Gångcykel v2 i lager (vänster ben, höger ben, överkropp), tysk Schütze, fotlåsning i motorn (**REQUEST_004 v1**) | REQUEST_004-v1 | `dist/assets/prototype/walk-v2-layers/` | valbar (`?art=pilot-w2`, `&footlock=off`), ej standard | Granskning: `docs/art/review/request-004-v1/REVIEW.md` |
 
 Levererat men ej integrerat: `REQUEST_001` v1 (SVG-soldat, hus 0, gruppkort) i `art/incoming/REQUEST_001-v1/`.
 
 **Björns provspelning 2026-10-01:** v4-stilen godkänd som grund (gevärsskytt v4, tysk hjälmkorrigering 2, tyska stödroller 1). Lägena är fortfarande valbara prov, inte standardgrafik; märket i spelet står kvar tills helheten (utslagna, specialister, animationer) är på plats.
 
-Beställt: `REQUEST_002` (levererat och integrerat som prov `pilot-r2`), `REQUEST_003` (levererat och integrerat som prov `pilot-w1`), `REQUEST_004` (gångcykel v2 i lager, beställd 2026-10-02).
+Beställt: `REQUEST_002` (levererat och integrerat som prov `pilot-r2`), `REQUEST_003` (levererat och integrerat som prov `pilot-w1`), `REQUEST_004` (levererat och integrerat som prov `pilot-w2`).

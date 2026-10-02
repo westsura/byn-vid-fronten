@@ -72,7 +72,8 @@ Resultat: en uppdatering tar cirka 0,8 ms i full strid, mot tidigare 5,4 ms.
 - [ ] Björn provspelar `pilot-r2`.
 - [x] `REQUEST_003` v1 levererat och valbart (`pilot-w1`): gångcykel för tysk gevärsskytt, styrd av gången sträcka. Speltestat av Claude: `docs/art/review/request-003-v1/REVIEW.md`. **Ej godkänt.** Kvar: fotglidning mellan rutor (förslag: ben som eget lager), lite synlig rörelse vid normal zoom.
 - [x] Björn 2026-10-02: längre steg och lätt vridning i axlar och höfter; uniformsfärgen behålls.
-- [ ] `REQUEST_004`: gångcykel v2 levererad i lager (vänster ben, höger ben, överkropp) så att motorn kan låsa stödfoten. Beställd 2026-10-02.
+- [x] `REQUEST_004` v1 levererat och valbart (`pilot-w2`): gångcykel i lager, motorn låser stödfoten (uppmätt 0,0 enheters glidning vid rak gång). Speltestat av Claude: `docs/art/review/request-004-v1/REVIEW.md`. **Ej godkänt.**
+- [ ] Björn provspelar `pilot-w2`. Vid godkännande: samma lagerupplägg för alla roller båda sidor, därefter krypning.
 - [ ] Efter godkänd pilot: gång för alla roller, krypcykel.
 - [ ] Integrera REQUEST_001 v1 (SVG-soldat, hus 0, gruppkort) – levererat, ej integrerat.
 - [ ] Zoom och panorering, skärpa på högupplösta skärmar.

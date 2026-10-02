@@ -1,0 +1,620 @@
+{
+  "version": "REQUEST_004-v1",
+  "base": "german-helmet-correction-v2",
+  "layerOrder": [
+    "leg-left",
+    "leg-right",
+    "upper"
+  ],
+  "frames": {
+    "german-rifleman-walk-0": {
+      "layers": {
+        "leg-left": {
+          "file": "german-rifleman-walk-v2-layers.png",
+          "sourceRect": [
+            0,
+            0,
+            1254,
+            700
+          ]
+        },
+        "leg-right": {
+          "file": "german-rifleman-walk-v2-layers.png",
+          "sourceRect": [
+            0,
+            700,
+            1254,
+            700
+          ]
+        },
+        "upper": {
+          "file": "german-rifleman-walk-v2-layers.png",
+          "sourceRect": [
+            0,
+            1400,
+            1254,
+            700
+          ]
+        }
+      },
+      "file": "german-rifleman-walk-v2.png",
+      "sourceRect": [
+        0,
+        0,
+        1254,
+        700
+      ],
+      "pivot": [
+        600,
+        390
+      ],
+      "muzzle": [
+        1115.1263110418809,
+        374.522005185847
+      ],
+      "helmetCenter": [
+        659,
+        385
+      ],
+      "plantedLeg": "left",
+      "plantedFoot": [
+        870,
+        265
+      ],
+      "feet": {
+        "left": [
+          870,
+          265
+        ],
+        "right": [
+          310,
+          530
+        ]
+      },
+      "pixelsPerUnit": 28,
+      "sourceForwardRadians": 0,
+      "contentBoundsAlpha32": [
+        262,
+        236,
+        1118,
+        578
+      ],
+      "status": "animation-pilot-not-approved"
+    },
+    "german-rifleman-walk-1": {
+      "layers": {
+        "leg-left": {
+          "file": "german-rifleman-walk-v2-layers.png",
+          "sourceRect": [
+            1254,
+            0,
+            1254,
+            700
+          ]
+        },
+        "leg-right": {
+          "file": "german-rifleman-walk-v2-layers.png",
+          "sourceRect": [
+            1254,
+            700,
+            1254,
+            700
+          ]
+        },
+        "upper": {
+          "file": "german-rifleman-walk-v2-layers.png",
+          "sourceRect": [
+            1254,
+            1400,
+            1254,
+            700
+          ]
+        }
+      },
+      "file": "german-rifleman-walk-v2.png",
+      "sourceRect": [
+        1254,
+        0,
+        1254,
+        700
+      ],
+      "pivot": [
+        600,
+        390
+      ],
+      "muzzle": [
+        1115.2366784428132,
+        381.98449946622867
+      ],
+      "helmetCenter": [
+        659,
+        385
+      ],
+      "plantedLeg": "left",
+      "plantedFoot": [
+        730,
+        265
+      ],
+      "feet": {
+        "left": [
+          730,
+          265
+        ],
+        "right": [
+          397.5,
+          530
+        ]
+      },
+      "pixelsPerUnit": 28,
+      "sourceForwardRadians": 0,
+      "contentBoundsAlpha32": [
+        349,
+        236,
+        1118,
+        577
+      ],
+      "status": "animation-pilot-not-approved"
+    },
+    "german-rifleman-walk-2": {
+      "layers": {
+        "leg-left": {
+          "file": "german-rifleman-walk-v2-layers.png",
+          "sourceRect": [
+            2508,
+            0,
+            1254,
+            700
+          ]
+        },
+        "leg-right": {
+          "file": "german-rifleman-walk-v2-layers.png",
+          "sourceRect": [
+            2508,
+            700,
+            1254,
+            700
+          ]
+        },
+        "upper": {
+          "file": "german-rifleman-walk-v2-layers.png",
+          "sourceRect": [
+            2508,
+            1400,
+            1254,
+            700
+          ]
+        }
+      },
+      "file": "german-rifleman-walk-v2.png",
+      "sourceRect": [
+        2508,
+        0,
+        1254,
+        700
+      ],
+      "pivot": [
+        600,
+        390
+      ],
+      "muzzle": [
+        1115,
+        400
+      ],
+      "helmetCenter": [
+        659,
+        385
+      ],
+      "plantedLeg": "left",
+      "plantedFoot": [
+        590,
+        265
+      ],
+      "feet": {
+        "left": [
+          590,
+          265
+        ],
+        "right": [
+          590,
+          530
+        ]
+      },
+      "pixelsPerUnit": 28,
+      "sourceForwardRadians": 0,
+      "contentBoundsAlpha32": [
+        392,
+        236,
+        1117,
+        575
+      ],
+      "status": "animation-pilot-not-approved"
+    },
+    "german-rifleman-walk-3": {
+      "layers": {
+        "leg-left": {
+          "file": "german-rifleman-walk-v2-layers.png",
+          "sourceRect": [
+            3762,
+            0,
+            1254,
+            700
+          ]
+        },
+        "leg-right": {
+          "file": "german-rifleman-walk-v2-layers.png",
+          "sourceRect": [
+            3762,
+            700,
+            1254,
+            700
+          ]
+        },
+        "upper": {
+          "file": "german-rifleman-walk-v2-layers.png",
+          "sourceRect": [
+            3762,
+            1400,
+            1254,
+            700
+          ]
+        }
+      },
+      "file": "german-rifleman-walk-v2.png",
+      "sourceRect": [
+        3762,
+        0,
+        1254,
+        700
+      ],
+      "pivot": [
+        600,
+        390
+      ],
+      "muzzle": [
+        1114.0522176043214,
+        417.99210895637447
+      ],
+      "helmetCenter": [
+        659,
+        385
+      ],
+      "plantedLeg": "left",
+      "plantedFoot": [
+        450,
+        265
+      ],
+      "feet": {
+        "left": [
+          450,
+          265
+        ],
+        "right": [
+          782.5,
+          530
+        ]
+      },
+      "pixelsPerUnit": 28,
+      "sourceForwardRadians": 0,
+      "contentBoundsAlpha32": [
+        392,
+        236,
+        1117,
+        573
+      ],
+      "status": "animation-pilot-not-approved"
+    },
+    "german-rifleman-walk-4": {
+      "layers": {
+        "leg-left": {
+          "file": "german-rifleman-walk-v2-layers.png",
+          "sourceRect": [
+            0,
+            2100,
+            1254,
+            700
+          ]
+        },
+        "leg-right": {
+          "file": "german-rifleman-walk-v2-layers.png",
+          "sourceRect": [
+            0,
+            2800,
+            1254,
+            700
+          ]
+        },
+        "upper": {
+          "file": "german-rifleman-walk-v2-layers.png",
+          "sourceRect": [
+            0,
+            3500,
+            1254,
+            700
+          ]
+        }
+      },
+      "file": "german-rifleman-walk-v2.png",
+      "sourceRect": [
+        0,
+        700,
+        1254,
+        700
+      ],
+      "pivot": [
+        600,
+        390
+      ],
+      "muzzle": [
+        1113.451665892086,
+        425.4312177396124
+      ],
+      "helmetCenter": [
+        659,
+        385
+      ],
+      "plantedLeg": "right",
+      "plantedFoot": [
+        870,
+        530
+      ],
+      "feet": {
+        "left": [
+          310,
+          265
+        ],
+        "right": [
+          870,
+          530
+        ]
+      },
+      "pixelsPerUnit": 28,
+      "sourceForwardRadians": 0,
+      "contentBoundsAlpha32": [
+        262,
+        236,
+        1116,
+        572
+      ],
+      "status": "animation-pilot-not-approved"
+    },
+    "german-rifleman-walk-5": {
+      "layers": {
+        "leg-left": {
+          "file": "german-rifleman-walk-v2-layers.png",
+          "sourceRect": [
+            1254,
+            2100,
+            1254,
+            700
+          ]
+        },
+        "leg-right": {
+          "file": "german-rifleman-walk-v2-layers.png",
+          "sourceRect": [
+            1254,
+            2800,
+            1254,
+            700
+          ]
+        },
+        "upper": {
+          "file": "german-rifleman-walk-v2-layers.png",
+          "sourceRect": [
+            1254,
+            3500,
+            1254,
+            700
+          ]
+        }
+      },
+      "file": "german-rifleman-walk-v2.png",
+      "sourceRect": [
+        1254,
+        700,
+        1254,
+        700
+      ],
+      "pivot": [
+        600,
+        390
+      ],
+      "muzzle": [
+        1114.0522176043214,
+        417.99210895637447
+      ],
+      "helmetCenter": [
+        659,
+        385
+      ],
+      "plantedLeg": "right",
+      "plantedFoot": [
+        730,
+        530
+      ],
+      "feet": {
+        "left": [
+          397.5,
+          265
+        ],
+        "right": [
+          730,
+          530
+        ]
+      },
+      "pixelsPerUnit": 28,
+      "sourceForwardRadians": 0,
+      "contentBoundsAlpha32": [
+        349,
+        236,
+        1117,
+        573
+      ],
+      "status": "animation-pilot-not-approved"
+    },
+    "german-rifleman-walk-6": {
+      "layers": {
+        "leg-left": {
+          "file": "german-rifleman-walk-v2-layers.png",
+          "sourceRect": [
+            2508,
+            2100,
+            1254,
+            700
+          ]
+        },
+        "leg-right": {
+          "file": "german-rifleman-walk-v2-layers.png",
+          "sourceRect": [
+            2508,
+            2800,
+            1254,
+            700
+          ]
+        },
+        "upper": {
+          "file": "german-rifleman-walk-v2-layers.png",
+          "sourceRect": [
+            2508,
+            3500,
+            1254,
+            700
+          ]
+        }
+      },
+      "file": "german-rifleman-walk-v2.png",
+      "sourceRect": [
+        2508,
+        700,
+        1254,
+        700
+      ],
+      "pivot": [
+        600,
+        390
+      ],
+      "muzzle": [
+        1115,
+        400
+      ],
+      "helmetCenter": [
+        659,
+        385
+      ],
+      "plantedLeg": "right",
+      "plantedFoot": [
+        590,
+        530
+      ],
+      "feet": {
+        "left": [
+          590,
+          265
+        ],
+        "right": [
+          590,
+          530
+        ]
+      },
+      "pixelsPerUnit": 28,
+      "sourceForwardRadians": 0,
+      "contentBoundsAlpha32": [
+        392,
+        236,
+        1117,
+        575
+      ],
+      "status": "animation-pilot-not-approved"
+    },
+    "german-rifleman-walk-7": {
+      "layers": {
+        "leg-left": {
+          "file": "german-rifleman-walk-v2-layers.png",
+          "sourceRect": [
+            3762,
+            2100,
+            1254,
+            700
+          ]
+        },
+        "leg-right": {
+          "file": "german-rifleman-walk-v2-layers.png",
+          "sourceRect": [
+            3762,
+            2800,
+            1254,
+            700
+          ]
+        },
+        "upper": {
+          "file": "german-rifleman-walk-v2-layers.png",
+          "sourceRect": [
+            3762,
+            3500,
+            1254,
+            700
+          ]
+        }
+      },
+      "file": "german-rifleman-walk-v2.png",
+      "sourceRect": [
+        3762,
+        700,
+        1254,
+        700
+      ],
+      "pivot": [
+        600,
+        390
+      ],
+      "muzzle": [
+        1115.2366784428132,
+        381.98449946622867
+      ],
+      "helmetCenter": [
+        659,
+        385
+      ],
+      "plantedLeg": "right",
+      "plantedFoot": [
+        450,
+        530
+      ],
+      "feet": {
+        "left": [
+          782.5,
+          265
+        ],
+        "right": [
+          450,
+          530
+        ]
+      },
+      "pixelsPerUnit": 28,
+      "sourceForwardRadians": 0,
+      "contentBoundsAlpha32": [
+        392,
+        236,
+        1118,
+        577
+      ],
+      "status": "animation-pilot-not-approved"
+    }
+  },
+  "animations": {
+    "german-rifleman-walk": {
+      "frames": [
+        "german-rifleman-walk-0",
+        "german-rifleman-walk-1",
+        "german-rifleman-walk-2",
+        "german-rifleman-walk-3",
+        "german-rifleman-walk-4",
+        "german-rifleman-walk-5",
+        "german-rifleman-walk-6",
+        "german-rifleman-walk-7"
+      ],
+      "cycleDistanceUnits": 40,
+      "loop": true,
+      "drive": "distance"
+    }
+  }
+}
