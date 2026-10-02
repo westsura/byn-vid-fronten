@@ -1,0 +1,1181 @@
+{
+  "frames": [
+    {
+      "frame": "german-rifleman-walk-0",
+      "layerCompositeDifferingChannels": 0
+    },
+    {
+      "frame": "german-rifleman-walk-1",
+      "layerCompositeDifferingChannels": 0
+    },
+    {
+      "frame": "german-rifleman-walk-2",
+      "layerCompositeDifferingChannels": 0
+    },
+    {
+      "frame": "german-rifleman-walk-3",
+      "layerCompositeDifferingChannels": 0
+    },
+    {
+      "frame": "german-rifleman-walk-4",
+      "layerCompositeDifferingChannels": 0
+    },
+    {
+      "frame": "german-rifleman-walk-5",
+      "layerCompositeDifferingChannels": 0
+    },
+    {
+      "frame": "german-rifleman-walk-6",
+      "layerCompositeDifferingChannels": 0
+    },
+    {
+      "frame": "german-rifleman-walk-7",
+      "layerCompositeDifferingChannels": 0
+    }
+  ],
+  "maxStraightLinePlantedFootResidualUnits": 7.105427357601002e-15,
+  "simulation": "six stance periods at 0 and 45 degrees, 800 samples per stance; not the game engine",
+  "contactMeasurements": [
+    {
+      "frame": 0,
+      "contact": true,
+      "hipAngleDegrees": 8,
+      "shoulderAngleDegrees": -3.2,
+      "frontFoot": "left",
+      "frontToeExtensionUnits": 7.035714285714286,
+      "rearHeelExtensionUnits": 4.678571428571429,
+      "contourMethod": "front upper alpha32 contour in boot lane +/-30px; rear global pack/back contour x<600; extensions use alpha32 leg silhouette",
+      "frontContourX": 719,
+      "rearContourX": 393,
+      "footBounds": {
+        "left": [
+          625,
+          236,
+          916,
+          378
+        ],
+        "right": [
+          262,
+          401,
+          643,
+          556
+        ]
+      },
+      "muzzleDeviationUnits": [
+        0.004511108638601919,
+        -0.9099283862197508
+      ],
+      "helmetDeviationUnits": [
+        0,
+        0
+      ],
+      "bounds": [
+        262,
+        236,
+        1118,
+        578
+      ]
+    },
+    {
+      "frame": 4,
+      "contact": true,
+      "hipAngleDegrees": -8,
+      "shoulderAngleDegrees": 3.2,
+      "frontFoot": "right",
+      "frontToeExtensionUnits": 7.392857142857143,
+      "rearHeelExtensionUnits": 4.607142857142857,
+      "contourMethod": "front upper alpha32 contour in boot lane +/-30px; rear global pack/back contour x<600; extensions use alpha32 leg silhouette",
+      "frontContourX": 709,
+      "rearContourX": 391,
+      "footBounds": {
+        "left": [
+          262,
+          236,
+          642,
+          382
+        ],
+        "right": [
+          625,
+          402,
+          916,
+          548
+        ]
+      },
+      "muzzleDeviationUnits": [
+        -0.05529764671121029,
+        0.9082577764147288
+      ],
+      "helmetDeviationUnits": [
+        0,
+        0
+      ],
+      "bounds": [
+        262,
+        236,
+        1116,
+        572
+      ]
+    }
+  ],
+  "maxMuzzleSideDeviationUnits": 0.9099283862197508,
+  "maxMuzzleForwardDeviationUnits": 0.05529764671121029,
+  "helmetDeviationUnits": 0,
+  "samples": [
+    {
+      "angleDegrees": 0,
+      "distance": 0,
+      "frame": 0,
+      "plantedLeg": "left",
+      "world": [
+        9.642857142857142,
+        -4.464285714285714
+      ],
+      "error": 0
+    },
+    {
+      "angleDegrees": 0,
+      "distance": 2.5,
+      "frame": 0,
+      "plantedLeg": "left",
+      "world": [
+        9.642857142857142,
+        -4.464285714285714
+      ],
+      "error": 0
+    },
+    {
+      "angleDegrees": 0,
+      "distance": 5,
+      "frame": 1,
+      "plantedLeg": "left",
+      "world": [
+        9.642857142857142,
+        -4.464285714285714
+      ],
+      "error": 0
+    },
+    {
+      "angleDegrees": 0,
+      "distance": 7.5,
+      "frame": 1,
+      "plantedLeg": "left",
+      "world": [
+        9.642857142857142,
+        -4.464285714285714
+      ],
+      "error": 0
+    },
+    {
+      "angleDegrees": 0,
+      "distance": 10,
+      "frame": 2,
+      "plantedLeg": "left",
+      "world": [
+        9.642857142857142,
+        -4.464285714285714
+      ],
+      "error": 0
+    },
+    {
+      "angleDegrees": 0,
+      "distance": 12.5,
+      "frame": 2,
+      "plantedLeg": "left",
+      "world": [
+        9.642857142857142,
+        -4.464285714285714
+      ],
+      "error": 0
+    },
+    {
+      "angleDegrees": 0,
+      "distance": 15,
+      "frame": 3,
+      "plantedLeg": "left",
+      "world": [
+        9.642857142857142,
+        -4.464285714285714
+      ],
+      "error": 0
+    },
+    {
+      "angleDegrees": 0,
+      "distance": 17.5,
+      "frame": 3,
+      "plantedLeg": "left",
+      "world": [
+        9.642857142857142,
+        -4.464285714285714
+      ],
+      "error": 0
+    },
+    {
+      "angleDegrees": 0,
+      "distance": 20,
+      "frame": 4,
+      "plantedLeg": "right",
+      "world": [
+        29.642857142857142,
+        5
+      ],
+      "error": 0
+    },
+    {
+      "angleDegrees": 0,
+      "distance": 22.5,
+      "frame": 4,
+      "plantedLeg": "right",
+      "world": [
+        29.642857142857142,
+        5
+      ],
+      "error": 0
+    },
+    {
+      "angleDegrees": 0,
+      "distance": 25,
+      "frame": 5,
+      "plantedLeg": "right",
+      "world": [
+        29.642857142857142,
+        5
+      ],
+      "error": 0
+    },
+    {
+      "angleDegrees": 0,
+      "distance": 27.5,
+      "frame": 5,
+      "plantedLeg": "right",
+      "world": [
+        29.642857142857142,
+        5
+      ],
+      "error": 0
+    },
+    {
+      "angleDegrees": 0,
+      "distance": 30,
+      "frame": 6,
+      "plantedLeg": "right",
+      "world": [
+        29.642857142857142,
+        5
+      ],
+      "error": 0
+    },
+    {
+      "angleDegrees": 0,
+      "distance": 32.5,
+      "frame": 6,
+      "plantedLeg": "right",
+      "world": [
+        29.642857142857142,
+        5
+      ],
+      "error": 0
+    },
+    {
+      "angleDegrees": 0,
+      "distance": 35,
+      "frame": 7,
+      "plantedLeg": "right",
+      "world": [
+        29.642857142857142,
+        5
+      ],
+      "error": 0
+    },
+    {
+      "angleDegrees": 0,
+      "distance": 37.5,
+      "frame": 7,
+      "plantedLeg": "right",
+      "world": [
+        29.642857142857142,
+        5
+      ],
+      "error": 0
+    },
+    {
+      "angleDegrees": 0,
+      "distance": 40,
+      "frame": 0,
+      "plantedLeg": "left",
+      "world": [
+        49.64285714285714,
+        -4.464285714285714
+      ],
+      "error": 0
+    },
+    {
+      "angleDegrees": 0,
+      "distance": 42.5,
+      "frame": 0,
+      "plantedLeg": "left",
+      "world": [
+        49.64285714285714,
+        -4.464285714285714
+      ],
+      "error": 0
+    },
+    {
+      "angleDegrees": 0,
+      "distance": 45,
+      "frame": 1,
+      "plantedLeg": "left",
+      "world": [
+        49.642857142857146,
+        -4.464285714285714
+      ],
+      "error": 7.105427357601002e-15
+    },
+    {
+      "angleDegrees": 0,
+      "distance": 47.5,
+      "frame": 1,
+      "plantedLeg": "left",
+      "world": [
+        49.642857142857146,
+        -4.464285714285714
+      ],
+      "error": 7.105427357601002e-15
+    },
+    {
+      "angleDegrees": 0,
+      "distance": 50,
+      "frame": 2,
+      "plantedLeg": "left",
+      "world": [
+        49.642857142857146,
+        -4.464285714285714
+      ],
+      "error": 7.105427357601002e-15
+    },
+    {
+      "angleDegrees": 0,
+      "distance": 52.5,
+      "frame": 2,
+      "plantedLeg": "left",
+      "world": [
+        49.642857142857146,
+        -4.464285714285714
+      ],
+      "error": 7.105427357601002e-15
+    },
+    {
+      "angleDegrees": 0,
+      "distance": 55,
+      "frame": 3,
+      "plantedLeg": "left",
+      "world": [
+        49.642857142857146,
+        -4.464285714285714
+      ],
+      "error": 7.105427357601002e-15
+    },
+    {
+      "angleDegrees": 0,
+      "distance": 57.5,
+      "frame": 3,
+      "plantedLeg": "left",
+      "world": [
+        49.642857142857146,
+        -4.464285714285714
+      ],
+      "error": 7.105427357601002e-15
+    },
+    {
+      "angleDegrees": 0,
+      "distance": 60,
+      "frame": 4,
+      "plantedLeg": "right",
+      "world": [
+        69.64285714285714,
+        5
+      ],
+      "error": 0
+    },
+    {
+      "angleDegrees": 0,
+      "distance": 62.5,
+      "frame": 4,
+      "plantedLeg": "right",
+      "world": [
+        69.64285714285714,
+        5
+      ],
+      "error": 0
+    },
+    {
+      "angleDegrees": 0,
+      "distance": 65,
+      "frame": 5,
+      "plantedLeg": "right",
+      "world": [
+        69.64285714285714,
+        5
+      ],
+      "error": 0
+    },
+    {
+      "angleDegrees": 0,
+      "distance": 67.5,
+      "frame": 5,
+      "plantedLeg": "right",
+      "world": [
+        69.64285714285714,
+        5
+      ],
+      "error": 0
+    },
+    {
+      "angleDegrees": 0,
+      "distance": 70,
+      "frame": 6,
+      "plantedLeg": "right",
+      "world": [
+        69.64285714285714,
+        5
+      ],
+      "error": 0
+    },
+    {
+      "angleDegrees": 0,
+      "distance": 72.5,
+      "frame": 6,
+      "plantedLeg": "right",
+      "world": [
+        69.64285714285714,
+        5
+      ],
+      "error": 0
+    },
+    {
+      "angleDegrees": 0,
+      "distance": 75,
+      "frame": 7,
+      "plantedLeg": "right",
+      "world": [
+        69.64285714285714,
+        5
+      ],
+      "error": 0
+    },
+    {
+      "angleDegrees": 0,
+      "distance": 77.5,
+      "frame": 7,
+      "plantedLeg": "right",
+      "world": [
+        69.64285714285714,
+        5
+      ],
+      "error": 0
+    },
+    {
+      "angleDegrees": 0,
+      "distance": 80,
+      "frame": 0,
+      "plantedLeg": "left",
+      "world": [
+        89.64285714285714,
+        -4.464285714285714
+      ],
+      "error": 0
+    },
+    {
+      "angleDegrees": 0,
+      "distance": 82.5,
+      "frame": 0,
+      "plantedLeg": "left",
+      "world": [
+        89.64285714285714,
+        -4.464285714285714
+      ],
+      "error": 0
+    },
+    {
+      "angleDegrees": 0,
+      "distance": 85,
+      "frame": 1,
+      "plantedLeg": "left",
+      "world": [
+        89.64285714285714,
+        -4.464285714285714
+      ],
+      "error": 0
+    },
+    {
+      "angleDegrees": 0,
+      "distance": 87.5,
+      "frame": 1,
+      "plantedLeg": "left",
+      "world": [
+        89.64285714285714,
+        -4.464285714285714
+      ],
+      "error": 0
+    },
+    {
+      "angleDegrees": 0,
+      "distance": 90,
+      "frame": 2,
+      "plantedLeg": "left",
+      "world": [
+        89.64285714285714,
+        -4.464285714285714
+      ],
+      "error": 0
+    },
+    {
+      "angleDegrees": 0,
+      "distance": 92.5,
+      "frame": 2,
+      "plantedLeg": "left",
+      "world": [
+        89.64285714285714,
+        -4.464285714285714
+      ],
+      "error": 0
+    },
+    {
+      "angleDegrees": 0,
+      "distance": 95,
+      "frame": 3,
+      "plantedLeg": "left",
+      "world": [
+        89.64285714285714,
+        -4.464285714285714
+      ],
+      "error": 0
+    },
+    {
+      "angleDegrees": 0,
+      "distance": 97.5,
+      "frame": 3,
+      "plantedLeg": "left",
+      "world": [
+        89.64285714285714,
+        -4.464285714285714
+      ],
+      "error": 0
+    },
+    {
+      "angleDegrees": 0,
+      "distance": 100,
+      "frame": 4,
+      "plantedLeg": "right",
+      "world": [
+        109.64285714285714,
+        5
+      ],
+      "error": 0
+    },
+    {
+      "angleDegrees": 0,
+      "distance": 102.5,
+      "frame": 4,
+      "plantedLeg": "right",
+      "world": [
+        109.64285714285714,
+        5
+      ],
+      "error": 0
+    },
+    {
+      "angleDegrees": 0,
+      "distance": 105,
+      "frame": 5,
+      "plantedLeg": "right",
+      "world": [
+        109.64285714285714,
+        5
+      ],
+      "error": 0
+    },
+    {
+      "angleDegrees": 0,
+      "distance": 107.5,
+      "frame": 5,
+      "plantedLeg": "right",
+      "world": [
+        109.64285714285714,
+        5
+      ],
+      "error": 0
+    },
+    {
+      "angleDegrees": 0,
+      "distance": 110,
+      "frame": 6,
+      "plantedLeg": "right",
+      "world": [
+        109.64285714285714,
+        5
+      ],
+      "error": 0
+    },
+    {
+      "angleDegrees": 0,
+      "distance": 112.5,
+      "frame": 6,
+      "plantedLeg": "right",
+      "world": [
+        109.64285714285714,
+        5
+      ],
+      "error": 0
+    },
+    {
+      "angleDegrees": 0,
+      "distance": 115,
+      "frame": 7,
+      "plantedLeg": "right",
+      "world": [
+        109.64285714285714,
+        5
+      ],
+      "error": 0
+    },
+    {
+      "angleDegrees": 0,
+      "distance": 117.5,
+      "frame": 7,
+      "plantedLeg": "right",
+      "world": [
+        109.64285714285714,
+        5
+      ],
+      "error": 0
+    },
+    {
+      "angleDegrees": 45,
+      "distance": 0,
+      "frame": 0,
+      "plantedLeg": "left",
+      "world": [
+        9.97525637745308,
+        3.6618029740017626
+      ],
+      "error": 0
+    },
+    {
+      "angleDegrees": 45,
+      "distance": 2.5,
+      "frame": 0,
+      "plantedLeg": "left",
+      "world": [
+        9.97525637745308,
+        3.6618029740017626
+      ],
+      "error": 0
+    },
+    {
+      "angleDegrees": 45,
+      "distance": 5,
+      "frame": 1,
+      "plantedLeg": "left",
+      "world": [
+        9.97525637745308,
+        3.6618029740017626
+      ],
+      "error": 0
+    },
+    {
+      "angleDegrees": 45,
+      "distance": 7.5,
+      "frame": 1,
+      "plantedLeg": "left",
+      "world": [
+        9.97525637745308,
+        3.6618029740017626
+      ],
+      "error": 0
+    },
+    {
+      "angleDegrees": 45,
+      "distance": 10,
+      "frame": 2,
+      "plantedLeg": "left",
+      "world": [
+        9.97525637745308,
+        3.6618029740017626
+      ],
+      "error": 0
+    },
+    {
+      "angleDegrees": 45,
+      "distance": 12.5,
+      "frame": 2,
+      "plantedLeg": "left",
+      "world": [
+        9.97525637745308,
+        3.6618029740017626
+      ],
+      "error": 0
+    },
+    {
+      "angleDegrees": 45,
+      "distance": 15,
+      "frame": 3,
+      "plantedLeg": "left",
+      "world": [
+        9.97525637745308,
+        3.6618029740017626
+      ],
+      "error": 0
+    },
+    {
+      "angleDegrees": 45,
+      "distance": 17.5,
+      "frame": 3,
+      "plantedLeg": "left",
+      "world": [
+        9.97525637745308,
+        3.6618029740017626
+      ],
+      "error": 0
+    },
+    {
+      "angleDegrees": 45,
+      "distance": 20,
+      "frame": 4,
+      "plantedLeg": "right",
+      "world": [
+        17.425131393525636,
+        24.496199205391108
+      ],
+      "error": 0
+    },
+    {
+      "angleDegrees": 45,
+      "distance": 22.5,
+      "frame": 4,
+      "plantedLeg": "right",
+      "world": [
+        17.425131393525636,
+        24.496199205391108
+      ],
+      "error": 0
+    },
+    {
+      "angleDegrees": 45,
+      "distance": 25,
+      "frame": 5,
+      "plantedLeg": "right",
+      "world": [
+        17.425131393525636,
+        24.496199205391108
+      ],
+      "error": 0
+    },
+    {
+      "angleDegrees": 45,
+      "distance": 27.5,
+      "frame": 5,
+      "plantedLeg": "right",
+      "world": [
+        17.425131393525636,
+        24.496199205391108
+      ],
+      "error": 0
+    },
+    {
+      "angleDegrees": 45,
+      "distance": 30,
+      "frame": 6,
+      "plantedLeg": "right",
+      "world": [
+        17.425131393525636,
+        24.496199205391108
+      ],
+      "error": 0
+    },
+    {
+      "angleDegrees": 45,
+      "distance": 32.5,
+      "frame": 6,
+      "plantedLeg": "right",
+      "world": [
+        17.425131393525636,
+        24.496199205391108
+      ],
+      "error": 0
+    },
+    {
+      "angleDegrees": 45,
+      "distance": 35,
+      "frame": 7,
+      "plantedLeg": "right",
+      "world": [
+        17.425131393525636,
+        24.496199205391108
+      ],
+      "error": 0
+    },
+    {
+      "angleDegrees": 45,
+      "distance": 37.5,
+      "frame": 7,
+      "plantedLeg": "right",
+      "world": [
+        17.425131393525636,
+        24.496199205391108
+      ],
+      "error": 0
+    },
+    {
+      "angleDegrees": 45,
+      "distance": 40,
+      "frame": 0,
+      "plantedLeg": "left",
+      "world": [
+        38.25952762491498,
+        31.94607422146366
+      ],
+      "error": 0
+    },
+    {
+      "angleDegrees": 45,
+      "distance": 42.5,
+      "frame": 0,
+      "plantedLeg": "left",
+      "world": [
+        38.25952762491498,
+        31.94607422146366
+      ],
+      "error": 0
+    },
+    {
+      "angleDegrees": 45,
+      "distance": 45,
+      "frame": 1,
+      "plantedLeg": "left",
+      "world": [
+        38.25952762491499,
+        31.94607422146366
+      ],
+      "error": 7.105427357601002e-15
+    },
+    {
+      "angleDegrees": 45,
+      "distance": 47.5,
+      "frame": 1,
+      "plantedLeg": "left",
+      "world": [
+        38.25952762491499,
+        31.94607422146366
+      ],
+      "error": 7.105427357601002e-15
+    },
+    {
+      "angleDegrees": 45,
+      "distance": 50,
+      "frame": 2,
+      "plantedLeg": "left",
+      "world": [
+        38.25952762491499,
+        31.94607422146366
+      ],
+      "error": 7.105427357601002e-15
+    },
+    {
+      "angleDegrees": 45,
+      "distance": 52.5,
+      "frame": 2,
+      "plantedLeg": "left",
+      "world": [
+        38.25952762491499,
+        31.94607422146366
+      ],
+      "error": 7.105427357601002e-15
+    },
+    {
+      "angleDegrees": 45,
+      "distance": 55,
+      "frame": 3,
+      "plantedLeg": "left",
+      "world": [
+        38.25952762491499,
+        31.94607422146366
+      ],
+      "error": 7.105427357601002e-15
+    },
+    {
+      "angleDegrees": 45,
+      "distance": 57.5,
+      "frame": 3,
+      "plantedLeg": "left",
+      "world": [
+        38.25952762491499,
+        31.94607422146366
+      ],
+      "error": 7.105427357601002e-15
+    },
+    {
+      "angleDegrees": 45,
+      "distance": 60,
+      "frame": 4,
+      "plantedLeg": "right",
+      "world": [
+        45.709402640987534,
+        52.780470452853
+      ],
+      "error": 0
+    },
+    {
+      "angleDegrees": 45,
+      "distance": 62.5,
+      "frame": 4,
+      "plantedLeg": "right",
+      "world": [
+        45.709402640987534,
+        52.780470452853
+      ],
+      "error": 0
+    },
+    {
+      "angleDegrees": 45,
+      "distance": 65,
+      "frame": 5,
+      "plantedLeg": "right",
+      "world": [
+        45.709402640987534,
+        52.780470452853
+      ],
+      "error": 0
+    },
+    {
+      "angleDegrees": 45,
+      "distance": 67.5,
+      "frame": 5,
+      "plantedLeg": "right",
+      "world": [
+        45.709402640987534,
+        52.780470452853
+      ],
+      "error": 0
+    },
+    {
+      "angleDegrees": 45,
+      "distance": 70,
+      "frame": 6,
+      "plantedLeg": "right",
+      "world": [
+        45.709402640987534,
+        52.780470452853
+      ],
+      "error": 0
+    },
+    {
+      "angleDegrees": 45,
+      "distance": 72.5,
+      "frame": 6,
+      "plantedLeg": "right",
+      "world": [
+        45.709402640987534,
+        52.780470452853
+      ],
+      "error": 0
+    },
+    {
+      "angleDegrees": 45,
+      "distance": 75,
+      "frame": 7,
+      "plantedLeg": "right",
+      "world": [
+        45.709402640987534,
+        52.780470452853
+      ],
+      "error": 0
+    },
+    {
+      "angleDegrees": 45,
+      "distance": 77.5,
+      "frame": 7,
+      "plantedLeg": "right",
+      "world": [
+        45.709402640987534,
+        52.780470452853
+      ],
+      "error": 0
+    },
+    {
+      "angleDegrees": 45,
+      "distance": 80,
+      "frame": 0,
+      "plantedLeg": "left",
+      "world": [
+        66.54379887237688,
+        60.230345468925556
+      ],
+      "error": 0
+    },
+    {
+      "angleDegrees": 45,
+      "distance": 82.5,
+      "frame": 0,
+      "plantedLeg": "left",
+      "world": [
+        66.54379887237688,
+        60.230345468925556
+      ],
+      "error": 0
+    },
+    {
+      "angleDegrees": 45,
+      "distance": 85,
+      "frame": 1,
+      "plantedLeg": "left",
+      "world": [
+        66.54379887237688,
+        60.230345468925556
+      ],
+      "error": 0
+    },
+    {
+      "angleDegrees": 45,
+      "distance": 87.5,
+      "frame": 1,
+      "plantedLeg": "left",
+      "world": [
+        66.54379887237688,
+        60.230345468925556
+      ],
+      "error": 0
+    },
+    {
+      "angleDegrees": 45,
+      "distance": 90,
+      "frame": 2,
+      "plantedLeg": "left",
+      "world": [
+        66.54379887237688,
+        60.230345468925556
+      ],
+      "error": 0
+    },
+    {
+      "angleDegrees": 45,
+      "distance": 92.5,
+      "frame": 2,
+      "plantedLeg": "left",
+      "world": [
+        66.54379887237688,
+        60.230345468925556
+      ],
+      "error": 0
+    },
+    {
+      "angleDegrees": 45,
+      "distance": 95,
+      "frame": 3,
+      "plantedLeg": "left",
+      "world": [
+        66.54379887237688,
+        60.230345468925556
+      ],
+      "error": 0
+    },
+    {
+      "angleDegrees": 45,
+      "distance": 97.5,
+      "frame": 3,
+      "plantedLeg": "left",
+      "world": [
+        66.54379887237688,
+        60.230345468925556
+      ],
+      "error": 0
+    },
+    {
+      "angleDegrees": 45,
+      "distance": 100,
+      "frame": 4,
+      "plantedLeg": "right",
+      "world": [
+        73.99367388844944,
+        81.0647417003149
+      ],
+      "error": 0
+    },
+    {
+      "angleDegrees": 45,
+      "distance": 102.5,
+      "frame": 4,
+      "plantedLeg": "right",
+      "world": [
+        73.99367388844944,
+        81.0647417003149
+      ],
+      "error": 0
+    },
+    {
+      "angleDegrees": 45,
+      "distance": 105,
+      "frame": 5,
+      "plantedLeg": "right",
+      "world": [
+        73.99367388844944,
+        81.0647417003149
+      ],
+      "error": 0
+    },
+    {
+      "angleDegrees": 45,
+      "distance": 107.5,
+      "frame": 5,
+      "plantedLeg": "right",
+      "world": [
+        73.99367388844944,
+        81.0647417003149
+      ],
+      "error": 0
+    },
+    {
+      "angleDegrees": 45,
+      "distance": 110,
+      "frame": 6,
+      "plantedLeg": "right",
+      "world": [
+        73.99367388844944,
+        81.0647417003149
+      ],
+      "error": 0
+    },
+    {
+      "angleDegrees": 45,
+      "distance": 112.5,
+      "frame": 6,
+      "plantedLeg": "right",
+      "world": [
+        73.99367388844944,
+        81.0647417003149
+      ],
+      "error": 0
+    },
+    {
+      "angleDegrees": 45,
+      "distance": 115,
+      "frame": 7,
+      "plantedLeg": "right",
+      "world": [
+        73.99367388844944,
+        81.0647417003149
+      ],
+      "error": 0
+    },
+    {
+      "angleDegrees": 45,
+      "distance": 117.5,
+      "frame": 7,
+      "plantedLeg": "right",
+      "world": [
+        73.99367388844944,
+        81.0647417003149
+      ],
+      "error": 0
+    }
+  ]
+}

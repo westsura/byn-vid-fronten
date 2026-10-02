@@ -1,0 +1,322 @@
+[
+  {
+    "frame": 0,
+    "contact": true,
+    "hipAngleDegrees": 8,
+    "shoulderAngleDegrees": -3.2,
+    "frontFoot": "left",
+    "frontToeExtensionUnits": 7.035714285714286,
+    "rearHeelExtensionUnits": 4.678571428571429,
+    "contourMethod": "front upper alpha32 contour in boot lane +/-30px; rear global pack/back contour x<600; extensions use alpha32 leg silhouette",
+    "frontContourX": 719,
+    "rearContourX": 393,
+    "footBounds": {
+      "left": [
+        625,
+        236,
+        916,
+        378
+      ],
+      "right": [
+        262,
+        401,
+        643,
+        556
+      ]
+    },
+    "muzzleDeviationUnits": [
+      0.004511108638601919,
+      -0.9099283862197508
+    ],
+    "helmetDeviationUnits": [
+      0,
+      0
+    ],
+    "bounds": [
+      262,
+      236,
+      1118,
+      578
+    ]
+  },
+  {
+    "frame": 1,
+    "contact": false,
+    "hipAngleDegrees": 5.656854249492381,
+    "shoulderAngleDegrees": -2.2627416997969525,
+    "frontFoot": "left",
+    "frontToeExtensionUnits": 2,
+    "rearHeelExtensionUnits": 1.5357142857142858,
+    "contourMethod": "front upper alpha32 contour in boot lane +/-30px; rear global pack/back contour x<600; extensions use alpha32 leg silhouette",
+    "frontContourX": 720,
+    "rearContourX": 392,
+    "footBounds": {
+      "left": [
+        610,
+        236,
+        776,
+        361
+      ],
+      "right": [
+        349,
+        401,
+        646,
+        556
+      ]
+    },
+    "muzzleDeviationUnits": [
+      0.008452801529041867,
+      -0.6434107333489761
+    ],
+    "helmetDeviationUnits": [
+      0,
+      0
+    ],
+    "bounds": [
+      349,
+      236,
+      1118,
+      577
+    ]
+  },
+  {
+    "frame": 2,
+    "contact": false,
+    "hipAngleDegrees": 4.898587196589413e-16,
+    "shoulderAngleDegrees": -1.9594348786357652e-16,
+    "frontFoot": "left",
+    "frontToeExtensionUnits": -2.2142857142857144,
+    "rearHeelExtensionUnits": -5.357142857142857,
+    "contourMethod": "front upper alpha32 contour in boot lane +/-30px; rear global pack/back contour x<600; extensions use alpha32 leg silhouette",
+    "frontContourX": 721,
+    "rearContourX": 392,
+    "footBounds": {
+      "left": [
+        542,
+        236,
+        659,
+        379
+      ],
+      "right": [
+        542,
+        405,
+        663,
+        548
+      ]
+    },
+    "muzzleDeviationUnits": [
+      0,
+      0
+    ],
+    "helmetDeviationUnits": [
+      0,
+      0
+    ],
+    "bounds": [
+      392,
+      236,
+      1117,
+      575
+    ]
+  },
+  {
+    "frame": 3,
+    "contact": false,
+    "hipAngleDegrees": -5.65685424949238,
+    "shoulderAngleDegrees": 2.262741699796952,
+    "frontFoot": "right",
+    "frontToeExtensionUnits": 4.214285714285714,
+    "rearHeelExtensionUnits": -0.35714285714285715,
+    "contourMethod": "front upper alpha32 contour in boot lane +/-30px; rear global pack/back contour x<600; extensions use alpha32 leg silhouette",
+    "frontContourX": 711,
+    "rearContourX": 392,
+    "footBounds": {
+      "left": [
+        402,
+        236,
+        646,
+        382
+      ],
+      "right": [
+        617,
+        410,
+        829,
+        548
+      ]
+    },
+    "muzzleDeviationUnits": [
+      -0.03384937127423525,
+      0.6425753198705166
+    ],
+    "helmetDeviationUnits": [
+      0,
+      0
+    ],
+    "bounds": [
+      392,
+      236,
+      1117,
+      573
+    ]
+  },
+  {
+    "frame": 4,
+    "contact": true,
+    "hipAngleDegrees": -8,
+    "shoulderAngleDegrees": 3.2,
+    "frontFoot": "right",
+    "frontToeExtensionUnits": 7.392857142857143,
+    "rearHeelExtensionUnits": 4.607142857142857,
+    "contourMethod": "front upper alpha32 contour in boot lane +/-30px; rear global pack/back contour x<600; extensions use alpha32 leg silhouette",
+    "frontContourX": 709,
+    "rearContourX": 391,
+    "footBounds": {
+      "left": [
+        262,
+        236,
+        642,
+        382
+      ],
+      "right": [
+        625,
+        402,
+        916,
+        548
+      ]
+    },
+    "muzzleDeviationUnits": [
+      -0.05529764671121029,
+      0.9082577764147288
+    ],
+    "helmetDeviationUnits": [
+      0,
+      0
+    ],
+    "bounds": [
+      262,
+      236,
+      1116,
+      572
+    ]
+  },
+  {
+    "frame": 5,
+    "contact": false,
+    "hipAngleDegrees": -5.6568542494923815,
+    "shoulderAngleDegrees": 2.2627416997969525,
+    "frontFoot": "right",
+    "frontToeExtensionUnits": 2.3214285714285716,
+    "rearHeelExtensionUnits": 1.5357142857142858,
+    "contourMethod": "front upper alpha32 contour in boot lane +/-30px; rear global pack/back contour x<600; extensions use alpha32 leg silhouette",
+    "frontContourX": 711,
+    "rearContourX": 392,
+    "footBounds": {
+      "left": [
+        349,
+        236,
+        645,
+        382
+      ],
+      "right": [
+        613,
+        420,
+        776,
+        548
+      ]
+    },
+    "muzzleDeviationUnits": [
+      -0.03384937127423525,
+      0.6425753198705166
+    ],
+    "helmetDeviationUnits": [
+      0,
+      0
+    ],
+    "bounds": [
+      349,
+      236,
+      1117,
+      573
+    ]
+  },
+  {
+    "frame": 6,
+    "contact": false,
+    "hipAngleDegrees": -1.4695761589768238e-15,
+    "shoulderAngleDegrees": 5.878304635907295e-16,
+    "frontFoot": "left",
+    "frontToeExtensionUnits": -2.2142857142857144,
+    "rearHeelExtensionUnits": -5.357142857142857,
+    "contourMethod": "front upper alpha32 contour in boot lane +/-30px; rear global pack/back contour x<600; extensions use alpha32 leg silhouette",
+    "frontContourX": 721,
+    "rearContourX": 392,
+    "footBounds": {
+      "left": [
+        542,
+        236,
+        659,
+        379
+      ],
+      "right": [
+        542,
+        405,
+        663,
+        548
+      ]
+    },
+    "muzzleDeviationUnits": [
+      0,
+      0
+    ],
+    "helmetDeviationUnits": [
+      0,
+      0
+    ],
+    "bounds": [
+      392,
+      236,
+      1117,
+      575
+    ]
+  },
+  {
+    "frame": 7,
+    "contact": false,
+    "hipAngleDegrees": 5.656854249492379,
+    "shoulderAngleDegrees": -2.2627416997969516,
+    "frontFoot": "left",
+    "frontToeExtensionUnits": 3.892857142857143,
+    "rearHeelExtensionUnits": -0.35714285714285715,
+    "contourMethod": "front upper alpha32 contour in boot lane +/-30px; rear global pack/back contour x<600; extensions use alpha32 leg silhouette",
+    "frontContourX": 720,
+    "rearContourX": 392,
+    "footBounds": {
+      "left": [
+        615,
+        236,
+        829,
+        371
+      ],
+      "right": [
+        402,
+        401,
+        648,
+        555
+      ]
+    },
+    "muzzleDeviationUnits": [
+      0.008452801529041867,
+      -0.6434107333489761
+    ],
+    "helmetDeviationUnits": [
+      0,
+      0
+    ],
+    "bounds": [
+      392,
+      236,
+      1118,
+      577
+    ]
+  }
+]
