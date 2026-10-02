@@ -1,0 +1,36 @@
+[
+  {
+    "frame": "german-fallen-a",
+    "widthUnits": 35.535714285714285,
+    "heightUnits": 15.107142857142858,
+    "muzzleForwardUnits": null,
+    "muzzleSideUnits": null,
+    "helmetBoundsFullSheetApprox": [
+      830,
+      384,
+      957,
+      501
+    ],
+    "helmetWidthUnitsApprox": 4.535714285714286,
+    "helmetHeightUnitsApprox": 4.178571428571429,
+    "helmetDiameterUnits": 4.535714285714286,
+    "measurementMethod": "manual visible shell bounds; +/-8px; pose orientation affects projected axes"
+  },
+  {
+    "frame": "german-fallen-b",
+    "widthUnits": 28.392857142857142,
+    "heightUnits": 15.285714285714286,
+    "muzzleForwardUnits": null,
+    "muzzleSideUnits": null,
+    "helmetBoundsFullSheetApprox": [
+      776,
+      904,
+      911,
+      1028
+    ],
+    "helmetWidthUnitsApprox": 4.821428571428571,
+    "helmetHeightUnitsApprox": 4.428571428571429,
+    "helmetDiameterUnits": 4.821428571428571,
+    "measurementMethod": "manual visible shell bounds; +/-8px; pose orientation affects projected axes"
+  }
+]

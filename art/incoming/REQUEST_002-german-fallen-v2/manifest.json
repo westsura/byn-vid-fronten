@@ -1,0 +1,62 @@
+{
+  "version": "REQUEST_002-german-fallen-v2",
+  "patchFor": "REQUEST_002-v1",
+  "frames": {
+    "german-fallen-a": {
+      "file": "german-fallen.png",
+      "sourceRect": [
+        0,
+        0,
+        1254,
+        700
+      ],
+      "pivot": [
+        780,
+        395
+      ],
+      "muzzle": null,
+      "helmetCenter": [
+        893,
+        443
+      ],
+      "pixelsPerUnit": 28,
+      "sourceForwardRadians": 0,
+      "contentBoundsAlpha32": [
+        143,
+        263,
+        1138,
+        686
+      ],
+      "status": "new-role-not-approved",
+      "registration": "manual torso anchor and helmet center after anatomy correction"
+    },
+    "german-fallen-b": {
+      "file": "german-fallen.png",
+      "sourceRect": [
+        0,
+        700,
+        1254,
+        554
+      ],
+      "pivot": [
+        730,
+        230
+      ],
+      "muzzle": null,
+      "helmetCenter": [
+        843,
+        266
+      ],
+      "pixelsPerUnit": 28,
+      "sourceForwardRadians": 0,
+      "contentBoundsAlpha32": [
+        261,
+        65,
+        1056,
+        493
+      ],
+      "status": "new-role-not-approved",
+      "registration": "manual torso anchor and helmet center after anatomy correction"
+    }
+  }
+}

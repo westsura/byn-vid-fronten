@@ -1,0 +1,37 @@
+{
+  "generated": "/Users/bjornelm/.codex/generated_images/01a0e97f-6139-7793-a63f-f89b063b09ed/exec-ac992e32-05db-4e4a-9e15-c7802505199f.png",
+  "helmets": [
+    [
+      893,
+      443
+    ],
+    [
+      843,
+      966
+    ]
+  ],
+  "helmetBounds": [
+    [
+      830,
+      384,
+      957,
+      501
+    ],
+    [
+      776,
+      904,
+      911,
+      1028
+    ]
+  ],
+  "pivots": [
+    [
+      780,
+      395
+    ],
+    [
+      730,
+      930
+    ]
+  ]
+}
