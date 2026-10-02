@@ -11,6 +11,7 @@ const v1 = read('infantry-v1/manifest.json');
 const defs = { german: read('infantry-v1/german-squad.json'), soviet: read('infantry-v1/soviet-squad.json') };
 const r2 = read('request-002-v1/manifest.json').frames;
 const reg = read('request-002-v1/soviet-rifleman-registration.json').frames;
+const gf2 = read('request-002-german-fallen-v2/manifest.json').frames;
 
 // Frame keys available in pilot-r2, named faction-role-pose (as art.js maps them).
 const keys = new Set([
@@ -31,7 +32,7 @@ for (const faction of ['german', 'soviet']) {
   });
   test(`pilot-r2: ${faction} fallen variants a and b`, () => {
     for (const v of ['a', 'b']) {
-      const d = r2[`${faction}-fallen-${v}`];
+      const d = (faction === 'german' ? gf2 : r2)[`${faction}-fallen-${v}`];
       assert.ok(d);
       assert.equal(d.pixelsPerUnit, 28);
       assert.equal(d.muzzle, null);

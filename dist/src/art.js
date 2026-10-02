@@ -72,6 +72,8 @@ const PILOT_SOURCES = {
     { base: P + 'german-helmet-v2/', map: GERMAN_H },
     { base: P + 'german-support-v1/', map: GERMAN_SUPPORT },
     { base: R2, map: { ...SOVIET_SPEC, ...FALLEN } },
+    // German fallen v2 (corrected helmet and anatomy) replaces v1 unless &fallen=v1.
+    ...(pilotOptions.fallen === 'v1' ? [] : [{ base: P + 'request-002-german-fallen-v2/', map: { 'german-fallen-a': 'german-fallen-a', 'german-fallen-b': 'german-fallen-b' } }]),
   ],
   'pilot-s1': () => [
     { base: P + 'rifleman-pilot-v4/', map: SOVIET_ONLY },
@@ -88,10 +90,10 @@ const PILOT_SOURCES = {
 };
 let pilotAnim = {}; // animation name → { frames, cycleDistanceUnits } from supplier manifests
 let pilot = null; // { 'german-ready': {data, image}, ... } normalised: sourceRect-relative pivot/muzzle
-export const pilotOptions = { scale: 'standard', shadow: 'small', spacing: 1, helmet: 'v2', reg: 'r2' };
+export const pilotOptions = { scale: 'standard', shadow: 'small', spacing: 1, helmet: 'v2', reg: 'r2', fallen: 'v2' };
 export const isPilotV2 = () => mode.startsWith('pilot-v2');
 export const isPilotV3 = () => /^pilot-(v3|v4|h2|s1|r2|w1)/.test(mode); // v3+ share shadow/scale options
-export const pilotVersion = () => (mode.startsWith('pilot-w1') ? '4 · GÅNGCYKEL TYSK GEVÄRSSKYTT (REQUEST_003)' : mode.startsWith('pilot-r2') ? '4 · BÅDA GRUPPERNA + UTSLAGNA (REQUEST_002)' + (pilotOptions.reg === 'v4' ? ' · V4-REGISTRERING' : '') : mode.startsWith('pilot-s1') ? '4 · TYSK GRUPP MED STÖDROLLER 1' : mode.startsWith('pilot-h2') ? '4 + TYSK HJÄLM ' + (pilotOptions.helmet === 'v1' ? '1 (FÖRE)' : '2') : (mode.match(/^pilot-v(\d)/) || [])[1] ?? null);
+export const pilotVersion = () => (mode.startsWith('pilot-w1') ? '4 · GÅNGCYKEL TYSK GEVÄRSSKYTT (REQUEST_003)' : mode.startsWith('pilot-r2') ? '4 · BÅDA GRUPPERNA + UTSLAGNA (REQUEST_002)' + (pilotOptions.reg === 'v4' ? ' · V4-REGISTRERING' : '') + (pilotOptions.fallen === 'v1' ? ' · TYSK UTSLAGEN V1' : '') : mode.startsWith('pilot-s1') ? '4 · TYSK GRUPP MED STÖDROLLER 1' : mode.startsWith('pilot-h2') ? '4 + TYSK HJÄLM ' + (pilotOptions.helmet === 'v1' ? '1 (FÖRE)' : '2') : (mode.match(/^pilot-v(\d)/) || [])[1] ?? null);
 export const modeBadge = () =>
   isPilotV3()
     ? `GRAFIKPROV V${pilotVersion()} – EJ GODKÄNT` +
@@ -134,6 +136,7 @@ export function modeFromUrl(search) {
   if (q.get('spacing') === 'wide') pilotOptions.spacing = 1.5;
   if (q.get('helmet') === 'v1') pilotOptions.helmet = 'v1';
   if (q.get('reg') === 'v4') pilotOptions.reg = 'v4';
+  if (q.get('fallen') === 'v1') pilotOptions.fallen = 'v1';
   if (!['infantry-v1', 'pilot-v2', 'pilot-v3', 'pilot-v4', 'pilot-h2', 'pilot-s1', 'pilot-r2', 'pilot-w1'].includes(art)) return 'standard';
   return `${art}:${q.get('side') === 'german' ? 'german' : 'soviet'}`;
 }

@@ -68,10 +68,11 @@ Resultat: en uppdatering tar cirka 0,8 ms i full strid, mot tidigare 5,4 ms.
 - [x] Tysk hjälmkorrigering 2 (Schütze, Gruppenführer, MG-Schütze) valbar och speltestad av Claude: `docs/art/review/german-helmet-v2/REVIEW.md`. **Ej godkänd.**
 - [x] Tyska stödroller 1 valbara (`pilot-s1`): hela tyska gruppen i v4-stil. Speltestad av Claude: `docs/art/review/german-support-v1/REVIEW.md`. **Ej godkänd.**
 - [x] Björn provspelade prototypgrafiken 2026-10-01 och godkände v4-stilen (gevärsskytt v4, tysk hjälm 2, tyska stödroller 1) som grund för fortsatt grafik. Färdig produktionsgrafik kräver fortfarande utslagna, sovjetiska specialister och animationer.
-- [x] `REQUEST_002` v1 levererat och valbart (`pilot-r2`): sovjetiska specialister, utslagna båda sidor, rättad sovjetisk registrering. Speltestat av Claude: `docs/art/review/request-002-v1/REVIEW.md`. **Ej godkänt.** Kvar: tysk utslagen har för stor hjälm.
+- [x] `REQUEST_002` v1 levererat och valbart (`pilot-r2`): sovjetiska specialister, utslagna båda sidor, rättad sovjetisk registrering. Speltestat av Claude: `docs/art/review/request-002-v1/REVIEW.md`. **Ej godkänt.** Tysk utslagen rättad i v2 (2026-10-02), granskning: `docs/art/review/request-002-german-fallen-v2/REVIEW.md`.
 - [ ] Björn provspelar `pilot-r2`.
 - [x] `REQUEST_003` v1 levererat och valbart (`pilot-w1`): gångcykel för tysk gevärsskytt, styrd av gången sträcka. Speltestat av Claude: `docs/art/review/request-003-v1/REVIEW.md`. **Ej godkänt.** Kvar: fotglidning mellan rutor (förslag: ben som eget lager), lite synlig rörelse vid normal zoom.
-- [ ] Björn provspelar `pilot-w1` och avgör hur tydlig gången ska vara.
+- [x] Björn 2026-10-02: längre steg och lätt vridning i axlar och höfter; uniformsfärgen behålls.
+- [ ] `REQUEST_004`: gångcykel v2 levererad i lager (vänster ben, höger ben, överkropp) så att motorn kan låsa stödfoten. Beställd 2026-10-02.
 - [ ] Efter godkänd pilot: gång för alla roller, krypcykel.
 - [ ] Integrera REQUEST_001 v1 (SVG-soldat, hus 0, gruppkort) – levererat, ej integrerat.
 - [ ] Zoom och panorering, skärpa på högupplösta skärmar.
