@@ -136,6 +136,15 @@ dist/data/
                                kulsprutetrupp skytt 1–3, skyttar), indelning i trupper, giltighetsår
     de-reinforcements.json     förstärkningar: extra grupp, tung kulsprutegrupp, granatkastargrupp 8 cm (steg 7)
     su-strelkovyj-vzvod.json   sovjetisk skyttepluton: grupper med DP och flera PPSj
+  ranks/
+    heer.json, waffen-ss.json, rkka.json
+                               grader: namn, förkortning, Heer-motsvarighet, beteckning (text + bildfil),
+                               giltighetsår (t.ex. Grenadier/Schütze, sovjetiska kragspeglar 1942 → axelklaffar 1943)
+  awards/
+    de.json, su.json           utmärkelser: namn, förkortning, klass/grad, krav, bärordning, bildfil
+  text/
+    en.json                    alla gränssnittstexter på engelska (menyer, order, tillstånd, värden, egenskaper,
+                               loggmallar som "{rank} {name} rallies {unit}")
   people/
     de-roster-1943.json        personer: id, namn, grad, roll, vapen, status, ledarvärden och egenskap
                                (prototypens fasta kärna; senare kampanjens bestånd)
@@ -152,6 +161,8 @@ dist/data/
 
 - Gruppen refererar personer med id. Det håller isär person och grupp, vilket kampanjen kräver.
 - En liten laddare (`dist/src/data.js`) läser filerna och kontrollerar dem: att id:n finns, att år stämmer och att värdena ligger inom gränserna. Testerna använder samma kontroll.
+- Förband, befattningar, grader och utmärkelser ligger på originalspråk i data (tyska; sovjetiska i translitterering). Gränssnittet hämtar övrig text från `text/en.json`.
+- Symboler (örn, hakkors i utmärkelser, SS-runor, röd stjärna) blir egna bildfiler, skilda från övrig grafik, enligt DESIGN.md (Symboler).
 - GPT:s rollistor i `dist/assets/prototype/infantry-v1/*-squad.json` används inte längre som speldata. Grafiken knyts till roll och vapen i datafilerna.
 
 ## 4. Risker och frågor
@@ -226,4 +237,27 @@ En enda målad bild räcker inte för både en stor karta och skärpa vid gruppn
 | Skarp karta | Två alternativ i avsnitt 6. Väntar på val. |
 
 Repots historik (`.git`) innehåller fortfarande de borttagna GIF-filerna. Den krymper bara om historiken skrivs om och tvingas upp till GitHub, vilket inte är gjort.
+
+## 8. Nya delar i DESIGN.md sedan inventeringen skrevs
+
+DESIGN.md uppdaterades i designchatten 11:08–11:17 med:
+
+- språkregler;
+- ledarkort;
+- grader, gradbeteckningar och utmärkelser för Heer, Waffen-SS och Röda armén;
+- symboler.
+
+Vid 11:23 skrev Claude Code av misstag över den versionen med en äldre version plus besluten från steg 0. Den senaste versionen är återställd ord för ord från designchatten, och besluten från steg 0 är införda ovanpå (12:00 ungefär).
+
+Det här påverkar planen:
+
+| Ändring i designen | Följd för koden |
+|---|---|
+| Gränssnittet på engelska; förband, befattningar, grader och utmärkelser på tyska respektive i rysk translitterering | Dagens svenska texter i `index.html` och `ui.js` byts mot engelska. Alla texter flyttas till `dist/data/text/en.json`. Gruppnamn blir "1. Gruppe" och "1-ye otdeleniye". Görs i steg 1, eftersom styrkorna och namnen byts då. |
+| Personer har formation, grad, befattning och utmärkelser | Datamodellen i steg 1 får dessa fält från början, med datafiler för grader och utmärkelser (avsnitt 3). |
+| Meniga heter Grenadier 1943 och Schütze 1942 | Gradnamnet hämtas från gradtabellen efter scenariots år. Rollnamnet MG-Schütze är oförändrat. |
+| Röda armén bytte till axelklaffar i januari 1943 | Beteckningen hämtas efter år. Prototypen (1943) visar axelklaffar. |
+| Ledarkort med porträtt eller siluett, gradbeteckning och utmärkelsesikoner | Kräver grafik: axelklaffar och kragspeglar, utmärkelseikoner och eventuellt porträtt. Det är en grafikbeställning före steg 7. Porträtt eller siluett är en öppen fråga i designen. |
+| Symboler visas historiskt korrekt, som separata bildfiler | Ikoner för utmärkelser och emblem levereras med symbolen som eget lager eller egen fil, så att en variant utan symboler kan byggas. Det gäller kommande grafikbeställningar. Dagens soldatfigurer sedda ovanifrån visar inga emblem. |
+| PROMPTER.md anger MG42 i steg 1 och 3 | Enligt Björns beslut används MG34 i prototypen. Jag läser "MG42" i prompterna som gruppens kulspruta, alltså MG34 i datan. Pipbyte gäller den. |
 
