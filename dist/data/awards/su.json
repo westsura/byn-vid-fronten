@@ -1,0 +1,11 @@
+{
+  "_comment": "Sovjetiska utmärkelser, rysk translitterering. Enligt DESIGN.md. Används i prototypen främst för fiendens benämningar.",
+  "formations": ["rkka"],
+  "awards": [
+    { "id": "za-otvagu", "name": "Medal \"Za otvagu\"", "abbr": "Za otvagu", "order": 3, "requirement": "För tapperhet; vanlig bland meniga och underbefäl", "symbolLayer": true, "validYears": [1938, 1945] },
+    { "id": "za-boyevye-zaslugi", "name": "Medal \"Za boyevye zaslugi\"", "abbr": "ZBZ", "order": 4, "requirement": "För stridsförtjänster", "symbolLayer": true, "validYears": [1938, 1945] },
+    { "id": "krasnaya-zvezda", "name": "Orden Krasnoy Zvezdy", "abbr": "OKZ", "order": 2, "requirement": "Röda stjärnans orden", "symbolLayer": true, "validYears": [1930, 1945] },
+    { "id": "otechestvennaya-voyna", "name": "Orden Otechestvennoy voyny", "abbr": "OOV", "order": 1, "requirement": "Fosterländska krigets orden", "symbolLayer": true, "validYears": [1942, 1945] },
+    { "id": "slava", "name": "Orden Slavy", "abbr": "OS", "order": 5, "requirement": "Ärans orden, för meniga och underbefäl (från slutet av 1943)", "symbolLayer": true, "validYears": [1943, 1945] }
+  ]
+}

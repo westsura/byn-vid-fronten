@@ -1,0 +1,132 @@
+{
+  "_comment": "All gränssnittstext på engelska (DESIGN.md, Språk i gränssnittet). Förband, befattningar, grader och utmärkelser kommer från datafilerna på originalspråk. {namn} ersätts med värden.",
+  "meta": {
+    "title": "Byn vid fronten — tactical infantry battle",
+    "description": "Lead a German infantry platoon on the Eastern Front, 1943. Give orders, use cover and pause when you need to."
+  },
+  "header": {
+    "title": "BYN VID FRONTEN",
+    "subtitle": "TACTICAL BATTLE · PROTOTYPE 04",
+    "theatre": "EASTERN FRONT, 1943",
+    "operation": "Operation Morgonljus",
+    "graphics": "Graphics",
+    "graphicsLabel": "Graphics set",
+    "soundOff": "Sound off",
+    "soundOn": "Sound on",
+    "restart": "Restart"
+  },
+  "map": {
+    "sector": "SECTOR 07",
+    "village": "MALINOVKA",
+    "objective": "FARMYARD",
+    "enemy": "ENEMY",
+    "pausedBanner": "PAUSED — GIVE YOUR ORDERS",
+    "ariaLabel": "Battle map. Select a unit with 1–4. Click the map to move. Arrow keys move the order cursor and Enter gives the order.",
+    "buildings": ["West house", "Farmhouse", "East house", "Barn", "South house", "Storehouse"],
+    "legendOwn": "Own unit",
+    "legendEnemy": "Spotted enemy",
+    "legendObjective": "Objective"
+  },
+  "phase": {
+    "planning": "PLANNING",
+    "paused": "PAUSED",
+    "running": "BATTLE IN PROGRESS",
+    "ended": "ENDED"
+  },
+  "buttons": {
+    "begin": "▶ Start battle",
+    "resume": "▶ Resume",
+    "pause": "Ⅱ Pause",
+    "move": "↗ Move",
+    "defend": "⊙ Defend",
+    "beginBrief": "Start battle",
+    "again": "Play again →"
+  },
+  "brief": {
+    "eyebrow": "YOUR MISSION",
+    "title": "Take the village crossroads.",
+    "text": "Lead your platoon forward and hold the farmyard by the objective flag for {hold} seconds. The enemy is defending the village.",
+    "hint": "Select a unit below. Click the map to give orders. Click a house to enter it. Space pauses.",
+    "resultEyebrow": "THE BATTLE IS OVER",
+    "won": "The farmyard is secured.",
+    "lost": "The attack has stalled."
+  },
+  "panel": {
+    "missionEyebrow": "01 / MISSION",
+    "missionTitle": "Secure the farmyard",
+    "missionText": "Hold the area with no enemy nearby.",
+    "noControl": "No control",
+    "securing": "Securing the area",
+    "forcesEyebrow": "02 / YOUR PLATOON",
+    "men": "{n} men",
+    "ordersEyebrow": "03 / ORDERS",
+    "soldier": "SOLDIER",
+    "portraitLabel": "Close-up of a soldier in the selected unit and his current posture",
+    "cover": "Cover",
+    "ammo": "Ammunition",
+    "order": "Order",
+    "eventsEyebrow": "EVENTS",
+    "footer": "Early playable version · Simplified simulation",
+    "leader": "Leader",
+    "out": "Out of action",
+    "helpMove": "Click the ground to move, or a house to enter it through the door.",
+    "helpDefend": "The unit holds its position with better cover. Click the map for a new defensive position.",
+    "keysClick": "CLICK",
+    "keysClickText": "Select / move",
+    "keysUnits": "1–4",
+    "keysUnitsText": "Select unit",
+    "keysSpace": "SPACE",
+    "keysSpaceText": "Pause",
+    "keysDefend": "D",
+    "keysDefendText": "Defend"
+  },
+  "morale": { "steady": "Steady", "shaken": "Shaken", "broken": "Broken" },
+  "cover": { "building": "Building", "vegetation": "Vegetation", "open": "Open ground" },
+  "posture": {
+    "out": "Out of action",
+    "pinned": "Pinned · taking cover",
+    "defending": "Prone · defending",
+    "moving": "Moving",
+    "ready": "Ready"
+  },
+  "orders": {
+    "hold": "Holding",
+    "move": "Moving",
+    "enter": "Entering {house}",
+    "position": "Taking up position",
+    "defend": "Defending",
+    "retreat": "Retreating"
+  },
+  "log": {
+    "ready": "{units} units ready. Give orders and start the battle.",
+    "moveOrder": "{unit}: new move order.",
+    "enterOrder": "{unit}: taking position in {house}.",
+    "defend": "{unit} takes up a defensive position.",
+    "retreat": "{unit} is falling back.",
+    "enemyRetreat": "Enemy {unit} is falling back.",
+    "casualty": "{unit} loses a man.",
+    "enemyCasualty": "Enemy {unit} loses a man.",
+    "won": "Mission accomplished.",
+    "ended": "The battle is over."
+  },
+  "toast": {
+    "recovering": "The unit is recovering and cannot take orders.",
+    "unreachable": "That place cannot be reached. Choose open ground or the middle of a house.",
+    "mapFailed": "The map image could not be loaded. Try reloading the page.",
+    "dataFailed": "Game data could not be loaded.",
+    "graphicsFailed": "The sprite graphics could not be loaded. Code-drawn graphics are used.",
+    "confirmRestart": "End this battle and start over?",
+    "confirmGraphics": "Changing graphics restarts the battle. Continue?"
+  },
+  "result": {
+    "held": "You held the objective for {hold} seconds.",
+    "wiped": "All your units are out of action.",
+    "timeout": "Time ran out before the objective was secured.",
+    "left": "{left} of {total} own soldiers remaining."
+  },
+  "graphics": {
+    "sprites": "Sprites (v4, approved style)",
+    "code": "Code-drawn (fallback)",
+    "badge": "WALK CYCLE V2 / FALLEN – NOT APPROVED"
+  }
+}

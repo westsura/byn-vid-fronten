@@ -1,0 +1,58 @@
+{
+  "_comment": "Prototypens uppställning för steg 1: år, styrkor och utgångslägen på nuvarande karta. Kartans geometri ligger kvar i src/scenario.js tills scenarierna byggs i steg 8. Panelen visar förbanden i styrkefilens ordning (Zugtrupp först); snabbtangenterna anges här.",
+  "id": "proto-1943",
+  "year": 1943,
+  "map": "village-1",
+  "player": {
+    "forces": "de-zug-1943-proto",
+    "placements": {
+      "gruppe-1": [
+        140,
+        230
+      ],
+      "gruppe-2": [
+        125,
+        410
+      ],
+      "zugtrupp": [
+        60,
+        500
+      ],
+      "gruppe-3": [
+        150,
+        600
+      ]
+    },
+    "hotkeys": {
+      "1": "gruppe-1",
+      "2": "gruppe-2",
+      "3": "gruppe-3",
+      "4": "zugtrupp"
+    }
+  },
+  "enemy": {
+    "forces": "su-vzvod-1943-proto",
+    "placements": {
+      "otdeleniye-1": [
+        865,
+        335
+      ],
+      "otdeleniye-2": [
+        1060,
+        400
+      ],
+      "otdeleniye-3": [
+        875,
+        670
+      ],
+      "otdeleniye-4": [
+        1135,
+        620
+      ],
+      "upravleniye": [
+        1140,
+        300
+      ]
+    }
+  }
+}

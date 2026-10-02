@@ -1,0 +1,62 @@
+{
+  "nation": "su",
+  "formation": "rkka",
+  "_comment": "Sovjetiskt skytteförband 1942–43, rysk translitterering enligt DESIGN.md. Gruppen (otdeleniye) har kulsprutan DP och flera PPSh. Organisationen är ett riktvärde för prototypen och kan justeras per scenario.",
+  "positions": {
+    "komandir-vzvoda": { "name": "Komandir vzvoda", "prescribedRank": "leytenant", "weapon": "tt33", "sprite": "leader", "leader": true },
+    "pomkomvzvoda": { "name": "Pomkomvzvoda", "prescribedRank": "starshiy-serzhant", "weapon": "ppsh41", "sprite": "leader", "leader": true },
+    "komandir-otdeleniya": { "name": "Komandir otdeleniya", "prescribedRank": "serzhant", "weapon": "ppsh41", "sprite": "leader", "leader": true },
+    "pulemyotchik": { "name": "Pulemyotchik", "prescribedRank": "yefreytor", "weapon": "dp27", "sprite": "mg" },
+    "vtoroy-nomer": { "name": "Vtoroy nomer", "prescribedRank": "krasnoarmeyets", "weapon": "mosin", "sprite": "assistant" },
+    "avtomatchik": { "name": "Avtomatchik", "prescribedRank": "krasnoarmeyets", "weapon": "ppsh41", "sprite": "leader" },
+    "strelok": { "name": "Strelok", "prescribedRank": "krasnoarmeyets", "weapon": "mosin", "sprite": "rifleman" }
+  },
+  "unitTypes": [
+    {
+      "id": "su-upravleniye-vzvoda-1943",
+      "name": "Upravleniye vzvoda",
+      "kind": "hq",
+      "validYears": [1942, 1943],
+      "slots": [
+        { "slot": "kv", "position": "komandir-vzvoda" },
+        { "slot": "pkv", "position": "pomkomvzvoda" }
+      ],
+      "leader": "kv",
+      "deputy": "pkv"
+    },
+    {
+      "id": "su-otdeleniye-1943",
+      "name": "Strelkovoye otdeleniye",
+      "kind": "squad",
+      "validYears": [1942, 1943],
+      "slots": [
+        { "slot": "ko", "position": "komandir-otdeleniya" },
+        { "slot": "pul", "position": "pulemyotchik" },
+        { "slot": "vn", "position": "vtoroy-nomer" },
+        { "slot": "avt-1", "position": "avtomatchik" },
+        { "slot": "avt-2", "position": "avtomatchik" },
+        { "slot": "str-1", "position": "strelok", "weapon": "svt40", "sprite": "svt" },
+        { "slot": "str-2", "position": "strelok" },
+        { "slot": "str-3", "position": "strelok" },
+        { "slot": "str-4", "position": "strelok" },
+        { "slot": "str-5", "position": "strelok" },
+        { "slot": "str-6", "position": "strelok" }
+      ],
+      "leader": "ko",
+      "deputy": "pul"
+    },
+    {
+      "id": "su-strelkovyy-vzvod-1943",
+      "name": "Strelkovyy vzvod",
+      "kind": "platoon",
+      "validYears": [1942, 1943],
+      "components": [
+        { "id": "upravleniye", "type": "su-upravleniye-vzvoda-1943", "name": "Upravleniye vzvoda" },
+        { "id": "otdeleniye-1", "type": "su-otdeleniye-1943", "name": "1-ye otdeleniye" },
+        { "id": "otdeleniye-2", "type": "su-otdeleniye-1943", "name": "2-ye otdeleniye" },
+        { "id": "otdeleniye-3", "type": "su-otdeleniye-1943", "name": "3-ye otdeleniye" },
+        { "id": "otdeleniye-4", "type": "su-otdeleniye-1943", "name": "4-ye otdeleniye" }
+      ]
+    }
+  ]
+}

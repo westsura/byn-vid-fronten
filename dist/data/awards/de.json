@@ -1,0 +1,16 @@
+{
+  "_comment": "Tyska utmärkelser, Heer och Waffen-SS, östfronten 1942–45. Enligt DESIGN.md. order = bärordning på ledarkortet (lägre först). Utmärkelser är berättelse, inga spelbonusar. symbolLayer = true när utmärkelsen bär en symbol som ska ligga som separat grafiklager (DESIGN.md, Symboler).",
+  "formations": ["heer", "waffen-ss"],
+  "awards": [
+    { "id": "ek1", "name": "Eisernes Kreuz 1. Klasse", "abbr": "EK I", "order": 1, "requirement": "Upprepad tapperhet", "worn": "Kors på vänster bröstficka", "symbolLayer": true, "candidate": true, "validYears": [1939, 1945] },
+    { "id": "dkig", "name": "Deutsches Kreuz in Gold", "abbr": "DKiG", "order": 2, "requirement": "Mellan EK I och Riddarkorset", "worn": "Stor stjärna på höger bröst", "symbolLayer": true, "candidate": true, "validYears": [1941, 1945] },
+    { "id": "isa", "name": "Infanterie-Sturmabzeichen (silber)", "abbr": "ISA", "order": 3, "requirement": "Tre anfall på olika dagar", "worn": "Märke på vänster bröst", "symbolLayer": true, "candidate": true, "validYears": [1939, 1945] },
+    { "id": "asa", "name": "Allgemeines Sturmabzeichen", "abbr": "ASA", "order": 4, "requirement": "Som stormärket, för pionjärer", "worn": "Märke på vänster bröst", "symbolLayer": true, "candidate": true, "validYears": [1940, 1945] },
+    { "id": "vwa", "name": "Verwundetenabzeichen", "abbr": "VwA", "order": 5, "requirement": "Sår", "worn": "Märke på vänster bröst", "classes": [{ "id": "schwarz", "name": "schwarz", "minWounds": 1 }, { "id": "silber", "name": "silber", "minWounds": 3 }, { "id": "gold", "name": "gold", "minWounds": 5 }], "symbolLayer": true, "candidate": true, "validYears": [1939, 1945] },
+    { "id": "nks", "name": "Nahkampfspange", "abbr": "NKS", "order": 6, "requirement": "Närstridsdagar", "worn": "Spänne ovanför vänster bröstficka", "classes": [{ "id": "bronze", "name": "Bronze", "minDays": 15 }, { "id": "silber", "name": "Silber", "minDays": 30 }, { "id": "gold", "name": "Gold", "minDays": 50 }], "symbolLayer": true, "candidate": true, "validYears": [1942, 1945] },
+    { "id": "ek2", "name": "Eisernes Kreuz 2. Klasse", "abbr": "EK II", "order": 7, "requirement": "Tapperhet; mycket vanlig bland veteraner", "worn": "Band i knapphålet", "symbolLayer": true, "candidate": true, "validYears": [1939, 1945] },
+    { "id": "ostmedaille", "name": "Medaille Winterschlacht im Osten 1941/42", "abbr": "Ostmedaille", "order": 8, "requirement": "Tjänst på östfronten vintern 1941–42", "worn": "Band i knapphålet", "symbolLayer": false, "candidate": true, "validYears": [1942, 1945] },
+    { "id": "pva", "name": "Panzervernichtungsabzeichen", "abbr": "PVA", "order": 9, "requirement": "Slagit ut stridsvagn i närstrid", "worn": "Ärmband, höger överarm", "symbolLayer": false, "candidate": true, "validYears": [1942, 1945] },
+    { "id": "rk", "name": "Ritterkreuz des Eisernen Kreuzes", "abbr": "RK", "order": 0, "requirement": "Ytterst sällsynt på plutonsnivå", "worn": "Kors vid halsen", "symbolLayer": true, "candidate": false, "validYears": [1939, 1945] }
+  ]
+}

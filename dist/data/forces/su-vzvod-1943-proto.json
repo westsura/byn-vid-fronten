@@ -1,0 +1,94 @@
+{
+ "_comment": "Prototypens sovjetiska motståndare. Personerna ligger i people/su-1943-proto.json.",
+ "id": "su-vzvod-1943-proto",
+ "name": "Strelkovyy vzvod",
+ "nation": "su",
+ "formation": "rkka",
+ "unitType": "su-strelkovyy-vzvod-1943",
+ "year": 1943,
+ "unitsFile": "su-rkka-1943",
+ "peopleFile": "su-1943-proto",
+ "units": [
+  {
+   "id": "upravleniye",
+   "type": "su-upravleniye-vzvoda-1943",
+   "name": "Upravleniye vzvoda",
+   "members": {
+    "kv": "su-001",
+    "pkv": "su-002"
+   }
+  },
+  {
+   "id": "otdeleniye-1",
+   "type": "su-otdeleniye-1943",
+   "name": "1-ye otdeleniye",
+   "members": {
+    "ko": "su-003",
+    "pul": "su-004",
+    "vn": "su-005",
+    "avt-1": "su-006",
+    "avt-2": "su-007",
+    "str-1": "su-008",
+    "str-2": "su-009",
+    "str-3": "su-010",
+    "str-4": "su-011",
+    "str-5": "su-012",
+    "str-6": "su-013"
+   }
+  },
+  {
+   "id": "otdeleniye-2",
+   "type": "su-otdeleniye-1943",
+   "name": "2-ye otdeleniye",
+   "members": {
+    "ko": "su-014",
+    "pul": "su-015",
+    "vn": "su-016",
+    "avt-1": "su-017",
+    "avt-2": "su-018",
+    "str-1": "su-019",
+    "str-2": "su-020",
+    "str-3": "su-021",
+    "str-4": "su-022",
+    "str-5": "su-023",
+    "str-6": "su-024"
+   }
+  },
+  {
+   "id": "otdeleniye-3",
+   "type": "su-otdeleniye-1943",
+   "name": "3-ye otdeleniye",
+   "members": {
+    "ko": "su-025",
+    "pul": "su-026",
+    "vn": "su-027",
+    "avt-1": "su-028",
+    "avt-2": "su-029",
+    "str-1": "su-030",
+    "str-2": "su-031",
+    "str-3": "su-032",
+    "str-4": "su-033",
+    "str-5": "su-034",
+    "str-6": "su-035"
+   }
+  },
+  {
+   "id": "otdeleniye-4",
+   "type": "su-otdeleniye-1943",
+   "name": "4-ye otdeleniye",
+   "members": {
+    "ko": "su-036",
+    "pul": "su-037",
+    "vn": "su-038",
+    "avt-1": "su-039",
+    "avt-2": "su-040",
+    "str-1": "su-041",
+    "str-2": "su-042",
+    "str-3": "su-043",
+    "str-4": "su-044",
+    "str-5": "su-045",
+    "str-6": "su-046"
+   }
+  }
+ ]
+}

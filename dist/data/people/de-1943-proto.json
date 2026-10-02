@@ -1,0 +1,503 @@
+{
+ "_comment": "Personer (fiktiva) i prototypens tyska pluton 1943. Person är skild från förbandet: förbanden i forces/ refererar id. status: active | wounded | severely-wounded | killed.",
+ "people": [
+  {
+   "id": "de-001",
+   "first": "Willi",
+   "last": "Fuchs",
+   "formation": "heer",
+   "rank": "oberfeldwebel",
+   "position": "zugfuehrer",
+   "weapon": "mp40",
+   "awards": [
+    {
+     "id": "ek2"
+    },
+    {
+     "id": "isa"
+    },
+    {
+     "id": "vwa",
+     "class": "schwarz"
+    },
+    {
+     "id": "ostmedaille"
+    }
+   ],
+   "born": 1911,
+   "status": "active"
+  },
+  {
+   "id": "de-002",
+   "first": "Heinz",
+   "last": "Vogel",
+   "formation": "heer",
+   "rank": "unteroffizier",
+   "position": "zugtruppfuehrer",
+   "weapon": "mp40",
+   "awards": [
+    {
+     "id": "ek2"
+    },
+    {
+     "id": "ostmedaille"
+    }
+   ],
+   "born": 1916,
+   "status": "active"
+  },
+  {
+   "id": "de-003",
+   "first": "Bruno",
+   "last": "Schwarz",
+   "formation": "heer",
+   "rank": "grenadier",
+   "position": "melder",
+   "weapon": "kar98k",
+   "awards": [],
+   "born": 1918,
+   "status": "active"
+  },
+  {
+   "id": "de-004",
+   "first": "Ludwig",
+   "last": "Roth",
+   "formation": "heer",
+   "rank": "obergrenadier",
+   "position": "melder",
+   "weapon": "kar98k",
+   "awards": [],
+   "born": 1919,
+   "status": "active"
+  },
+  {
+   "id": "de-005",
+   "first": "Herbert",
+   "last": "Krause",
+   "formation": "heer",
+   "rank": "grenadier",
+   "position": "krankentraeger",
+   "weapon": null,
+   "awards": [],
+   "born": 1918,
+   "status": "active"
+  },
+  {
+   "id": "de-006",
+   "first": "Rudolf",
+   "last": "Albrecht",
+   "formation": "heer",
+   "rank": "obergrenadier",
+   "position": "krankentraeger",
+   "weapon": null,
+   "awards": [],
+   "born": 1920,
+   "status": "active"
+  },
+  {
+   "id": "de-007",
+   "first": "Herbert",
+   "last": "Keller",
+   "formation": "heer",
+   "rank": "unteroffizier",
+   "position": "gruppenfuehrer",
+   "weapon": "mp40",
+   "awards": [
+    {
+     "id": "ek2"
+    },
+    {
+     "id": "isa"
+    },
+    {
+     "id": "ostmedaille"
+    }
+   ],
+   "born": 1918,
+   "status": "active"
+  },
+  {
+   "id": "de-008",
+   "first": "Georg",
+   "last": "Krüger",
+   "formation": "heer",
+   "rank": "obergefreiter",
+   "position": "mg-schuetze-1",
+   "weapon": "mg34",
+   "awards": [
+    {
+     "id": "isa"
+    }
+   ],
+   "born": 1918,
+   "status": "active"
+  },
+  {
+   "id": "de-009",
+   "first": "Max",
+   "last": "Frank",
+   "formation": "heer",
+   "rank": "obergrenadier",
+   "position": "mg-schuetze-2",
+   "weapon": "p08",
+   "awards": [],
+   "born": 1918,
+   "status": "active"
+  },
+  {
+   "id": "de-010",
+   "first": "Heinz",
+   "last": "Braun",
+   "formation": "heer",
+   "rank": "obergrenadier",
+   "position": "mg-schuetze-3",
+   "weapon": "kar98k",
+   "awards": [],
+   "born": 1921,
+   "status": "active"
+  },
+  {
+   "id": "de-011",
+   "first": "Werner",
+   "last": "Lorenz",
+   "formation": "heer",
+   "rank": "gefreiter",
+   "position": "truppfuehrer",
+   "weapon": "kar98k",
+   "awards": [
+    {
+     "id": "isa"
+    }
+   ],
+   "born": 1917,
+   "status": "active"
+  },
+  {
+   "id": "de-012",
+   "first": "Ludwig",
+   "last": "Wagner",
+   "formation": "heer",
+   "rank": "grenadier",
+   "position": "schuetze",
+   "weapon": "kar98k",
+   "awards": [],
+   "born": 1923,
+   "status": "active"
+  },
+  {
+   "id": "de-013",
+   "first": "Gustav",
+   "last": "Becker",
+   "formation": "heer",
+   "rank": "grenadier",
+   "position": "schuetze",
+   "weapon": "kar98k",
+   "awards": [],
+   "born": 1923,
+   "status": "active"
+  },
+  {
+   "id": "de-014",
+   "first": "Albert",
+   "last": "Hofmann",
+   "formation": "heer",
+   "rank": "grenadier",
+   "position": "schuetze",
+   "weapon": "kar98k",
+   "awards": [],
+   "born": 1919,
+   "status": "active"
+  },
+  {
+   "id": "de-015",
+   "first": "Kurt",
+   "last": "Möller",
+   "formation": "heer",
+   "rank": "grenadier",
+   "position": "schuetze",
+   "weapon": "kar98k",
+   "awards": [],
+   "born": 1919,
+   "status": "active"
+  },
+  {
+   "id": "de-016",
+   "first": "Walter",
+   "last": "Jung",
+   "formation": "heer",
+   "rank": "grenadier",
+   "position": "schuetze",
+   "weapon": "kar98k",
+   "awards": [],
+   "born": 1915,
+   "status": "active"
+  },
+  {
+   "id": "de-017",
+   "first": "Max",
+   "last": "Klein",
+   "formation": "heer",
+   "rank": "obergefreiter",
+   "position": "gruppenfuehrer",
+   "weapon": "mp40",
+   "awards": [
+    {
+     "id": "isa"
+    }
+   ],
+   "born": 1919,
+   "status": "active"
+  },
+  {
+   "id": "de-018",
+   "first": "Heinz",
+   "last": "Kaiser",
+   "formation": "heer",
+   "rank": "obergefreiter",
+   "position": "mg-schuetze-1",
+   "weapon": "mg34",
+   "awards": [
+    {
+     "id": "isa"
+    }
+   ],
+   "born": 1915,
+   "status": "active"
+  },
+  {
+   "id": "de-019",
+   "first": "Albert",
+   "last": "Werner",
+   "formation": "heer",
+   "rank": "grenadier",
+   "position": "mg-schuetze-2",
+   "weapon": "p08",
+   "awards": [],
+   "born": 1920,
+   "status": "active"
+  },
+  {
+   "id": "de-020",
+   "first": "Gerhard",
+   "last": "Schulz",
+   "formation": "heer",
+   "rank": "grenadier",
+   "position": "mg-schuetze-3",
+   "weapon": "kar98k",
+   "awards": [],
+   "born": 1923,
+   "status": "active"
+  },
+  {
+   "id": "de-021",
+   "first": "Rolf",
+   "last": "Lang",
+   "formation": "heer",
+   "rank": "gefreiter",
+   "position": "truppfuehrer",
+   "weapon": "kar98k",
+   "awards": [
+    {
+     "id": "isa"
+    }
+   ],
+   "born": 1915,
+   "status": "active"
+  },
+  {
+   "id": "de-022",
+   "first": "Rolf",
+   "last": "Herrmann",
+   "formation": "heer",
+   "rank": "grenadier",
+   "position": "schuetze",
+   "weapon": "kar98k",
+   "awards": [],
+   "born": 1918,
+   "status": "active"
+  },
+  {
+   "id": "de-023",
+   "first": "Wilhelm",
+   "last": "Mayer",
+   "formation": "heer",
+   "rank": "grenadier",
+   "position": "schuetze",
+   "weapon": "kar98k",
+   "awards": [],
+   "born": 1919,
+   "status": "active"
+  },
+  {
+   "id": "de-024",
+   "first": "Franz",
+   "last": "Hahn",
+   "formation": "heer",
+   "rank": "grenadier",
+   "position": "schuetze",
+   "weapon": "kar98k",
+   "awards": [],
+   "born": 1921,
+   "status": "active"
+  },
+  {
+   "id": "de-025",
+   "first": "Martin",
+   "last": "Scholz",
+   "formation": "heer",
+   "rank": "obergrenadier",
+   "position": "schuetze",
+   "weapon": "kar98k",
+   "awards": [],
+   "born": 1920,
+   "status": "active"
+  },
+  {
+   "id": "de-026",
+   "first": "Hans",
+   "last": "Neumann",
+   "formation": "heer",
+   "rank": "obergrenadier",
+   "position": "schuetze",
+   "weapon": "kar98k",
+   "awards": [],
+   "born": 1923,
+   "status": "active"
+  },
+  {
+   "id": "de-027",
+   "first": "Max",
+   "last": "Weiß",
+   "formation": "heer",
+   "rank": "unterfeldwebel",
+   "position": "gruppenfuehrer",
+   "weapon": "mp40",
+   "awards": [
+    {
+     "id": "ek2"
+    },
+    {
+     "id": "vwa",
+     "class": "schwarz"
+    },
+    {
+     "id": "ostmedaille"
+    }
+   ],
+   "born": 1917,
+   "status": "active"
+  },
+  {
+   "id": "de-028",
+   "first": "Ernst",
+   "last": "Beck",
+   "formation": "heer",
+   "rank": "obergefreiter",
+   "position": "mg-schuetze-1",
+   "weapon": "mg34",
+   "awards": [
+    {
+     "id": "isa"
+    }
+   ],
+   "born": 1917,
+   "status": "active"
+  },
+  {
+   "id": "de-029",
+   "first": "Max",
+   "last": "Bauer",
+   "formation": "heer",
+   "rank": "obergrenadier",
+   "position": "mg-schuetze-2",
+   "weapon": "p08",
+   "awards": [],
+   "born": 1921,
+   "status": "active"
+  },
+  {
+   "id": "de-030",
+   "first": "Anton",
+   "last": "Koch",
+   "formation": "heer",
+   "rank": "grenadier",
+   "position": "mg-schuetze-3",
+   "weapon": "kar98k",
+   "awards": [],
+   "born": 1916,
+   "status": "active"
+  },
+  {
+   "id": "de-031",
+   "first": "Alfred",
+   "last": "Richter",
+   "formation": "heer",
+   "rank": "obergefreiter",
+   "position": "truppfuehrer",
+   "weapon": "kar98k",
+   "awards": [],
+   "born": 1920,
+   "status": "active"
+  },
+  {
+   "id": "de-032",
+   "first": "Hans",
+   "last": "König",
+   "formation": "heer",
+   "rank": "obergrenadier",
+   "position": "schuetze",
+   "weapon": "kar98k",
+   "awards": [],
+   "born": 1917,
+   "status": "active"
+  },
+  {
+   "id": "de-033",
+   "first": "Otto",
+   "last": "Hartmann",
+   "formation": "heer",
+   "rank": "grenadier",
+   "position": "schuetze",
+   "weapon": "kar98k",
+   "awards": [],
+   "born": 1923,
+   "status": "active"
+  },
+  {
+   "id": "de-034",
+   "first": "Erwin",
+   "last": "Zimmermann",
+   "formation": "heer",
+   "rank": "grenadier",
+   "position": "schuetze",
+   "weapon": "kar98k",
+   "awards": [],
+   "born": 1916,
+   "status": "active"
+  },
+  {
+   "id": "de-035",
+   "first": "Rudolf",
+   "last": "Lehmann",
+   "formation": "heer",
+   "rank": "grenadier",
+   "position": "schuetze",
+   "weapon": "kar98k",
+   "awards": [],
+   "born": 1915,
+   "status": "active"
+  },
+  {
+   "id": "de-036",
+   "first": "Helmut",
+   "last": "Meier",
+   "formation": "heer",
+   "rank": "grenadier",
+   "position": "schuetze",
+   "weapon": "kar98k",
+   "awards": [],
+   "born": 1915,
+   "status": "active"
+  }
+ ]
+}

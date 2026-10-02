@@ -1,0 +1,18 @@
+{
+  "formation": "rkka",
+  "name": "Krasnaya Armiya",
+  "_comment": "Röda armén, infanteri (hallonröd vapenfärg). Enligt DESIGN.md, Röda armén – förband, befattningar och grader. Rysk translitterering. Axelklaffar (pogony) från januari 1943, kragspeglar dessförinnan: insignia anger beteckning per period.",
+  "insigniaChangeYear": 1943,
+  "ranks": [
+    { "id": "krasnoarmeyets", "name": "Krasnoarmeyets", "abbr": "Kr-ts", "level": 1, "category": "enlisted", "insignia": { "pogon": "Slät", "collar": "Slät" }, "validYears": [1935, 1945], "insigniaImage": null },
+    { "id": "yefreytor", "name": "Yefreytor", "abbr": "Yefr.", "level": 2, "category": "enlisted", "insignia": { "pogon": "En smal tvärrand", "collar": "Slät med kantband" }, "validYears": [1935, 1945], "insigniaImage": null },
+    { "id": "mladshiy-serzhant", "name": "Mladshiy serzhant", "abbr": "Ml. serzh.", "level": 3, "category": "nco", "insignia": { "pogon": "Två smala tvärränder", "collar": "Två trianglar" }, "validYears": [1940, 1945], "insigniaImage": null },
+    { "id": "serzhant", "name": "Serzhant", "abbr": "Serzh.", "level": 4, "category": "nco", "insignia": { "pogon": "Tre smala tvärränder", "collar": "Tre trianglar" }, "validYears": [1940, 1945], "insigniaImage": null },
+    { "id": "starshiy-serzhant", "name": "Starshiy serzhant", "abbr": "St. serzh.", "level": 5, "category": "nco", "insignia": { "pogon": "En bred tvärrand", "collar": "Fyra trianglar" }, "validYears": [1940, 1945], "insigniaImage": null },
+    { "id": "starshina", "name": "Starshina", "abbr": "Starsh.", "level": 6, "category": "nco", "insignia": { "pogon": "Bred längsgående galon", "collar": "Fem trianglar" }, "validYears": [1940, 1945], "insigniaImage": null },
+    { "id": "mladshiy-leytenant", "name": "Mladshiy leytenant", "abbr": "Ml. lt.", "level": 7, "category": "officer", "insignia": { "pogon": "En stjärna, ett längsgående streck", "collar": "En kvadrat" }, "validYears": [1937, 1945], "insigniaImage": null },
+    { "id": "leytenant", "name": "Leytenant", "abbr": "Lt.", "level": 8, "category": "officer", "insignia": { "pogon": "Två stjärnor", "collar": "Två kvadrater" }, "validYears": [1935, 1945], "insigniaImage": null },
+    { "id": "starshiy-leytenant", "name": "Starshiy leytenant", "abbr": "St. lt.", "level": 9, "category": "officer", "insignia": { "pogon": "Tre stjärnor", "collar": "Tre kvadrater" }, "validYears": [1935, 1945], "insigniaImage": null },
+    { "id": "kapitan", "name": "Kapitan", "abbr": "Kpt.", "level": 10, "category": "officer", "insignia": { "pogon": "Fyra stjärnor", "collar": "En rektangel" }, "validYears": [1935, 1945], "insigniaImage": null }
+  ]
+}
