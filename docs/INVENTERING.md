@@ -166,8 +166,8 @@ dist/data/
 
 **Tekniska risker**
 
-6. **Kamera och kartupplösning.** Steg 4 kräver zoomnivån "grupp". Kartbilden har bara 1,28 pixlar per enhet och blir suddig i nära zoom. Sprites håller (28 pixlar per enhet). En skarpare kartbild behövs om gruppnivån ska se bra ut, vilket blir en grafikbeställning.
-7. **Trängsel.** En pluton med cirka 40 man och en sovjetisk pluton med cirka 33 på en karta på 120 × 80 m, med soldater ritade i dubbel storlek, blir trångt. Liggande figurer bildar redan kedjor huvud mot fötter i dagens formation. En formation som vrids efter riktningen behövs tidigt, senast i steg 3.
+6. **Kamera och kartupplösning.** Steg 4 kräver zoomnivån "grupp". Dagens kartbild har bara 1,28 pixlar per enhet och blir suddig i nära zoom. Sprites håller (28 pixlar per enhet). Ett förslag på lösning finns i avsnitt 6.
+7. **Kartstorlek (Björn 2026-10-02).** Kartan kan vara långt större än det spelaren ser, så trängseln löses med en större karta och en kamera som panorerar. En formation som vrids efter riktningen behövs ändå för liggande figurer, men den är inte längre en tidskritisk risk.
 8. **Prestanda.** Hotkarta och siktlinjer för cirka 75 soldater kostar mer än dagens gruppsalvor. Planen är att uppdatera spritt över flera bildrutor, som designen anger, och mäta i varje steg. Dagens nivå är 6 ms per bildruta.
 9. **Repots storlek.** `art/` och `docs/art/review/` är cirka 150 MB och `.git` cirka 140 MB, främst GIF-filer och ark. Det fungerar, men varje synk till Björns dator kräver uppdelade paket. Fråga: ska nya granskningsfiler (GIF) läggas utanför repot, till exempel bara skickas i chatten eller ligga i projektet?
 10. **Kartan är fransk.** Designen vill ha izbor, raviner, kolchosbyggnader och en stenbyggnad. Prototypen får använda nuvarande by, men scenariot i steg 8 behöver en stenbyggnad som mål. Ett av dagens stenhus kan fungera tills vidare.
@@ -187,3 +187,28 @@ Stegen följer PROMPTER 1–8 med avstämning efter varje steg. Med tanke på ri
   - pose för nedhållen;
   - MG42, om fråga 4 kräver det;
   - skarpare karta eller izba-by, om fråga 6 och 10 kräver det.
+
+## 6. Skarp karta i alla zoomnivåer (förslag, väntar på beslut)
+
+En enda målad bild räcker inte för både en stor karta och skärpa vid gruppnivån. Ett exempel: en karta på 2400 × 1600 enheter med 8 pixlar per enhet (gruppnivå på retinaskärm) blir 19 200 × 12 800 pixlar. Det är för stort för en bild i webbläsaren och för tungt att ladda.
+
+**Alternativ A – stor målad bild i rutor (tiles) med flera upplösningar**
+
+- Kartan målas som i dag men i hög upplösning och delas i rutor. Spelet laddar bara de rutor som syns, i den upplösning zoomnivån kräver.
+- **Fördel:** samma målade helhetsintryck som i dag.
+- **Nackdel:** varje karta blir ett mycket stort målningsjobb. Geometrin (väggar, skydd) måste fortfarande ritas in separat och hållas i fas med bilden, vilket är det problem vi har i dag med häckar och skog.
+
+**Alternativ B – kartan byggs av delar (rekommenderas)**
+
+- Marken består av sömlösa marktexturer (gräs, lera, väg, åker, snö), till exempel 512 × 512 pixlar som upprepas. En grov terrängkarta anger vilken mark som ligger var, och övergångarna blandas mjukt.
+- Hus, izbor, staket, träd, buskar, ravinkanter och stenbyggnader är egna sprites med 28 pixlar per enhet, som soldaterna. De ritas skarpt i alla zoomnivåer.
+- Kartan blir en datafil (`dist/data/maps/…json`) som placerar delarna. Samma fil ger geometri för väggar, skydd och siktlinje. Grafik och regler kan alltså inte glida isär.
+- Nya kartor per scenario blir mest ett placeringsjobb, och GPT:s grafik återanvänds. Det passar designens "kartor anpassas per scenario".
+- **Nackdel:** kräver en uppsättning grundgrafik först, och helheten blir mindre "målad" om inte marken får variation (fläckar, slitage, skuggor från objekt).
+
+**Gäller båda**
+
+- Canvas ritas med skärmens pixeltäthet (`devicePixelRatio`), vilket också rättar dagens suddighet på retinaskärmar.
+- Vid översiktsnivån används förminskade versioner, så att kartan inte flimrar.
+- Kartgrafiken påverkar inte steg 1–3. Kameran byggs i steg 4, och en första testkarta kan byggas med dagens bild som mark tills grafiken finns.
+
