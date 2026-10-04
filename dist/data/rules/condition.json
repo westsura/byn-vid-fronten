@@ -11,7 +11,7 @@
     "decayPerS": 1
   },
   "suppression": {
-    "_comment": "Nedhållning: stiger med hotet i rutorna där gruppens soldater står (hälften medelvärde, hälften högsta), sjunker snabbt när elden upphör.",
+    "_comment": "Nedhållning: rör sig mot 100 × hotet i rutorna där gruppens soldater står (hälften medelvärde, hälften högsta). Stiger med risePerS × hotet, sjunker med decayPerS när elden mattas eller upphör.",
     "risePerS": 70,
     "decayPerS": 30,
     "pinnedAt": 60,

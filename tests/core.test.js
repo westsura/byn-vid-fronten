@@ -68,10 +68,10 @@ test('postures: defend and suppression make soldiers prone, then recover', () =>
   sim.update(0.05);
   assert.equal(sim.soldierPose(player().men[0], player()), 'prone');
   sim.reset();
-  player().underFire = 2;
-  sim.update(0.05);
+  player().cond.pinned = true;
   assert.equal(sim.soldierPose(player().men[0], player()), 'prone');
-  player().underFire = 0;
+  player().cond.pinned = false;
+  player().cond.suppression = 0;
   player().men[0].moving = false;
   assert.equal(sim.soldierPose(player().men[0], player()), 'ready');
   player().men[0].hp = 0;

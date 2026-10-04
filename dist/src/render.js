@@ -145,7 +145,7 @@ function drawSquad(ctx, s) {
   if (!s.side && alive(s).length) drawReadiness(ctx, s, R);
   for (const m of s.men) if (m.hp > 0) drawUnit(ctx, m, s, state.elapsed, 1.12);
   if (!alive(s).length) return;
-  // Squad tag (coloured by state) and morale bar
+  // Squad tag (coloured by state) and cohesion bar
   const c = s.cond ?? {};
   ctx.textAlign = 'center';
   ctx.font = 'bold 12px system-ui';
@@ -166,8 +166,8 @@ function drawSquad(ctx, s) {
   }
   ctx.fillStyle = '#18221a';
   ctx.fillRect(s.x - 25, s.y + R - 12, 50, 4);
-  ctx.fillStyle = s.morale < 40 ? '#ddad74' : '#aaca86';
-  ctx.fillRect(s.x - 25, s.y + R - 12, s.morale / 2, 4);
+  ctx.fillStyle = c.cohesion < 55 ? '#ddad74' : '#aaca86';
+  ctx.fillRect(s.x - 25, s.y + R - 12, (c.cohesion ?? 100) / 2, 4);
 }
 
 // Fire readiness: a ring just outside the unit that fills clockwise from the top;

@@ -5,7 +5,7 @@
 // Fire is registered as sources (an area, an intensity, who fires, which side is
 // threatened, and a lifetime). The grid is recomputed from the sources a few rows
 // per simulation update, so the cost is spread over several frames.
-// In step 2 the only sources are the debug test tool; real fire feeds it in step 3.
+// Sources come from real fire (fire.js) and from the debug test tool.
 import { W, H } from './config.js';
 
 let P = null; // parameters from data/rules/condition.json
@@ -78,15 +78,19 @@ function recomputeRow(r, dt) {
   for (let c = 0; c < COLS; c++) {
     const i = r * COLS + c;
     for (const side of [0, 1]) {
+      // Sources in the same cell add up (capped at 1); `by` is the largest contributor.
       let d = 0;
+      let top = 0;
       let who = null;
       for (const s of sources) {
         if (!s.sides.includes(side) || Math.abs(s.r - r) > s.radius || Math.abs(s.c - c) > s.radius) continue;
-        if (s.intensity > d) {
-          d = s.intensity;
+        d += s.intensity;
+        if (s.intensity > top) {
+          top = s.intensity;
           who = s.by;
         }
       }
+      d = Math.min(1, d);
       grid.danger[side][i] = d;
       grid.by[side][i] = who;
       const k = grid.discomfort[side][i];

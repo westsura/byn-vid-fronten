@@ -1,9 +1,10 @@
 // State model per unit (DESIGN.md, Tillståndsmodell): suppression (seconds),
 // cohesion (minutes) and fire readiness (seconds), all 0–100, with Pinned and
 // Broken derived from them. Parameters come from data/rules/condition.json.
-// In step 2 these values are computed and shown; they do not yet change how
-// units move or fire (that is step 3).
+// They drive the battle: suppression slows and stops movement and weakens fire,
+// a broken unit falls back (sim.js), readiness scales fire effect (fire.js).
 import { dangerAt } from './threat.js';
+import { flanked, fireRules } from './fire.js';
 
 let P = null;
 let weapons = {};
@@ -23,6 +24,8 @@ export function newCondition(s) {
     aliveSeen: s.men.length,
     leaderAlive: true,
     losses: 0,
+    incoming: [], // recent directions of incoming fire (flanking)
+    flanked: false,
   };
 }
 
@@ -50,15 +53,20 @@ export function readyTime(s) {
   return t.length ? t.reduce((a, b) => a + b, 0) / t.length : 4;
 }
 
-export function updateCondition(s, dt, allSquads) {
+export function updateCondition(s, dt, allSquads, now = 0) {
   const c = s.cond;
   const men = living(s);
   if (!men.length) return;
 
-  // Suppression: rises with threat, falls quickly when the fire stops.
   const threat = threatOn(s);
   c.threat = threat;
-  c.suppression = clamp(threat > 0 ? c.suppression + P.suppression.risePerS * threat * dt : c.suppression - P.suppression.decayPerS * dt);
+  // It moves towards 100 × threat: heavier fire holds a unit down harder, and it
+  // falls (at decayPerS) as soon as the fire slackens.
+  const target = 100 * threat;
+  c.suppression =
+    c.suppression < target
+      ? Math.min(target, c.suppression + P.suppression.risePerS * threat * dt)
+      : Math.max(target, c.suppression - P.suppression.decayPerS * dt);
   if (!c.pinned && c.suppression >= P.suppression.pinnedAt) c.pinned = true;
   else if (c.pinned && c.suppression <= P.suppression.unpinnedAt) c.pinned = false;
 
@@ -80,6 +88,8 @@ export function updateCondition(s, dt, allSquads) {
   const friends = allSquads.some((o) => o !== s && o.side === s.side && o.men.some((m) => m.hp > 0) && Math.hypot(o.x - s.x, o.y - s.y) <= P2.isolationRadius);
   c.isolated = !friends;
   if (c.isolated) c.cohesion = clamp(c.cohesion - (P2.isolationPerMin / 60) * dt);
+  c.flanked = flanked(s, now);
+  if (c.flanked) c.cohesion = clamp(c.cohesion - (fireRules().flanking.cohesionPerMin / 60) * dt);
   const ceiling = 100 - P2.ceilingLossAtFullLosses * (c.losses / s.men.length);
   if (threat === 0 && c.suppression === 0 && !c.isolated && c.cohesion < ceiling) {
     const rate = (P2.recoverPerMin / 60) * (c.leaderAlive ? P2.recoverWithLeader : 1);
@@ -88,7 +98,8 @@ export function updateCondition(s, dt, allSquads) {
   if (!c.broken && c.cohesion < P2.brokenAt) c.broken = true;
   else if (c.broken && c.cohesion >= P2.rallyAt) c.broken = false;
 
-  // Fire readiness: zero while the unit moves, builds while it stands still.
-  if (s.path.length) c.readiness = 0;
+  // Fire readiness: zero while the unit moves, builds while it stands still
+  // (also a pinned unit that has a move order but cannot advance).
+  if (s.path.length && s.advancing) c.readiness = 0;
   else c.readiness = clamp(c.readiness + (100 / readyTime(s)) * (c.pinned ? P.readiness.pinnedFactor : 1) * dt);
 }

@@ -1,0 +1,203 @@
+// Fire (DESIGN.md, Eld och rörelse; PROMPTER step 3 part A).
+//
+// - Line of sight on the threat-map grid: house walls block exactly (doors and
+//   windows are open, as in terrain.los); cells with trees and bushes hinder sight
+//   and lower the chance to hit, and enough of them block it.
+// - Spotting: an enemy unit is visible to a side when one of that side's soldiers
+//   has line of sight to one of its soldiers within the spotting range.
+// - Every soldier fires on his own at a spotted enemy unit within his weapon's
+//   range. Effect per round = weapon base hit × range × the unit's fire readiness
+//   × the target's cover × the shooter's suppression (all parameters in
+//   data/rules/fire.json and weapons.json).
+// - Each fire event is laid into the threat map around the target, which raises
+//   the target's suppression (condition.js); hits cause casualties.
+import { W, H } from './config.js';
+import { woods } from './scenario.js';
+import { los, coverAt } from './terrain.js';
+import { addSource } from './threat.js';
+import { random } from './rng.js';
+
+let P = null;
+let weapons = {};
+let CELL = 20;
+let COLS = 0;
+let ROWS = 0;
+let hinder = null; // Uint8Array: 1 = cell with trees or bushes
+
+export function setFireRules(rules, weaponTable, cell) {
+  P = rules;
+  weapons = weaponTable ?? {};
+  CELL = cell;
+  COLS = Math.ceil(W / CELL);
+  ROWS = Math.ceil(H / CELL);
+  hinder = new Uint8Array(COLS * ROWS);
+  for (let r = 0; r < ROWS; r++)
+    for (let c = 0; c < COLS; c++) {
+      const x = (c + 0.5) * CELL;
+      const y = (r + 0.5) * CELL;
+      hinder[r * COLS + c] = woods.some((t) => Math.hypot(x - t.x, y - t.y) < t.r) ? 1 : 0;
+    }
+}
+
+export const fireRules = () => P;
+export const hindranceCell = (c, r) => hinder[r * COLS + c];
+
+// Hindering cells strictly between a and b (the cells a and b stand in do not count).
+export function hindrance(a, b) {
+  const ca = Math.floor(a.x / CELL) + Math.floor(a.y / CELL) * COLS;
+  const cb = Math.floor(b.x / CELL) + Math.floor(b.y / CELL) * COLS;
+  const d = Math.hypot(b.x - a.x, b.y - a.y);
+  const n = Math.max(1, Math.ceil(d / (CELL / 4)));
+  const seen = new Set();
+  let count = 0;
+  for (let k = 1; k < n; k++) {
+    const x = a.x + ((b.x - a.x) * k) / n;
+    const y = a.y + ((b.y - a.y) * k) / n;
+    const c = Math.floor(x / CELL);
+    const r = Math.floor(y / CELL);
+    if (c < 0 || r < 0 || c >= COLS || r >= ROWS) continue;
+    const i = r * COLS + c;
+    if (i === ca || i === cb || seen.has(i)) continue;
+    seen.add(i);
+    count += hinder[i];
+  }
+  return count;
+}
+
+// Line of sight: null when blocked, otherwise the number of hindering cells.
+export function sight(a, b) {
+  if (!los(a, b)) return null;
+  const h = hindrance(a, b);
+  return h > P.sight.blockAfterCells ? null : h;
+}
+
+const living = (s) => s.men.filter((m) => m.hp > 0);
+const metres = (a, b) => Math.hypot(a.x - b.x, a.y - b.y) * P.metresPerUnit;
+
+// ---- Spotting ---------------------------------------------------------------
+
+// spotted[side] = set of enemy squad ids that side can see. Own units are always
+// visible to the player; enemy units only when spotted (s.visible).
+export function updateSpotting(squads, state) {
+  for (const side of [0, 1]) {
+    const seen = new Set();
+    const eyes = squads.filter((s) => s.side === side && living(s).length);
+    for (const t of squads) {
+      if (t.side === side || !living(t).length) continue;
+      const found = eyes.some((s) =>
+        living(s).some((a) => living(t).some((b) => Math.hypot(a.x - b.x, a.y - b.y) < P.spotting.rangeUnits && sight(a, b) !== null)),
+      );
+      if (found) seen.add(t.id);
+    }
+    state.spotted[side] = seen;
+  }
+  for (const s of squads) s.visible = !s.side || state.spotted[0].has(s.id);
+}
+
+// ---- Fire -------------------------------------------------------------------
+
+// Range factor: full effect within the weapon's effective range, falling to zero
+// at its maximum range.
+export function rangeFactor(w, m) {
+  if (m <= w.effectiveRangeM) return 1;
+  if (m >= w.maxRangeM) return 0;
+  return 1 - (m - w.effectiveRangeM) / (w.maxRangeM - w.effectiveRangeM);
+}
+
+// Seconds between fire events for one soldier with weapon w.
+export function fireInterval(w) {
+  const rounds = P.fire.roundsPerEvent[w.type] ?? 1;
+  return (rounds * 60) / w.rofPerMin;
+}
+
+// Chance per round that a round from shooter m (unit s) hits victim v (unit t).
+export function hitChance(w, s, m, t, v, hinderCells) {
+  const F = P.fire;
+  const ready = F.readinessFloor + (1 - F.readinessFloor) * (s.cond.readiness / 100);
+  const cover = Math.min(0.9, coverAt(v.x, v.y) + (t.cond.pinned || t.order === 'defend' ? F.proneCover : 0));
+  const shooterSup = 1 - F.shooterSuppressionPenalty * (s.cond.suppression / 100);
+  return w.baseHit * F.hitScale * rangeFactor(w, metres(m, v)) * ready * (1 - cover) * shooterSup * P.sight.perCellHitFactor ** hinderCells;
+}
+
+// The unit's current target: nearest spotted enemy unit that at least one of its
+// soldiers can see and reach. Re-chosen every targetRetargetS seconds.
+function chooseTarget(s, squads, state) {
+  const men = living(s);
+  const options = squads
+    .filter((t) => t.side !== s.side && living(t).length && state.spotted[s.side].has(t.id))
+    .sort((a, b) => Math.hypot(a.x - s.x, a.y - s.y) - Math.hypot(b.x - s.x, b.y - s.y));
+  return (
+    options.find((t) =>
+      men.some((m) => {
+        const w = weapons[m.weapon];
+        return w && living(t).some((v) => metres(m, v) < w.maxRangeM && sight(m, v) !== null);
+      }),
+    ) ?? null
+  );
+}
+
+// One update of fire for unit s. `ev` = { log(key, params), shot(squad), effect(e) }.
+export function fireUnit(s, dt, squads, state, ev) {
+  if (s.routed) return;
+  s.retarget = (s.retarget ?? 0) - dt;
+  if (s.retarget <= 0 || (s.target && !living(s.target).length)) {
+    s.target = chooseTarget(s, squads, state);
+    s.retarget = P.fire.targetRetargetS;
+  }
+  const t = s.target;
+  if (!t) return;
+  for (const m of living(s)) {
+    const w = weapons[m.weapon];
+    if (!w) continue;
+    m.fireTimer = (m.fireTimer ?? random() * fireInterval(w)) - dt;
+    if (m.fireTimer > 0 || m.ammo <= 0) continue;
+    const victims = living(t)
+      .map((v) => ({ v, h: metres(m, v) < w.maxRangeM ? sight(m, v) : null }))
+      .filter((x) => x.h !== null);
+    m.fireTimer = fireInterval(w) * (1 + P.fire.intervalJitter * (2 * random() - 1));
+    if (!victims.length) continue;
+    const { v, h } = victims[Math.floor(random() * victims.length)];
+    const rounds = Math.min(m.ammo, P.fire.roundsPerEvent[w.type] ?? 1);
+    m.ammo -= rounds;
+    m.flash = 0.12;
+    m.aim = 1.2;
+    m.angle = Math.atan2(v.y - m.y, v.x - m.x);
+    shootAt(s, m, w, t, v, h, rounds, state, ev);
+  }
+}
+
+function shootAt(s, m, w, t, v, h, rounds, state, ev) {
+  const E = P.effectOnTarget;
+  // Into the threat map around the target: this is what raises its suppression.
+  const cover = coverAt(v.x, v.y);
+  addSource({ x: v.x, y: v.y, radius: E.radius, life: E.lifeS, by: s.id, sides: [t.side], intensity: ((w.suppression * rounds) / E.intensityDivisor) * (1 - E.coverFactor * cover) });
+  // Direction of incoming fire, for flanking.
+  t.cond.incoming.push({ at: state.elapsed, angle: Math.atan2(m.y - t.y, m.x - t.x) });
+  const p = hitChance(w, s, m, t, v, h);
+  let hit = false;
+  for (let k = 0; k < rounds && v.hp > 0; k++) {
+    if (random() < p) {
+      hit = true;
+      v.hp -= P.fire.damageMin + random() * (P.fire.damageMax - P.fire.damageMin);
+      if (v.hp <= 0) ev.log(t.side ? 'log.enemyCasualty' : 'log.casualty', { unit: t.name });
+    }
+  }
+  const seen = !s.side || s.visible;
+  ev.effect({ kind: 'shot', x: m.x, y: m.y, tx: v.x, ty: v.y, life: 0.1, visible: seen, weapon: w.type, hit });
+  if (seen) ev.shot(s);
+}
+
+// Flanked: fire from two directions more than minAngleDeg apart within windowS.
+export function flanked(s, now) {
+  const F = P.flanking;
+  s.cond.incoming = s.cond.incoming.filter((f) => now - f.at <= F.windowS);
+  const a = s.cond.incoming;
+  const lim = (F.minAngleDeg * Math.PI) / 180;
+  for (let i = 0; i < a.length; i++)
+    for (let j = i + 1; j < a.length; j++) {
+      let d = Math.abs(a[i].angle - a[j].angle) % (2 * Math.PI);
+      if (d > Math.PI) d = 2 * Math.PI - d;
+      if (d > lim) return true;
+    }
+  return false;
+}

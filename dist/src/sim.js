@@ -1,13 +1,13 @@
-// Battle simulation: squads, orders, movement, combat, morale and mission end.
+// Battle simulation: squads, orders, movement, fire, unit state and mission end.
 // No DOM access here — the UI listens to events emitted through `hooks`.
 import { MISSION_TIME, HOLD_TIME } from './config.js';
 import { objective } from './scenario.js';
 import { t } from './text.js';
-const tr = t; // `t` is shadowed by target squads in fire()
-import { random, seedRandom } from './rng.js';
-import { dist, buildingAt, blocked, canWalk, coverAt, los, interiorSlots } from './terrain.js';
+import { seedRandom } from './rng.js';
+import { dist, buildingAt, blocked, canWalk, coverAt, interiorSlots } from './terrain.js';
 import { pathTo } from './nav.js';
-import { setThreatRules, resetThreat, stepThreat } from './threat.js';
+import { setThreatRules, resetThreat, stepThreat, CELL } from './threat.js';
+import { setFireRules, updateSpotting, fireUnit } from './fire.js';
 import { setConditionRules, newCondition, updateCondition } from './condition.js';
 
 export const state = {
@@ -38,7 +38,8 @@ export const playerSquads = () => state.squads.filter((s) => !s.side);
 
 export function soldierPose(m, s) {
   if (m.hp <= 0) return 'fallen';
-  if (!s.routed && (s.underFire > 0 || s.cond?.pinned || s.order === 'defend' || s.morale < 40)) return 'prone';
+  const c = s.cond;
+  if (!s.routed && (c?.pinned || c?.suppression > 25 || s.order === 'defend')) return 'prone';
   return m.moving ? 'walk' : 'ready';
 }
 
@@ -57,10 +58,14 @@ export function setForces(f) {
 }
 export const currentForces = () => forces;
 
-// State-model and threat-map parameters (data/rules/condition.json) and the weapon table.
+let weapons = {};
+// State-model, threat-map and fire parameters (data/rules/condition.json) and the weapon table.
 export function setRules(db) {
   setThreatRules(db.rules.condition);
   setConditionRules(db.rules.condition, db.weapons);
+  setFireRules(db.rules.fire, db.weapons, CELL);
+  fireRulesCheck = db.rules.fire.spotting.checkS;
+  weapons = db.weapons;
 }
 
 // Order states are keys; the interface text comes from data/text/en.json.
@@ -96,16 +101,13 @@ function buildSquad(unit, id, side) {
     split: unit.split ?? false,
     nation: side ? forces.enemy.nation : forces.player.nation,
     faction: (side ? forces.enemy.nation : forces.player.nation) === 'de' ? 'german' : 'soviet',
-    morale: 100,
-    ammo: 150,
     order: 'hold',
     orderHouse: null,
     path: [],
-    cooldown: 2 + id * 0.7,
     visible: !side,
     lastAI: 0,
-    underFire: 0,
     routed: false,
+    target: null,
     men: roster.map((def, i) => {
       const o = formationOffset(i, roster.length);
       return {
@@ -122,6 +124,9 @@ function buildSquad(unit, id, side) {
         aim: 0,
         role: def.role,
         weapon: def.weapon,
+        ammo: weapons[def.weapon] ? weapons[def.weapon].ammoCarried + weapons[def.weapon].magazine : 0,
+        ammoFull: weapons[def.weapon] ? weapons[def.weapon].ammoCarried + weapons[def.weapon].magazine : 0,
+        fireTimer: null,
         sprite: def.sprite ?? null,
         personId: def.personId ?? null,
         name: def.name ?? null,
@@ -156,6 +161,8 @@ export function reset() {
     logs: [],
     mode: 'move',
     debug: state.debug,
+    spotted: [new Set(), new Set()],
+    spotTimer: 0,
   });
   addLog(t('log.ready', { units: forces.player.units.length }));
   hooks.changed();
@@ -240,26 +247,21 @@ function finish(win, reason) {
 
 // ---- per-squad update steps -------------------------------------------------
 
-function updateVisibility(s) {
-  s.visible =
-    !s.side ||
-    state.squads.some(
-      (f) => !f.side && alive(f).length && dist(s, f) < 335 && alive(s).some((a) => alive(f).some((b) => los(a, b))),
-    );
-}
-
-function updateMorale(s, dt) {
-  s.morale = Math.min(100, s.morale + dt * (s.path.length ? 0.6 : 1.5));
-  if (s.morale < 22 && !s.routed) {
+// A broken unit falls back towards its own map edge; it stops when it has rallied.
+function updateBroken(s) {
+  const c = s.cond;
+  if (c.broken && !s.routed) {
     s.routed = true;
     s.path = pathTo(s, s.side ? 1130 : 70, s.y) || [];
     s.order = 'retreat';
+    s.orderHouse = null;
     addLog(t(s.side ? 'log.enemyRetreat' : 'log.retreat', { unit: s.name }));
   }
-  if (s.routed && s.morale > 48) {
+  if (s.routed && !c.broken) {
     s.routed = false;
     s.order = 'hold';
     s.path = [];
+    addLog(t(s.side ? 'log.enemyRallied' : 'log.rallied', { unit: s.name }));
   }
 }
 
@@ -267,7 +269,7 @@ function updateEnemyAI(s) {
   if (!s.side || s.routed || state.elapsed - s.lastAI <= 12) return;
   s.lastAI = state.elapsed;
   const target = state.squads
-    .filter((f) => !f.side && alive(f).length && los(s, f) && dist(s, f) < 310)
+    .filter((f) => !f.side && alive(f).length && state.spotted[1].has(f.id) && dist(s, f) < 310)
     .sort((a, b) => dist(a, s) - dist(b, s))[0];
   if (target && dist(target, s) < 245) {
     s.path = [];
@@ -280,10 +282,15 @@ function updateEnemyAI(s) {
 }
 
 function moveSquad(s, dt) {
+  s.advancing = false;
   if (!s.path.length) return;
   const p = s.path[0];
   const d = dist(s, p);
-  const speed = (s.underFire > 0 && !s.routed ? 9 : s.morale < 35 ? 10 : 24) * (s.routed ? 1.25 : 1);
+  // Suppression slows a unit; a pinned unit does not advance (a broken one still falls back).
+  const c = s.cond;
+  const speed = s.routed ? 30 : c.pinned ? 0 : 24 * (1 - c.suppression / 200);
+  s.advancing = speed > 0;
+  if (!speed) return;
   const step = Math.min(d, speed * dt);
   if (d > 0) {
     s.x += ((p.x - s.x) / d) * step;
@@ -312,7 +319,7 @@ function soldierTarget(s, m, i) {
     ty = s.y;
   }
   // A defending or suppressed soldier uses nearby cover without leaving the squad.
-  if (!home && !s.path.length && !s.routed && (s.underFire > 0 || s.order === 'defend')) {
+  if (!home && !s.path.length && !s.routed && (s.cond.suppression > 0 || s.order === 'defend')) {
     if (m.coverTimer <= 0 || !m.coverPoint) {
       let best = { x: tx, y: ty };
       let score = coverAt(tx, ty);
@@ -431,39 +438,6 @@ function moveSoldiers(s, dt) {
   }
 }
 
-function fire(s, dt) {
-  s.cooldown -= dt;
-  if (s.cooldown > 0 || s.ammo <= 0 || s.routed) return;
-  const targets = state.squads.filter(
-    (t) => t.side !== s.side && alive(t).length && dist(s, t) < 290 && alive(s).some((a) => alive(t).some((b) => los(a, b))),
-  );
-  targets.sort((a, b) => dist(a, s) - dist(b, s));
-  if (!targets.length) return;
-
-  const t = targets[0];
-  const attackers = alive(s);
-  const pairs = attackers.flatMap((a) => alive(t).filter((b) => los(a, b)).map((b) => ({ a, b })));
-  const { a: shooter, b: victim } = pairs[Math.floor(random() * pairs.length)];
-  const cover = Math.min(0.86, coverAt(victim.x, victim.y) + (soldierPose(victim, t) === 'prone' ? 0.14 : 0));
-  t.underFire = 5;
-  shooter.flash = 0.12;
-  shooter.aim = 1.2;
-  s.ammo -= 1;
-  s.cooldown = 0.55 + random() * 1.4;
-  shooter.angle = Math.atan2(victim.y - shooter.y, victim.x - shooter.x);
-  const seen = !s.side || s.visible;
-  state.effects.push({ kind: 'shot', x: shooter.x, y: shooter.y, tx: victim.x, ty: victim.y, life: 0.1, visible: seen });
-  t.morale = Math.max(0, t.morale - (2.3 + attackers.length * 0.45) * (1 - cover * 0.55));
-  if (random() < (0.35 - dist(s, t) / 1400) * (1 - cover) * (s.path.length ? 0.5 : 1)) {
-    victim.hp -= 45 + random() * 35;
-    if (victim.hp <= 0) {
-      addLog(tr(t.side ? 'log.enemyCasualty' : 'log.casualty', { unit: t.name }));
-      t.morale = Math.max(0, t.morale - 9);
-    }
-  }
-  if (seen) hooks.shot(s.x);
-}
-
 function updateObjective(dt) {
   const near = (s, r) => alive(s).length && dist(s, objective) < r;
   const friends = state.squads.some((s) => !s.side && !s.routed && near(s, objective.radius));
@@ -483,21 +457,31 @@ export function step(dt) {
   return true;
 }
 
+const fireEvents = {
+  log: (key, params) => addLog(t(key, params)),
+  shot: (s) => hooks.shot(s.x),
+  effect: (e) => state.effects.push(e),
+};
+let fireRulesCheck = 0.25;
+
 export function update(dt) {
   replansLeft = REPLAN_BUDGET;
   state.elapsed += dt;
   state.effects = state.effects.filter((e) => (e.life -= dt) > 0);
   stepThreat(dt);
+  state.spotTimer -= dt;
+  if (state.spotTimer <= 0) {
+    updateSpotting(state.squads, state);
+    state.spotTimer = fireRulesCheck;
+  }
   for (const s of state.squads) {
     if (!alive(s).length) continue;
-    s.underFire = Math.max(0, s.underFire - dt);
-    updateVisibility(s);
-    updateMorale(s, dt);
     updateEnemyAI(s);
     moveSquad(s, dt);
     moveSoldiers(s, dt);
-    fire(s, dt);
-    updateCondition(s, dt, state.squads);
+    fireUnit(s, dt, state.squads, state, fireEvents);
+    updateCondition(s, dt, state.squads, state.elapsed);
+    updateBroken(s);
   }
   updateObjective(dt);
 }

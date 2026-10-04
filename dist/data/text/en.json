@@ -92,7 +92,8 @@
   "morale": {
     "steady": "Steady",
     "shaken": "Shaken",
-    "broken": "Broken"
+    "broken": "Broken",
+    "pinned": "Pinned"
   },
   "cover": {
     "building": "Building",
@@ -124,7 +125,9 @@
     "casualty": "{unit} loses a man.",
     "enemyCasualty": "Enemy {unit} loses a man.",
     "won": "Mission accomplished.",
-    "ended": "The battle is over."
+    "ended": "The battle is over.",
+    "rallied": "{unit} has rallied.",
+    "enemyRallied": "Enemy {unit} has rallied."
   },
   "toast": {
     "recovering": "The unit is recovering and cannot take orders.",

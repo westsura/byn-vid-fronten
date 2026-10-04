@@ -34,13 +34,21 @@ function setHTML(el, html) {
 
 function squadCard(s) {
   const n = alive(s).length;
-  const morale = t(s.morale < 25 ? 'morale.broken' : s.morale < 55 ? 'morale.shaken' : 'morale.steady');
-  const colour = s.morale < 40 ? '#d89b70' : '#a4bd83';
+  // State from the state model: Broken, Pinned, Shaken (low cohesion) or Steady; the bar is cohesion.
+  const c = s.cond;
+  const morale = t(c.broken ? 'morale.broken' : c.pinned ? 'morale.pinned' : c.cohesion < 55 ? 'morale.shaken' : 'morale.steady');
+  const colour = c.broken ? '#d0705c' : c.cohesion < 55 ? '#d89b70' : '#a4bd83';
   return `<button class="squad ${s.id === state.selected ? 'selected' : ''}" data-squad="${s.id}" aria-pressed="${s.id === state.selected}" ${n ? '' : 'disabled'}>
 <div class="squad-top"><span class="number">${s.hotkey ?? ''}</span><strong>${s.name}</strong><span class="count">${n} / ${s.men.length}</span></div>
 <div class="squad-bottom"><span>${n ? orderText(s) : t('panel.out')}</span><span>${morale}</span></div>
-<div class="morale"><span style="width:${Math.round(s.morale)}%;background:${colour}"></span></div></button>`;
+<div class="morale"><span style="width:${Math.round(c.cohesion)}%;background:${colour}"></span></div></button>`;
 }
+
+// Rounds left as a share of what the unit carried at the start.
+const ammoPercent = (s) => {
+  const full = s.men.reduce((n, m) => n + (m.ammoFull ?? 0), 0);
+  return full ? Math.round((100 * s.men.reduce((n, m) => n + (m.hp > 0 ? m.ammo : 0), 0)) / full) : 0;
+};
 
 export function renderUI() {
   const s = state.squads[state.selected];
@@ -60,11 +68,11 @@ export function renderUI() {
   const house = buildingAt(s.x, s.y);
   const cover = coverAt(s.x, s.y);
   $('cover').textContent = house ? houseName(house.id) : t(cover > 0.6 ? 'cover.building' : cover > 0.3 ? 'cover.vegetation' : 'cover.open');
-  $('ammo').textContent = Math.round((s.ammo / 150) * 100) + ' %';
+  $('ammo').textContent = ammoPercent(s) + ' %';
   $('currentOrder').textContent = n ? orderText(s) : t('panel.out');
   $('posture').textContent = t(
     !n ? 'posture.out'
-    : s.underFire > 0 ? 'posture.pinned'
+    : s.cond.pinned ? 'posture.pinned'
     : s.order === 'defend' ? 'posture.defending'
     : s.path.length ? 'posture.moving' : 'posture.ready',
   );

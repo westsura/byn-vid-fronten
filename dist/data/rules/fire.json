@@ -1,0 +1,39 @@
+{
+  "_comment": "Eld och siktlinje (DESIGN.md, Eld och rörelse; PROMPTER steg 3 del A). Vapnens egna värden (räckvidd, eldhastighet, grundträff, nedhållning, tid till eldberedskap) ligger i weapons.json. Här ligger hur de räknas om till spelet. Startvärden att balansera.",
+  "metresPerUnit": 0.1,
+  "spotting": {
+    "_comment": "En fiendegrupp upptäcks när någon av sidans soldater har fri sikt till någon av dess soldater inom rangeUnits. Kontrolleras var checkS sekund.",
+    "rangeUnits": 335,
+    "checkS": 0.25
+  },
+  "sight": {
+    "_comment": "Siktlinje på hotkartans rutnät: husväggar blockerar exakt (dörrar och fönster är öppna). Rutor med träd och buskar är skymmande: varje mellanliggande skymmande ruta sänker träffchansen med perCellHitFactor, och fler än blockAfterCells skymmande rutor blockerar sikten helt.",
+    "perCellHitFactor": 0.8,
+    "blockAfterCells": 5
+  },
+  "fire": {
+    "_comment": "Varje soldat skjuter själv mot en upptäckt fiende inom räckhåll. Ett eldtillfälle är ett skott (gevär, pistol) eller en salva (kulsprutepistol, kulspruta). Intervallet följer vapnets rofPerMin, ±30 % slump.",
+    "roundsPerEvent": { "rifle": 1, "pistol": 1, "smg": 4, "lmg": 6 },
+    "intervalJitter": 0.3,
+    "targetRetargetS": 1.5,
+    "hitScale": 0.5,
+    "readinessFloor": 0.15,
+    "shooterSuppressionPenalty": 0.7,
+    "proneCover": 0.14,
+    "damageMin": 45,
+    "damageMax": 80
+  },
+  "effectOnTarget": {
+    "_comment": "Elden läggs in i hotkartan som en källa runt målet (radius rutor) som lever lifeS sekunder. Intensitet = vapnets suppression × rundor / intensityDivisor, minskad av målets skydd (coverFactor). Flera källor i samma ruta summeras upp till 1. Därifrån höjer hotkartan målets nedhållning (rules/condition.json).",
+    "radius": 1,
+    "lifeS": 1.5,
+    "intensityDivisor": 200,
+    "coverFactor": 0.5
+  },
+  "flanking": {
+    "_comment": "En grupp som beskjuts från två riktningar som skiljer mer än minAngleDeg inom windowS sekunder är flankerad och förlorar sammanhållning.",
+    "minAngleDeg": 90,
+    "windowS": 6,
+    "cohesionPerMin": 12
+  }
+}
