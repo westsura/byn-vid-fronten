@@ -6,7 +6,7 @@ import { setText, t } from './text.js';
 import { loadMode, modeFromUrl } from './art.js';
 import { loadMap, drawMap, drawPortrait } from './render.js';
 import { renderUI, toast, showResult, bindInput, applyStaticText, cursor } from './ui.js';
-import { fireSound } from './audio.js';
+import { fireSound, explosionSound } from './audio.js';
 
 const canvas = document.getElementById('map');
 const ctx = canvas.getContext('2d');
@@ -15,6 +15,7 @@ const portrait = document.getElementById('soldierDetail').getContext('2d');
 hooks.changed = renderUI;
 hooks.toast = toast;
 hooks.shot = fireSound;
+hooks.boom = explosionSound;
 hooks.finished = showResult;
 
 // Game data (units, people, weapons, ranks, text) from dist/data. Problems in the

@@ -703,3 +703,7 @@ p {
 .prototype-art .proto-badge {
   display:block;
 }
+.shake-select input {
+  width:80px;
+  accent-color:#b9a76e;
+}

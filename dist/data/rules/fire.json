@@ -13,7 +13,12 @@
   },
   "fire": {
     "_comment": "Varje soldat skjuter själv mot en upptäckt fiende inom räckhåll. Ett eldtillfälle är ett skott (gevär, pistol) eller en salva (kulsprutepistol, kulspruta). Intervallet följer vapnets rofPerMin, ±30 % slump.",
-    "roundsPerEvent": { "rifle": 1, "pistol": 1, "smg": 4, "lmg": 6 },
+    "roundsPerEvent": {
+      "rifle": 1,
+      "pistol": 1,
+      "smg": 4,
+      "lmg": 6
+    },
     "intervalJitter": 0.3,
     "targetRetargetS": 1.5,
     "hitScale": 0.5,
@@ -35,5 +40,23 @@
     "minAngleDeg": 90,
     "windowS": 6,
     "cohesionPerMin": 12
+  },
+  "grenades": {
+    "_comment": "Handgranater i närstrid. Varje Schütze/Strelok och Avtomatchik bär perMan granater (nationens typ). Var checkS sekund kan en stillastående grupp med mål inom kastavstånd kasta en, med chansen chancePerCheck. Granaten landar inom scatterM från målet och briserar efter vapnets fuseS. Explosionen läggs i hotkartan (båda sidor) och ger kamerastöt om spelaren kan se den.",
+    "byNation": {
+      "de": "stg24",
+      "su": "rgd33"
+    },
+    "throwers": [
+      "rifle",
+      "smg"
+    ],
+    "perMan": 1,
+    "checkS": 2,
+    "chancePerCheck": 0.3,
+    "minRangeM": 5,
+    "scatterM": 3,
+    "coverFactor": 0.7,
+    "threatLifeS": 2.5
   }
 }

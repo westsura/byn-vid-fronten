@@ -13,8 +13,9 @@
 //   the target's suppression (condition.js); hits cause casualties.
 import { W, H } from './config.js';
 import { woods } from './scenario.js';
-import { los, coverAt } from './terrain.js';
+import { los, coverAt, buildingAt } from './terrain.js';
 import { addSource } from './threat.js';
+import { addImpacts, addTracers, addTrauma, effectRules } from './effects.js';
 import { random } from './rng.js';
 
 let P = null;
@@ -191,16 +192,20 @@ function shootAt(s, m, w, t, v, h, rounds, state, ev) {
   // Direction of incoming fire, for flanking.
   t.cond.incoming.push({ at: state.elapsed, angle: Math.atan2(m.y - t.y, m.x - t.x) });
   const p = hitChance(w, s, m, t, v, h);
-  let hit = false;
+  let hits = 0;
   for (let k = 0; k < rounds && v.hp > 0; k++) {
     if (random() < p) {
-      hit = true;
+      hits++;
       v.hp -= P.fire.damageMin + random() * (P.fire.damageMax - P.fire.damageMin);
       if (v.hp <= 0) ev.log(t.side ? 'log.enemyCasualty' : 'log.casualty', { unit: t.name });
     }
   }
   const seen = !s.side || s.visible;
-  ev.effect({ kind: 'shot', x: m.x, y: m.y, tx: v.x, ty: v.y, life: 0.1, visible: seen, weapon: w.type, hit });
+  s.lastContact = t.lastContact = state.elapsed;
+  ev.effect({ kind: 'shot', x: m.x, y: m.y, tx: v.x, ty: v.y, life: 0.1, visible: seen, weapon: w.type, hit: hits > 0 });
+  // Impacts on the material where the rounds land, tracers for MG bursts.
+  addImpacts(state, m, v, rounds, hits);
+  addTracers(state, w, m, v, rounds, seen);
   if (seen) ev.shot(s);
 }
 
@@ -217,4 +222,84 @@ export function flanked(s, now) {
       if (d > lim) return true;
     }
   return false;
+}
+
+// ---- Hand grenades ----------------------------------------------------------
+// In close combat a unit that is not advancing can throw a grenade at its target:
+// a soldier with a grenade and a rifle or SMG, the target within his throwing
+// range. It lands near the target and goes off after the fuse time.
+
+export function grenadesFor(nation, weaponId) {
+  const G = P.grenades;
+  const w = weapons[weaponId];
+  return w && G.throwers.includes(w.type) && G.byNation[nation] ? G.perMan : 0;
+}
+
+export function throwGrenades(s, dt, state) {
+  const G = P.grenades;
+  s.grenadeTimer = (s.grenadeTimer ?? G.checkS * random()) - dt;
+  if (s.grenadeTimer > 0) return;
+  s.grenadeTimer = G.checkS;
+  const t = s.target;
+  if (!t || s.routed || s.advancing || random() >= G.chancePerCheck) return;
+  const g = weapons[G.byNation[s.nation]];
+  if (!g) return;
+  let best = null;
+  for (const m of living(s)) {
+    if (!(m.grenades > 0)) continue;
+    for (const v of living(t)) {
+      const d = metres(m, v);
+      if (d < G.minRangeM || d > g.throwRangeM || sight(m, v) === null) continue;
+      if (!best || d < best.d) best = { m, v, d };
+    }
+  }
+  if (!best) return;
+  const { m, v } = best;
+  m.grenades--;
+  m.aim = 1;
+  m.angle = Math.atan2(v.y - m.y, v.x - m.x);
+  const r = (G.scatterM / P.metresPerUnit) * Math.sqrt(random());
+  const a = random() * Math.PI * 2;
+  state.pending.push({ kind: 'grenade', at: state.elapsed + g.fuseS, x: v.x + Math.cos(a) * r, y: v.y + Math.sin(a) * r, weapon: g.id, by: s.id, side: s.side });
+  state.effects.push({ kind: 'thrown', x0: m.x, y0: m.y, x1: v.x, y1: v.y, life: 0.8, max: 0.8, visible: !s.side || s.visible });
+}
+
+// Can the player know about something at (x, y)? Own side did it, or an own
+// soldier is close by or can see the spot.
+export function playerKnows(squads, x, y, ownSide) {
+  if (ownSide === 0) return true;
+  const p = { x, y };
+  return squads.some((s) => !s.side && living(s).some((m) => {
+    const d = Math.hypot(m.x - x, m.y - y);
+    return d < 60 || (d < P.spotting.rangeUnits && sight(m, p) !== null);
+  }));
+}
+
+export function detonate(e, squads, state, ev, focus) {
+  const G = P.grenades;
+  const g = weapons[e.weapon];
+  const lethal = g.lethalRadiusM / P.metresPerUnit;
+  const blast = g.blastRadiusM / P.metresPerUnit;
+  for (const s of squads) {
+    let hitHere = false;
+    for (const m of living(s)) {
+      const d = Math.hypot(m.x - e.x, m.y - e.y);
+      if (d < blast) hitHere = true;
+      if (d >= lethal || !los(e, m)) continue;
+      const cover = buildingAt(m.x, m.y) ? 0 : coverAt(m.x, m.y);
+      const prone = s.cond.pinned || s.order === 'defend' ? 0.6 : 1;
+      if (random() < g.baseHit * (1 - d / lethal) * (1 - G.coverFactor * cover) * prone) {
+        m.hp = 0;
+        ev.log(s.side ? 'log.enemyCasualty' : 'log.casualty', { unit: s.name });
+      }
+    }
+    if (hitHere) s.lastContact = state.elapsed;
+  }
+  addSource({ x: e.x, y: e.y, radius: Math.max(1, Math.floor(blast / 2 / CELL)), life: G.threatLifeS, by: e.by, sides: [0, 1], intensity: g.suppression / 100 });
+  const known = playerKnows(squads, e.x, e.y, e.side);
+  state.effects.push({ kind: 'explosion', x: e.x, y: e.y, r: blast, life: 1.4, max: 1.4, seed: random(), visible: known });
+  if (known) {
+    addTrauma(state, e.x, e.y, effectRules().shake.grenadeTrauma, focus);
+    ev.boom(e.x);
+  }
 }

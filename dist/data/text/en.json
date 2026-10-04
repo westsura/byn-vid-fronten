@@ -13,7 +13,9 @@
     "graphicsLabel": "Graphics set",
     "soundOff": "Sound off",
     "soundOn": "Sound on",
-    "restart": "Restart"
+    "restart": "Restart",
+    "shake": "Shake",
+    "shakeLabel": "Camera shake strength"
   },
   "map": {
     "sector": "SECTOR 07",
@@ -135,7 +137,8 @@
     "split": "{unit} splits into MG-Trupp and Schützentrupp.",
     "merge": "{unit} is together again.",
     "barrelChange": "{unit}: {weapon} barrel change.",
-    "barrelDone": "{unit}: barrel changed, MG firing again."
+    "barrelDone": "{unit}: barrel changed, MG firing again.",
+    "contact": "{unit} in contact!"
   },
   "toast": {
     "recovering": "The unit is recovering and cannot take orders.",
@@ -176,7 +179,11 @@
     "fireOnRunning": "Test fire on the cell.",
     "fireOff": "Test fire removed.",
     "on": "Debug view on. Shift+click a cell for test fire.",
-    "off": "Debug view off."
+    "off": "Debug view off.",
+    "zoom": "Z: test zoom ×2 (edge markers)",
+    "explode": "Alt+click: test grenade",
+    "grenade": "Test grenade.",
+    "grenadePaused": "Test grenade set. It goes off when the battle runs."
   },
   "units": {
     "teamName": "{unit} · {team}"

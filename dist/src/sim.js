@@ -1,13 +1,14 @@
 // Battle simulation: squads, orders, movement, fire, unit state and mission end.
 // No DOM access here — the UI listens to events emitted through `hooks`.
-import { MISSION_TIME, HOLD_TIME } from './config.js';
+import { MISSION_TIME, HOLD_TIME, W, H } from './config.js';
 import { objective } from './scenario.js';
 import { t } from './text.js';
 import { seedRandom } from './rng.js';
 import { dist, buildingAt, blocked, canWalk, coverAt, interiorSlots } from './terrain.js';
 import { pathTo } from './nav.js';
 import { setThreatRules, resetThreat, stepThreat, CELL } from './threat.js';
-import { setFireRules, updateSpotting, fireUnit } from './fire.js';
+import { setFireRules, updateSpotting, fireUnit, grenadesFor, throwGrenades, detonate } from './fire.js';
+import { setEffectRules, stepEffects } from './effects.js';
 import { setConditionRules, newCondition, updateCondition } from './condition.js';
 
 export const state = {
@@ -30,6 +31,7 @@ export const hooks = {
   changed() {},
   toast() {},
   shot() {},
+  boom() {},
   finished() {},
 };
 
@@ -63,12 +65,15 @@ export const currentForces = () => forces;
 
 let weapons = {};
 let orderRules = null;
+let effectRules = null;
 // State-model, threat-map and fire parameters (data/rules/condition.json) and the weapon table.
 export function setRules(db) {
   setThreatRules(db.rules.condition);
   setConditionRules(db.rules.condition, db.weapons);
   setFireRules(db.rules.fire, db.weapons, CELL);
   orderRules = db.rules.orders;
+  setEffectRules(db.rules.effects);
+  effectRules = db.rules.effects;
   fireRulesCheck = db.rules.fire.spotting.checkS;
   weapons = db.weapons;
 }
@@ -135,6 +140,7 @@ function buildSquad(unit, id, side) {
         role: def.role,
         weapon: def.weapon,
         ammo: weapons[def.weapon] ? weapons[def.weapon].ammoCarried + weapons[def.weapon].magazine : 0,
+        grenades: grenadesFor(side ? forces.enemy.nation : forces.player.nation, def.weapon),
         roundsSinceChange: 0, // MG: rounds fired on the current barrel
         barrelChange: 0, // MG: seconds left of a barrel change
         ammoFull: weapons[def.weapon] ? weapons[def.weapon].ammoCarried + weapons[def.weapon].magazine : 0,
@@ -175,6 +181,9 @@ export function reset() {
     debug: state.debug,
     spotted: [new Set(), new Set()],
     spotTimer: 0,
+    pending: [], // grenades in the air
+    trauma: 0, // camera shake (effects.js)
+    view: state.view ?? { x: 0, y: 0, w: W, h: H }, // the part of the map on screen (set by render.js)
   });
   addLog(t('log.ready', { units: forces.player.units.length }));
   hooks.changed();
@@ -331,6 +340,12 @@ export function merge(id = state.selected) {
   addLog(t('log.merge', { unit: a.groupName }));
   hooks.changed();
   return true;
+}
+
+// Debug test tool: a grenade (Soviet type, thrown by "test") goes off at (x, y)
+// on the next update.
+export function testGrenade(x, y) {
+  state.pending.push({ kind: 'grenade', at: state.elapsed, x, y, weapon: 'rgd33', by: 'test', side: 1 });
 }
 
 export function togglePause() {
@@ -573,8 +588,23 @@ export function step(dt) {
 const fireEvents = {
   log: (key, params) => addLog(t(key, params)),
   shot: (s) => hooks.shot(s.x),
+  boom: (x) => hooks.boom(x),
   effect: (e) => state.effects.push(e),
 };
+
+// Combat contact of own units: firing or under fire in the last holdS seconds.
+// Off screen it is marked at the map edge (render.js) and logged once in a while.
+export const inContact = (s) => s.lastContact != null && state.elapsed - s.lastContact < effectRules.contact.holdS;
+export const offScreen = (s, margin = 20) => {
+  const v = state.view;
+  return s.x < v.x - margin || s.y < v.y - margin || s.x > v.x + v.w + margin || s.y > v.y + v.h + margin;
+};
+function logContact(s) {
+  if (s.side || !inContact(s) || !offScreen(s)) return;
+  if (s.contactLogged != null && state.elapsed - s.contactLogged < effectRules.contact.logEveryS) return;
+  s.contactLogged = state.elapsed;
+  addLog(t('log.contact', { unit: s.name }));
+}
 let fireRulesCheck = 0.25;
 
 export function update(dt) {
@@ -582,6 +612,10 @@ export function update(dt) {
   state.elapsed += dt;
   state.effects = state.effects.filter((e) => (e.life -= dt) > 0);
   stepThreat(dt);
+  stepEffects(state, dt);
+  const focus = state.squads[state.selected];
+  for (const e of state.pending.filter((p) => p.at <= state.elapsed)) detonate(e, state.squads, state, fireEvents, focus);
+  state.pending = state.pending.filter((p) => p.at > state.elapsed);
   state.spotTimer -= dt;
   if (state.spotTimer <= 0) {
     updateSpotting(state.squads, state);
@@ -593,6 +627,8 @@ export function update(dt) {
     moveSquad(s, dt);
     moveSoldiers(s, dt);
     fireUnit(s, dt, state.squads, state, fireEvents);
+    throwGrenades(s, dt, state);
+    logContact(s);
     updateCondition(s, dt, state.squads, state.elapsed);
     updateBroken(s);
   }

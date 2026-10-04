@@ -4,13 +4,15 @@ import { STEP } from './config.js';
 export const objective = { x: 755, y: 290, radius: 68, enemyRadius: 100 };
 
 // `name` is an internal label; the interface shows map.buildings[id] from data/text/en.json.
+// `material` decides how hits look (wood: log houses / izby; stone: the brick
+// farmhouse and storehouse). Map geometry moves to data files with the new map.
 export const buildings = [
-  { name: 'West house', x: 444, y: 120, w: 115, h: 99 },
-  { name: 'Farmhouse', x: 689, y: 145, w: 134, h: 102 },
-  { name: 'East house', x: 965, y: 170, w: 107, h: 89 },
-  { name: 'Barn', x: 485, y: 426, w: 133, h: 89 },
-  { name: 'South house', x: 759, y: 428, w: 123, h: 97 },
-  { name: 'Storehouse', x: 983, y: 443, w: 104, h: 115 },
+  { name: 'West house', material: 'wood', x: 444, y: 120, w: 115, h: 99 },
+  { name: 'Farmhouse', material: 'stone', x: 689, y: 145, w: 134, h: 102 },
+  { name: 'East house', material: 'wood', x: 965, y: 170, w: 107, h: 89 },
+  { name: 'Barn', material: 'wood', x: 485, y: 426, w: 133, h: 89 },
+  { name: 'South house', material: 'wood', x: 759, y: 428, w: 123, h: 97 },
+  { name: 'Storehouse', material: 'stone', x: 983, y: 443, w: 104, h: 115 },
 ];
 buildings.forEach((b, i) => {
   b.id = i;

@@ -1,7 +1,10 @@
 // Canvas rendering of the map, buildings, squads and effects. Reads state only.
 import { W, H } from './config.js';
 import { buildings, objective } from './scenario.js';
-import { state, alive, formationOffset, houseName } from './sim.js';
+import { state, alive, formationOffset, houseName, playerSquads, inContact, offScreen } from './sim.js';
+import { shakeAmount, effectRules } from './effects.js';
+import { fireRules } from './fire.js';
+import { cam, view, toScreen } from './camera.js';
 import { buildingAt } from './terrain.js';
 import { drawUnit, isPrototype } from './art.js';
 import { t } from './text.js';
@@ -271,12 +274,14 @@ function drawDebugLegend(ctx) {
     ['rgba(60,120,235,0.6)', t('debug.threatEnemy')],
     ['rgba(240,170,40,0.5)', t('debug.discomfort')],
     [null, t('debug.tool')],
+    [null, t('debug.explode')],
+    [null, t('debug.zoom')],
   ];
   const x = W - 238;
-  const y = H - 128;
+  const y = H - 166;
   ctx.save();
   ctx.fillStyle = '#0b0f0be6';
-  ctx.fillRect(x, y, 226, 112);
+  ctx.fillRect(x, y, 226, 150);
   ctx.textAlign = 'left';
   ctx.fillStyle = '#f0e6c4';
   ctx.font = 'bold 11px system-ui';
@@ -294,24 +299,183 @@ function drawDebugLegend(ctx) {
   ctx.restore();
 }
 
+// Pseudo-random 0..1 from a seed, so particles stay put from frame to frame.
+const rnd = (seed, k) => {
+  const x = Math.sin(seed * 9301 + k * 49297) * 233280;
+  return x - Math.floor(x);
+};
+
+// Impact on a material: the look teaches the cover. Wood: light splinters and a
+// tan puff; stone: a pale dust cloud and grey chips; earth: dark spray and dust.
+function drawImpact(ctx, e) {
+  const age = e.max - e.life - (e.delay ?? 0);
+  if (age < 0) return;
+  const k = age / (e.max - (e.delay ?? 0)); // 0 → 1
+  const back = e.dir + Math.PI; // debris flies back towards the shooter
+  ctx.save();
+  ctx.globalAlpha = Math.max(0, 1 - k);
+  if (e.material === 'stone') {
+    ctx.fillStyle = '#d9d4c8';
+    circle(ctx, e.x, e.y, 4 + k * 14, '#e2ddd0bb', true);
+    ctx.fillStyle = '#9b9890';
+    for (let i = 0; i < 5; i++) {
+      const a = back + (rnd(e.seed, i) - 0.5) * 2.2;
+      const d = 3 + k * (9 + rnd(e.seed, i + 9) * 12);
+      ctx.fillRect(e.x + Math.cos(a) * d - 1.2, e.y + Math.sin(a) * d - 1.2, 2.4, 2.4);
+    }
+  } else if (e.material === 'wood') {
+    circle(ctx, e.x, e.y, 3 + k * 8, '#c4a46ea0', true);
+    ctx.strokeStyle = '#f0d39a';
+    ctx.lineWidth = 1.6;
+    for (let i = 0; i < 5; i++) {
+      const a = back + (rnd(e.seed, i) - 0.5) * 2.4;
+      const d0 = 2 + k * (7 + rnd(e.seed, i + 3) * 11);
+      const len = 4 + rnd(e.seed, i + 7) * 4;
+      const x = e.x + Math.cos(a) * d0;
+      const y = e.y + Math.sin(a) * d0;
+      ctx.beginPath();
+      ctx.moveTo(x, y);
+      ctx.lineTo(x + Math.cos(a + 0.6) * len, y + Math.sin(a + 0.6) * len);
+      ctx.stroke();
+    }
+  } else {
+    circle(ctx, e.x, e.y, 3 + k * 10, '#c9b48cc0', true);
+    ctx.fillStyle = '#3e2f1e';
+    for (let i = 0; i < 6; i++) {
+      const a = back + (rnd(e.seed, i) - 0.5) * 1.6;
+      const d = 2 + k * (5 + rnd(e.seed, i + 5) * 14);
+      ctx.fillRect(e.x + Math.cos(a) * d - 1.4, e.y + Math.sin(a) * d - 1.4, 2.8, 2.8);
+    }
+  }
+  ctx.restore();
+}
+
+// Tracer: a short glowing streak flying from start to impact.
+function drawTracer(ctx, e) {
+  const age = e.max - e.life - e.delay;
+  if (age < 0 || age > e.dur) return;
+  const p = age / e.dur;
+  const len = Math.min(30, Math.hypot(e.x1 - e.x0, e.y1 - e.y0));
+  const dx = e.x1 - e.x0;
+  const dy = e.y1 - e.y0;
+  const d = Math.hypot(dx, dy) || 1;
+  const hx = e.x0 + dx * p;
+  const hy = e.y0 + dy * p;
+  const tx = hx - (dx / d) * len;
+  const ty = hy - (dy / d) * len;
+  ctx.save();
+  const g = ctx.createLinearGradient(tx, ty, hx, hy);
+  g.addColorStop(0, '#ffb34a00');
+  g.addColorStop(1, '#ffe7a8ff');
+  ctx.strokeStyle = g;
+  ctx.lineWidth = 2.2;
+  ctx.lineCap = 'round';
+  ctx.beginPath();
+  ctx.moveTo(tx, ty);
+  ctx.lineTo(hx, hy);
+  ctx.stroke();
+  ctx.restore();
+}
+
+// Grenade explosion: a short flash, then a spreading cloud of dust and smoke with
+// thrown earth.
+function drawExplosion(ctx, e) {
+  const age = e.max - e.life;
+  const k = age / e.max;
+  const r = e.r * 0.55;
+  ctx.save();
+  if (age < 0.15) {
+    ctx.globalAlpha = 1 - age / 0.15;
+    circle(ctx, e.x, e.y, r * 0.5, '#fff1c4', true);
+    circle(ctx, e.x, e.y, r * 0.8, '#ffb85a88', true);
+  }
+  ctx.globalAlpha = Math.max(0, 0.85 * (1 - k));
+  for (let i = 0; i < 7; i++) {
+    const a = rnd(e.seed, i) * Math.PI * 2;
+    const d = r * (0.2 + 0.6 * k) * rnd(e.seed, i + 11);
+    circle(ctx, e.x + Math.cos(a) * d, e.y + Math.sin(a) * d, r * (0.25 + 0.45 * k), i % 2 ? '#6b5f4c99' : '#8d826c88', true);
+  }
+  ctx.fillStyle = '#3e3020';
+  for (let i = 0; i < 14; i++) {
+    const a = rnd(e.seed, i + 30) * Math.PI * 2;
+    const d = r * (0.3 + 1.1 * Math.min(1, k * 2.5)) * (0.5 + rnd(e.seed, i + 50) / 2);
+    ctx.fillRect(e.x + Math.cos(a) * d - 1.2, e.y + Math.sin(a) * d - 1.2, 2.4, 2.4);
+  }
+  ctx.restore();
+}
+
 function drawEffects(ctx) {
   for (const e of state.effects) {
-    if (e.kind === 'shot' && e.visible) {
-      ctx.strokeStyle = '#f8e9a4b0';
-      ctx.lineWidth = 1.2;
-      ctx.beginPath();
-      ctx.moveTo(e.x, e.y);
-      ctx.lineTo(e.tx, e.ty);
-      ctx.stroke();
-      circle(ctx, e.x, e.y, 5, '#ffeac1', true);
+    if (e.kind === 'impact') drawImpact(ctx, e);
+    else if (e.kind === 'tracer') drawTracer(ctx, e);
+    else if (e.kind === 'explosion' && e.visible) drawExplosion(ctx, e);
+    else if (e.kind === 'thrown' && e.visible) {
+      const p = 1 - e.life / e.max;
+      const x = e.x0 + (e.x1 - e.x0) * p;
+      const y = e.y0 + (e.y1 - e.y0) * p - Math.sin(p * Math.PI) * 18;
+      circle(ctx, x, y, 2.2, '#2b2a24', true);
     } else if (e.kind === 'order') {
       circle(ctx, e.x, e.y, 12 + (1.5 - e.life) * 15, '#f1e4b5');
     }
   }
 }
 
+// Camera shake from explosions (effects.js trauma). Only the map moves; the
+// panels outside the canvas and the screen-space overlays stay still.
+let shakeStrength = 1;
+export const setShakeStrength = (v) => (shakeStrength = v);
+function shakeOffset(t) {
+  const a = shakeAmount(state) * effectRules().shake.maxOffsetPx * shakeStrength;
+  return { x: a * (Math.sin(t * 47.3) + Math.sin(t * 91.7 + 1.3)) / 2, y: a * (Math.sin(t * 53.9 + 0.7) + Math.sin(t * 77.1 + 2.1)) / 2 };
+}
+
+// Edge markers: own units in contact outside the view, shown as an arrow on the
+// map edge pointing at them, with the unit's name.
+function drawEdgeMarkers(ctx) {
+  const v = state.view;
+  const cx = v.x + v.w / 2;
+  const cy = v.y + v.h / 2;
+  for (const s of playerSquads()) {
+    if (!alive(s).length || !inContact(s) || !offScreen(s)) continue;
+    const dx = s.x - cx;
+    const dy = s.y - cy;
+    const k = Math.min((v.w / 2 - 14 / cam.zoom) / Math.abs(dx || 1e-6), (v.h / 2 - 14 / cam.zoom) / Math.abs(dy || 1e-6));
+    const p = toScreen(cx + dx * k, cy + dy * k);
+    const a = Math.atan2(dy, dx);
+    const pulse = 0.65 + 0.35 * Math.sin(performance.now() / 160);
+    ctx.save();
+    ctx.translate(p.x, p.y);
+    ctx.rotate(a);
+    ctx.fillStyle = `rgba(232,120,70,${pulse})`;
+    ctx.beginPath();
+    ctx.moveTo(12, 0);
+    ctx.lineTo(-8, -10);
+    ctx.lineTo(-4, 0);
+    ctx.lineTo(-8, 10);
+    ctx.closePath();
+    ctx.fill();
+    ctx.restore();
+    ctx.font = 'bold 11px system-ui';
+    const label = s.name.toUpperCase();
+    const w = ctx.measureText(label).width + 10;
+    const lx = Math.max(4, Math.min(W - w - 4, p.x - w / 2 - Math.cos(a) * (w / 2 + 14)));
+    const ly = Math.max(4, Math.min(H - 20, p.y - 8 - Math.sin(a) * 20));
+    ctx.fillStyle = '#3a1c12e8';
+    ctx.fillRect(lx, ly, w, 16);
+    ctx.fillStyle = '#ffd2b8';
+    ctx.textAlign = 'left';
+    ctx.fillText(label, lx + 5, ly + 12);
+  }
+}
+
 export function drawMap(ctx, cursor) {
-  ctx.clearRect(0, 0, W, H);
+  state.view = view();
+  ctx.setTransform(1, 0, 0, 1, 0, 0);
+  ctx.fillStyle = '#121812';
+  ctx.fillRect(0, 0, W, H);
+  // World layer: camera (zoom, position) and shake.
+  const sh = shakeOffset(performance.now() / 1000);
+  ctx.setTransform(cam.zoom, 0, 0, cam.zoom, sh.x - cam.x * cam.zoom, sh.y - cam.y * cam.zoom);
   if (mapLoaded) ctx.drawImage(mapImage, 0, 0, W, H);
   else drawFallbackMap(ctx);
   ctx.fillStyle = '#18211724';
@@ -324,11 +488,11 @@ export function drawMap(ctx, cursor) {
   drawBuildings(ctx);
 
   const sel = state.squads[state.selected];
-  if (sel && alive(sel).length) {
-    // Approximate firing range of the selected squad
+  if (sel && alive(sel).length && fireRules()) {
+    // Spotting range of the selected unit
     ctx.setLineDash([3, 7]);
     ctx.lineWidth = 1;
-    circle(ctx, sel.x, sel.y, 290, '#e5e8c21f');
+    circle(ctx, sel.x, sel.y, fireRules().spotting.rangeUnits, '#e5e8c21f');
     ctx.setLineDash([]);
   }
   drawObjective(ctx);
@@ -337,16 +501,17 @@ export function drawMap(ctx, cursor) {
   for (const s of state.squads) if (!s.side || s.visible) for (const m of s.men) if (m.hp <= 0) drawUnit(ctx, m, s, state.elapsed, 1.12);
   for (const s of state.squads) if (!s.side || s.visible) drawSquad(ctx, s);
   drawEffects(ctx);
-  if (state.debug) {
-    drawDebugValues(ctx);
-    drawDebugLegend(ctx);
-  }
-
+  if (state.debug) drawDebugValues(ctx);
   if (cursor) {
     ctx.strokeStyle = '#fff';
     ctx.lineWidth = 2;
     ctx.strokeRect(cursor.x - 8, cursor.y - 8, 16, 16);
   }
+
+  // Screen layer: still, whatever the camera does.
+  ctx.setTransform(1, 0, 0, 1, 0, 0);
+  drawEdgeMarkers(ctx);
+  if (state.debug) drawDebugLegend(ctx);
   if (state.paused && state.started && !state.ended) {
     ctx.fillStyle = '#11181155';
     ctx.fillRect(0, 0, W, H);

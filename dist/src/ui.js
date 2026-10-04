@@ -1,12 +1,13 @@
 // DOM side panel, overlays and input handling.
 import { MISSION_TIME, HOLD_TIME } from './config.js';
-import { state, alive, playerSquads, select, issue, defend, split, canSplit, setMode, togglePause, reset, orderText, houseName } from './sim.js';
+import { state, alive, playerSquads, select, issue, defend, split, canSplit, setMode, togglePause, reset, orderText, houseName, testGrenade } from './sim.js';
 import { buildingAt, coverAt } from './terrain.js';
 import { setSound, soundEnabled, resumeAudio } from './audio.js';
 import { MODES, artMode, isPrototype, urlForMode, modeBadge } from './art.js';
 import { t } from './text.js';
 import { toggleTestFire } from './threat.js';
-import { squadRadius } from './render.js';
+import { toWorld, cam, setZoom } from './camera.js';
+import { squadRadius, setShakeStrength } from './render.js';
 
 const $ = (id) => document.getElementById(id);
 export let cursor = null;
@@ -112,8 +113,14 @@ export function bindInput(canvas, W, H) {
   canvas.addEventListener('pointerdown', (e) => {
     if (state.ended || !$('intro').hidden) return;
     const r = canvas.getBoundingClientRect();
-    const x = ((e.clientX - r.left) * W) / r.width;
-    const y = ((e.clientY - r.top) * H) / r.height;
+    const { x, y } = toWorld(((e.clientX - r.left) * W) / r.width, ((e.clientY - r.top) * H) / r.height);
+    if (state.debug && e.altKey) {
+      // Debug test tool: a grenade goes off here (camera shake, effects, threat).
+      testGrenade(x, y);
+      toast(t(state.started && !state.paused ? 'debug.grenade' : 'debug.grenadePaused'));
+      canvas.focus();
+      return;
+    }
     if (state.debug && e.shiftKey) {
       // Debug test tool: toggle test fire on the cell.
       const on = toggleTestFire(x, y);
@@ -140,6 +147,8 @@ export function bindInput(canvas, W, H) {
   $('restart').onclick = () => {
     if (!state.started || state.ended || confirm(t('toast.confirmRestart'))) restart();
   };
+  const shake = $('shake');
+  if (shake) shake.oninput = () => setShakeStrength(shake.value / 100);
   $('sound').onclick = () => {
     setSound(!soundEnabled());
     $('sound').textContent = t(soundEnabled() ? 'header.soundOn' : 'header.soundOff');
@@ -156,6 +165,10 @@ export function bindInput(canvas, W, H) {
     if (hot) select(hot.id);
     if (e.key.toLowerCase() === 'd') defend();
     if (e.key.toLowerCase() === 's') split();
+    if (e.key.toLowerCase() === 'z') {
+      // Provisional test zoom (step 4 brings the real zoom levels).
+      setZoom(cam.zoom === 1 ? 2 : 1, state.squads[state.selected]);
+    }
     if (e.key.toLowerCase() === 'g') {
       state.debug = !state.debug;
       toast(t(state.debug ? 'debug.on' : 'debug.off'));

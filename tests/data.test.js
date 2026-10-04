@@ -81,7 +81,7 @@ test('ranks and awards: Heer, Waffen-SS and Red Army; SS ranks map to Heer equiv
 test('weapons: every unit type is in service in the scenario year and MG34 has a barrel change', () => {
   assert.equal(db.scenario.year, 1943);
   assert.ok(db.weapons.mg34.barrelChange.afterRounds > 0);
-  for (const w of Object.values(db.weapons)) {
+  for (const w of Object.values(db.weapons).filter((x) => x.type !== 'grenade')) {
     for (const k of ['effectiveRangeM', 'rofPerMin', 'magazine', 'baseHit', 'suppression', 'readyTimeS']) assert.equal(typeof w[k], 'number', `${w.id}.${k}`);
   }
 });
