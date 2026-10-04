@@ -15,7 +15,9 @@
     "soundOn": "Sound on",
     "restart": "Restart",
     "shake": "Shake",
-    "shakeLabel": "Camera shake strength"
+    "shakeLabel": "Camera shake strength",
+    "autoPauseOn": "Auto-pause on contact: on",
+    "autoPauseOff": "Auto-pause on contact: off"
   },
   "map": {
     "sector": "SECTOR 07",
@@ -23,7 +25,7 @@
     "objective": "FARMYARD",
     "enemy": "ENEMY",
     "pausedBanner": "PAUSED — GIVE YOUR ORDERS",
-    "ariaLabel": "Battle map. Select a unit with 1–4. Click the map to move. Arrow keys move the order cursor and Enter gives the order.",
+    "ariaLabel": "Battle map. Select a unit with 1–4; press again to centre on it. Click the map to give the order. Arrow keys move the order cursor and Enter gives the order; Shift and arrow keys move the camera.",
     "buildings": [
       "West house",
       "Farmhouse",
@@ -34,7 +36,11 @@
     ],
     "legendOwn": "Own unit",
     "legendEnemy": "Spotted enemy",
-    "legendObjective": "Objective"
+    "legendObjective": "Objective",
+    "zoomLabel": "Zoom level",
+    "zoomMap": "Map",
+    "zoomPlatoon": "Platoon",
+    "zoomUnit": "Unit"
   },
   "phase": {
     "planning": "PLANNING",
@@ -51,7 +57,12 @@
     "beginBrief": "Start battle",
     "again": "Play again →",
     "split": "⑂ Split",
-    "merge": "⑃ Merge"
+    "merge": "⑃ Merge",
+    "fast": "» Fast Move",
+    "crawl": "⤓ Crawl",
+    "fire": "✛ Fire",
+    "retreat": "↩ Retreat",
+    "halfSpeed": "½ Speed"
   },
   "brief": {
     "eyebrow": "YOUR MISSION",
@@ -80,12 +91,10 @@
     "footer": "Early playable version · Simplified simulation",
     "leader": "Leader",
     "out": "Out of action",
-    "helpMove": "Click the ground to move, or a house to enter it through the door.",
-    "helpDefend": "The unit holds its position with better cover. Click the map for a new defensive position.",
     "keysClick": "CLICK",
-    "keysClickText": "Select / move",
+    "keysClickText": "Select / order",
     "keysUnits": "1–4",
-    "keysUnitsText": "Select unit",
+    "keysUnitsText": "Select (twice: centre)",
     "keysSpace": "SPACE",
     "keysSpaceText": "Pause",
     "keysDefend": "D",
@@ -93,7 +102,28 @@
     "keysDebug": "G",
     "keysDebugText": "Debug view",
     "keysSplit": "S",
-    "keysSplitText": "Split / merge"
+    "keysSplitText": "Split / merge",
+    "help": {
+      "move": "Click the ground to move, or a house to enter it through the door.",
+      "fast": "Fast Move: click where to run. Faster, but easier to see and hit, and no fire readiness on the way.",
+      "crawl": "Crawl: click where to crawl. Slow, but hard to see and hit; a pinned unit can still crawl.",
+      "position": "Defend: the unit holds here with better cover. Click the map to move to a new defensive position.",
+      "fire": "Fire: click a spotted enemy unit. The selected units hold their position and concentrate their fire on it."
+    },
+    "noLeader": "No leader",
+    "fitTitle": "Men fit to fight / strength",
+    "readiness": "Fire readiness",
+    "cohesion": "Cohesion",
+    "keysModes": "M R C F",
+    "keysModesText": "Move · Fast · Crawl · Fire",
+    "keysRetreat": "B",
+    "keysRetreatText": "Retreat",
+    "keysHalf": "H",
+    "keysHalfText": "Half speed",
+    "keysZoom": "+ − / wheel",
+    "keysZoomText": "Zoom level",
+    "keysPan": "Right-drag / Shift+arrows",
+    "keysPanText": "Move camera"
   },
   "morale": {
     "steady": "Steady",
@@ -119,7 +149,10 @@
     "enter": "Entering {house}",
     "position": "Taking up position",
     "defend": "Defending",
-    "retreat": "Retreating"
+    "retreat": "Retreating",
+    "fast": "Moving fast",
+    "crawl": "Crawling",
+    "fire": "Concentrating fire"
   },
   "log": {
     "ready": "{units} units ready. Give orders and start the battle.",
@@ -138,7 +171,12 @@
     "merge": "{unit} is together again.",
     "barrelChange": "{unit}: {weapon} barrel change.",
     "barrelDone": "{unit}: barrel changed, MG firing again.",
-    "contact": "{unit} in contact!"
+    "contact": "{unit} in contact!",
+    "fastOrder": "{unit}: fast move.",
+    "crawlOrder": "{unit}: crawling forward.",
+    "positionOrder": "{unit}: moving to a defensive position.",
+    "fireOrder": "{unit}: concentrate fire!",
+    "retreatOrder": "{unit}: falling back."
   },
   "toast": {
     "recovering": "The unit is recovering and cannot take orders.",
@@ -149,7 +187,9 @@
     "confirmRestart": "End this battle and start over?",
     "confirmGraphics": "Changing graphics restarts the battle. Continue?",
     "cannotSplit": "This unit cannot split. A Gruppe needs both its Gruppenführer and Truppführer to split.",
-    "tooFarToMerge": "The two Trupps are too far apart to merge. Move them together first."
+    "tooFarToMerge": "The two Trupps are too far apart to merge. Move them together first.",
+    "noTarget": "Click a spotted enemy unit to fire on.",
+    "autoPaused": "{unit} in contact. Paused."
   },
   "result": {
     "held": "You held the objective for {hold} seconds.",
@@ -180,7 +220,6 @@
     "fireOff": "Test fire removed.",
     "on": "Debug view on. Shift+click a cell for test fire.",
     "off": "Debug view off.",
-    "zoom": "Z: test zoom ×2 (edge markers)",
     "explode": "Alt+click: test grenade",
     "grenade": "Test grenade.",
     "grenadePaused": "Test grenade set. It goes off when the battle runs."

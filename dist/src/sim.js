@@ -44,7 +44,7 @@ export const playerSquads = () => state.squads.filter((s) => !s.side && !s.absor
 export function soldierPose(m, s) {
   if (m.hp <= 0) return 'fallen';
   const c = s.cond;
-  if (!s.routed && (c?.pinned || c?.suppression > 25 || s.order === 'defend')) return 'prone';
+  if (!s.routed && (c?.pinned || c?.suppression > 25 || s.order === 'defend' || (s.moveMode === 'crawl' && s.path?.length))) return 'prone';
   return m.moving ? 'walk' : 'ready';
 }
 
@@ -65,12 +65,13 @@ export const currentForces = () => forces;
 
 let weapons = {};
 let orderRules = null;
+export const orderRulesUI = () => orderRules;
 let effectRules = null;
 // State-model, threat-map and fire parameters (data/rules/condition.json) and the weapon table.
 export function setRules(db) {
   setThreatRules(db.rules.condition);
   setConditionRules(db.rules.condition, db.weapons);
-  setFireRules(db.rules.fire, db.weapons, CELL);
+  setFireRules(db.rules.fire, db.weapons, CELL, db.rules.orders.movement);
   orderRules = db.rules.orders;
   setEffectRules(db.rules.effects);
   effectRules = db.rules.effects;
@@ -123,6 +124,8 @@ function buildSquad(unit, id, side) {
     lastAI: 0,
     routed: false,
     target: null,
+    fireTarget: null,
+    moveMode: 'move',
     men: roster.map((def, i) => {
       const o = formationOffset(i, roster.length);
       return {
@@ -184,32 +187,81 @@ export function reset() {
     pending: [], // grenades in the air
     trauma: 0, // camera shake (effects.js)
     view: state.view ?? { x: 0, y: 0, w: W, h: H }, // the part of the map on screen (set by render.js)
+    selection: [],
+    speed: 1,
+    autoPause: state.autoPause ?? false,
   });
+  state.selection = [state.selected];
   addLog(t('log.ready', { units: forces.player.units.length }));
   hooks.changed();
 }
 
-export function select(id) {
+// ---- Selection ----------------------------------------------------------------
+// state.selection: the selected own units; state.selected: the primary one (its
+// details are shown in the panel). A split Gruppe can be selected as one half or
+// as both halves together.
+export const selectedUnits = () => state.selection.map((id) => state.squads[id]).filter((s) => s && !s.side && !s.absorbed && alive(s).length);
+
+export function select(id, add = false) {
   const s = state.squads[id];
   if (!s || s.side || !alive(s).length) return;
+  state.selection = add ? [...new Set([...state.selection, id])] : [id];
   state.selected = id;
   hooks.changed();
 }
+
+// Both halves of a split Gruppe (or the whole Gruppe when it is not split).
+export const groupUnits = (group) => playerSquads().filter((q) => q.group === group && alive(q).length);
+export function selectGroup(group) {
+  const units = groupUnits(group);
+  if (!units.length) return;
+  state.selection = units.map((q) => q.id);
+  state.selected = units[0].id;
+  hooks.changed();
+}
+
+// ---- Orders (DESIGN.md, Order och kontroll) -----------------------------------
+// Map-click modes: move, fast, crawl, position (move then defend), fire (click an
+// enemy unit). Defend, Retreat and Split/Merge act at once.
+export const MOVE_MODES = ['move', 'fast', 'crawl', 'position'];
 
 export function setMode(mode) {
   state.mode = mode;
   hooks.changed();
 }
 
-export function issue(x, y) {
-  const s = state.squads[state.selected];
+function orderable(s) {
   if (state.ended || !s || !alive(s).length) return false;
   if (s.routed) {
     hooks.toast(t('toast.recovering'));
     return false;
   }
-  x = Math.max(10, Math.min(1190, x));
-  y = Math.max(10, Math.min(790, y));
+  return true;
+}
+
+// A map click: a fire order on a spotted enemy unit, or a move order for every
+// selected unit (they keep their positions relative to the primary unit).
+export function issue(x, y) {
+  if (state.ended) return false;
+  if (state.mode === 'fire') return fireAt(x, y);
+  const units = selectedUnits();
+  const primary = state.squads[state.selected];
+  if (!units.length || !primary) return false;
+  let any = false;
+  for (const s of units) {
+    if (!orderable(s)) continue;
+    const dx = units.length > 1 ? s.x - primary.x : 0;
+    const dy = units.length > 1 ? s.y - primary.y : 0;
+    any = moveOrder(s, x + dx, y + dy) || any;
+  }
+  if (any) state.effects.push({ kind: 'order', x, y, life: 1.5 });
+  hooks.changed();
+  return any;
+}
+
+function moveOrder(s, x, y) {
+  x = Math.max(10, Math.min(W - 10, x));
+  y = Math.max(10, Math.min(H - 10, y));
   const house = buildingAt(x, y);
   if (house) {
     x = house.midX;
@@ -220,24 +272,77 @@ export function issue(x, y) {
     hooks.toast(t('toast.unreachable'));
     return false;
   }
+  const mode = MOVE_MODES.includes(state.mode) ? state.mode : 'move';
   s.path = path;
+  s.moveMode = mode === 'position' ? 'move' : mode;
+  s.fireTarget = null;
   s.destinationHouse = house?.id ?? null;
-  s.order = house ? 'enter' : state.mode === 'defend' ? 'position' : 'move';
+  s.order = house ? 'enter' : mode === 'position' ? 'position' : mode;
   s.orderHouse = house?.id ?? null;
-  s.defendAtEnd = !!house || state.mode === 'defend';
-  addLog(house ? t('log.enterOrder', { unit: s.name, house: houseName(house.id) }) : t('log.moveOrder', { unit: s.name }));
-  state.effects.push({ kind: 'order', x, y, life: 1.5 });
+  s.defendAtEnd = !!house || mode === 'position';
+  addLog(house ? t('log.enterOrder', { unit: s.name, house: houseName(house.id) }) : t('log.' + (mode === 'position' ? 'positionOrder' : mode + 'Order'), { unit: s.name }));
+  return true;
+}
+
+// Fire: the selected units concentrate on the clicked enemy unit while they can
+// see it; they hold their position.
+function fireAt(x, y) {
+  const target = state.squads.find(
+    (q) => q.side && q.visible && alive(q).some((m) => Math.hypot(m.x - x, m.y - y) < 28),
+  );
+  if (!target) {
+    hooks.toast(t('toast.noTarget'));
+    return false;
+  }
+  for (const s of selectedUnits()) {
+    if (!orderable(s)) continue;
+    s.path = [];
+    s.fireTarget = target.id;
+    s.target = null;
+    s.retarget = 0;
+    s.order = 'fire';
+    addLog(t('log.fireOrder', { unit: s.name }));
+  }
+  state.effects.push({ kind: 'order', x: target.x, y: target.y, life: 1.5, fire: true });
+  state.mode = 'move';
   hooks.changed();
   return true;
 }
 
 export function defend() {
-  const s = state.squads[state.selected];
-  if (state.ended || !s || !alive(s).length || s.routed) return;
-  s.path = [];
-  s.order = 'defend';
-  state.mode = 'defend';
-  addLog(t('log.defend', { unit: s.name }));
+  for (const s of selectedUnits()) {
+    if (!orderable(s)) continue;
+    s.path = [];
+    s.order = 'defend';
+    s.fireTarget = null;
+    addLog(t('log.defend', { unit: s.name }));
+  }
+  state.mode = 'position';
+  hooks.changed();
+}
+
+// Retreat: fall back towards the own map edge at speed, without firing.
+export function retreat() {
+  const back = orderRules.movement.retreat.distanceUnits;
+  for (const s of selectedUnits()) {
+    if (!orderable(s)) continue;
+    const dir = s.side ? 1 : -1;
+    let path = null;
+    for (let k = 1; k >= 0.25 && !path; k -= 0.25) path = pathTo(s, Math.max(20, Math.min(W - 20, s.x + dir * back * k)), s.y);
+    if (!path) continue;
+    s.path = path;
+    s.moveMode = 'retreat';
+    s.fireTarget = null;
+    s.order = 'retreat';
+    s.orderHouse = null;
+    s.defendAtEnd = true;
+    addLog(t('log.retreatOrder', { unit: s.name }));
+  }
+  hooks.changed();
+}
+
+export function setHalfSpeed(on) {
+  state.speed = on ? orderRules.speed.half : 1;
   hooks.changed();
 }
 
@@ -258,6 +363,7 @@ export function split(id = state.selected) {
   const s = state.squads[id];
   if (state.ended || !s) return false;
   if (s.team) return merge(id);
+  s.fireTarget = null;
   if (!canSplit(s)) {
     hooks.toast(t(s?.routed ? 'toast.recovering' : 'toast.cannotSplit'));
     return false;
@@ -284,6 +390,8 @@ export function split(id = state.selected) {
     orderHouse: null,
     routed: false,
     target: null,
+    fireTarget: null,
+    moveMode: 'move',
     hotkey: null,
     cond: { ...s.cond, incoming: [], aliveSeen: menB.filter((m) => m.hp > 0).length, losses: menB.filter((m) => m.hp <= 0).length },
   });
@@ -295,6 +403,8 @@ export function split(id = state.selected) {
   s.cond.aliveSeen = alive(s).length;
   s.cond.losses = s.men.length - alive(s).length;
   s.split = b.split = true;
+  state.selection = [s.id, b.id];
+  state.selected = s.id;
   addLog(t('log.split', { unit: s.groupName }));
   hooks.changed();
   return true;
@@ -337,6 +447,7 @@ export function merge(id = state.selected) {
   Object.assign(a, { name: a.groupName, team: null, leaderSlot: unit?.leaderSlot ?? a.leaderSlot, split: false });
   Object.assign(b, { men: [], absorbed: true, path: [], target: null, split: false });
   if (state.selected === b.id) state.selected = a.id;
+  state.selection = [...new Set(state.selection.map((id) => (id === b.id ? a.id : id)))];
   addLog(t('log.merge', { unit: a.groupName }));
   hooks.changed();
   return true;
@@ -382,7 +493,9 @@ function updateBroken(s) {
     s.routed = true;
     s.path = pathTo(s, s.side ? 1130 : 70, s.y) || [];
     s.order = 'retreat';
+    s.moveMode = 'broken';
     s.orderHouse = null;
+    s.fireTarget = null;
     addLog(t(s.side ? 'log.enemyRetreat' : 'log.retreat', { unit: s.name }));
   }
   if (s.routed && !c.broken) {
@@ -416,7 +529,10 @@ function moveSquad(s, dt) {
   const d = dist(s, p);
   // Suppression slows a unit; a pinned unit does not advance (a broken one still falls back).
   const c = s.cond;
-  const speed = s.routed ? 30 : c.pinned ? 0 : 24 * (1 - c.suppression / 200);
+  const M = orderRules.movement;
+  const mode = s.routed ? 'broken' : s.moveMode ?? 'move';
+  const base = M[mode]?.unitSpeed ?? M.move.unitSpeed;
+  const speed = s.routed ? base : c.pinned ? (mode === 'crawl' ? base * M.crawl.pinnedFactor : 0) : base * (1 - c.suppression / 200);
   s.advancing = speed > 0;
   if (!speed) return;
   const step = Math.min(d, speed * dt);
@@ -426,7 +542,10 @@ function moveSquad(s, dt) {
   }
   if (d < 2) {
     s.path.shift();
-    if (!s.path.length) s.order = s.defendAtEnd ? 'defend' : 'hold';
+    if (!s.path.length) {
+      s.order = s.defendAtEnd ? 'defend' : 'hold';
+      s.moveMode = 'move';
+    }
   }
 }
 
@@ -548,7 +667,9 @@ function moveSoldiers(s, dt) {
       if (d > 0.8) {
         m.moving = true;
         if (!m.aim) m.angle = Math.atan2(dy, dx);
-        const step = Math.min(d, (soldierPose(m, s) === 'prone' ? 16 : 36) * dt);
+        const M = orderRules.movement;
+        const mode = s.routed ? 'broken' : s.path.length ? s.moveMode ?? 'move' : 'move';
+        const step = Math.min(d, (mode === 'crawl' || (soldierPose(m, s) === 'prone' && !s.path.length) ? M.crawl.menSpeed : M[mode]?.menSpeed ?? M.move.menSpeed) * dt);
         mx = (dx / d) * step;
         my = (dy / d) * step;
       }
@@ -581,7 +702,7 @@ function updateObjective(dt) {
 // Advance the battle unless it is paused or over. The frame loop calls this.
 export function step(dt) {
   if (state.paused || state.ended) return false;
-  update(dt);
+  update(dt * (state.speed ?? 1));
   return true;
 }
 
@@ -600,7 +721,16 @@ export const offScreen = (s, margin = 20) => {
   return s.x < v.x - margin || s.y < v.y - margin || s.x > v.x + v.w + margin || s.y > v.y + v.h + margin;
 };
 function logContact(s) {
-  if (s.side || !inContact(s) || !offScreen(s)) return;
+  const now = inContact(s);
+  const fresh = now && !s.wasInContact;
+  s.wasInContact = now;
+  // Auto-pause (setting) when an own unit comes into contact.
+  if (fresh && !s.side && state.autoPause && state.started && !state.paused) {
+    state.paused = true;
+    hooks.toast(t('toast.autoPaused', { unit: s.name }));
+    hooks.changed();
+  }
+  if (s.side || !now || !offScreen(s)) return;
   if (s.contactLogged != null && state.elapsed - s.contactLogged < effectRules.contact.logEveryS) return;
   s.contactLogged = state.elapsed;
   addLog(t('log.contact', { unit: s.name }));

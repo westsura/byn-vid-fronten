@@ -1,0 +1,11 @@
+{
+  "_comment": "Kamera och zoomnivåer (DESIGN.md, Order och kontroll samt Zoomnivåer; steg 4). Tre fasta nivåer; zoomen ändras bara när spelaren byter nivå. Per nivå: kamerastöt (0 = stilla), ljudvolym och effekternas styrka.",
+  "levels": [
+    { "id": "map", "zoom": 1, "shake": 0, "sound": 0.6, "effects": 0.75 },
+    { "id": "platoon", "zoom": 1.8, "shake": 0.5, "sound": 0.8, "effects": 0.9 },
+    { "id": "unit", "zoom": 3, "shake": 1, "sound": 1, "effects": 1 }
+  ],
+  "glideS": 0.35,
+  "panKeyUnits": 60,
+  "doubleClickToLevel": "platoon"
+}

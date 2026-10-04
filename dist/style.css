@@ -707,3 +707,126 @@ p {
   width:80px;
   accent-color:#b9a76e;
 }
+
+/* ---- Step 4: map bar controls, unit panel with half-cards, order buttons ---- */
+.bar-controls {
+  display:flex;
+  gap:8px;
+  align-items:center;
+}
+.zoom {
+  display:flex;
+}
+.zoom button {
+  border-radius:0;
+  font-size:12px;
+  padding:6px 9px;
+}
+.zoom button:first-child {
+  border-radius:4px 0 0 4px;
+}
+.zoom button:last-child {
+  border-radius:0 4px 4px 0;
+}
+.mapbar #speed {
+  font-size:12px;
+}
+#squads .squad {
+  cursor:pointer;
+  padding:10px 11px;
+}
+.squad-mid {
+  display:flex;
+  justify-content:space-between;
+  font-size:12.5px;
+  margin-top:5px;
+}
+.squad-mid .leader {
+  color:var(--text);
+}
+.squad .state {
+  font-weight:600;
+}
+.st-steady .state { color:var(--green); }
+.st-shaken .state { color:#d8b070; }
+.st-pinned .state { color:#e6b04a; }
+.st-broken .state { color:#e0806c; }
+.squad.out {
+  opacity:.45;
+}
+.squad-bottom {
+  align-items:center;
+  min-height:22px;
+}
+.bars {
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:6px;
+  margin-top:7px;
+}
+.bar {
+  height:3px;
+  background:#465040;
+}
+.bar span {
+  display:block;
+  height:100%;
+}
+.bar .rdy { background:#e2c766; }
+.bar .coh { background:#9fb879; }
+.mini {
+  font-size:11px;
+  padding:2px 7px;
+  margin-left:6px;
+}
+.squad-pair {
+  border:1px solid #3a4636;
+  border-radius:3px;
+  background:#1d241c;
+  padding:6px;
+}
+.squad-pair.selected {
+  border-color:#83966c;
+}
+.pair-head {
+  display:flex;
+  align-items:center;
+  gap:8px;
+  padding:2px 4px 6px;
+  cursor:pointer;
+}
+.pair-head .count {
+  margin-left:auto;
+  font-size:13px;
+}
+.halves {
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:6px;
+}
+.squad.half strong {
+  font-size:13px;
+}
+.squad.half .squad-mid, .squad.half .squad-bottom {
+  font-size:11px;
+}
+.order-buttons {
+  flex-wrap:wrap;
+}
+.order-buttons button {
+  flex:1 1 30%;
+  font-size:13px;
+}
+canvas.fire-mode {
+  cursor:crosshair;
+}
+.squad.half .squad-top {
+  flex-wrap:wrap;
+  gap:4px 8px;
+}
+.squad.half strong {
+  font-size:12.5px;
+}
+.squad .count {
+  white-space:nowrap;
+}

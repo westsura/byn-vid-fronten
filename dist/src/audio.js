@@ -2,7 +2,9 @@
 let enabled = false;
 let audio = null;
 
+let volume = 1; // per zoom level (camera.json)
 export const soundEnabled = () => enabled;
+export const setVolume = (v) => (volume = v);
 
 export function setSound(on) {
   enabled = on;
@@ -28,7 +30,7 @@ export function fireSound(x) {
     const gain = audio.createGain();
     const pan = audio.createStereoPanner();
     src.buffer = buffer;
-    gain.gain.value = 0.13;
+    gain.gain.value = 0.13 * volume;
     pan.pan.value = Math.max(-1, Math.min(1, (x - 600) / 600));
     src.connect(gain).connect(pan).connect(audio.destination);
     src.start(audio.currentTime);
@@ -54,7 +56,7 @@ export function explosionSound(x) {
     const gain = audio.createGain();
     const pan = audio.createStereoPanner();
     src.buffer = buffer;
-    gain.gain.value = 0.5;
+    gain.gain.value = 0.5 * volume;
     pan.pan.value = Math.max(-1, Math.min(1, (x - 600) / 600));
     src.connect(gain).connect(pan).connect(audio.destination);
     src.start(audio.currentTime);

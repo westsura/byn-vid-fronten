@@ -25,8 +25,11 @@ let COLS = 0;
 let ROWS = 0;
 let hinder = null; // Uint8Array: 1 = cell with trees or bushes
 
-export function setFireRules(rules, weaponTable, cell) {
+let MOVE = null; // movement modes (rules/orders.json): exposure and spotting factors
+
+export function setFireRules(rules, weaponTable, cell, movement) {
   P = rules;
+  MOVE = movement ?? null;
   weapons = weaponTable ?? {};
   CELL = cell;
   COLS = Math.ceil(W / CELL);
@@ -85,8 +88,9 @@ export function updateSpotting(squads, state) {
     const eyes = squads.filter((s) => s.side === side && living(s).length);
     for (const t of squads) {
       if (t.side === side || !living(t).length) continue;
+      const range = P.spotting.rangeUnits * movementOf(t).spotFactor;
       const found = eyes.some((s) =>
-        living(s).some((a) => living(t).some((b) => Math.hypot(a.x - b.x, a.y - b.y) < P.spotting.rangeUnits && sight(a, b) !== null)),
+        living(s).some((a) => living(t).some((b) => Math.hypot(a.x - b.x, a.y - b.y) < range && sight(a, b) !== null)),
       );
       if (found) seen.add(t.id);
     }
@@ -96,6 +100,14 @@ export function updateSpotting(squads, state) {
 }
 
 // ---- Fire -------------------------------------------------------------------
+
+// How a unit is moving right now (crawling units are harder to see and hit,
+// running ones easier).
+const STILL = { exposure: 1, spotFactor: 1 };
+export function movementOf(t) {
+  if (!MOVE || !t.advancing) return STILL;
+  return MOVE[t.routed ? 'broken' : t.moveMode ?? 'move'] ?? STILL;
+}
 
 // Range factor: full effect within the weapon's effective range, falling to zero
 // at its maximum range.
@@ -117,13 +129,21 @@ export function hitChance(w, s, m, t, v, hinderCells) {
   const ready = F.readinessFloor + (1 - F.readinessFloor) * (s.cond.readiness / 100);
   const cover = Math.min(0.9, coverAt(v.x, v.y) + (t.cond.pinned || t.order === 'defend' ? F.proneCover : 0));
   const shooterSup = 1 - F.shooterSuppressionPenalty * (s.cond.suppression / 100);
-  return w.baseHit * F.hitScale * rangeFactor(w, metres(m, v)) * ready * (1 - cover) * shooterSup * P.sight.perCellHitFactor ** hinderCells;
+  return w.baseHit * F.hitScale * rangeFactor(w, metres(m, v)) * ready * (1 - cover) * shooterSup * movementOf(t).exposure * P.sight.perCellHitFactor ** hinderCells;
 }
 
 // The unit's current target: nearest spotted enemy unit that at least one of its
 // soldiers can see and reach. Re-chosen every targetRetargetS seconds.
 function chooseTarget(s, squads, state) {
   const men = living(s);
+  // A Fire order: the ordered target first, while it lives and is spotted.
+  const ordered = s.fireTarget != null ? squads[s.fireTarget] : null;
+  if (ordered && !living(ordered).length) {
+    s.fireTarget = null;
+    if (s.order === 'fire') s.order = 'hold';
+  } else if (ordered && state.spotted[s.side].has(ordered.id) && men.some((m) => living(ordered).some((v) => weapons[m.weapon] && metres(m, v) < weapons[m.weapon].maxRangeM && sight(m, v) !== null))) {
+    return ordered;
+  }
   const options = squads
     .filter((t) => t.side !== s.side && living(t).length && state.spotted[s.side].has(t.id))
     .sort((a, b) => Math.hypot(a.x - s.x, a.y - s.y) - Math.hypot(b.x - s.x, b.y - s.y));
@@ -146,7 +166,8 @@ export function fireUnit(s, dt, squads, state, ev) {
       if (m.barrelChange === 0 && m.hp > 0) ev.log('log.barrelDone', { unit: s.name });
     }
   }
-  if (s.routed) return;
+  // Broken units and units carrying out a Retreat order do not fire.
+  if (s.routed || (s.order === 'retreat' && s.advancing)) return;
   s.retarget = (s.retarget ?? 0) - dt;
   if (s.retarget <= 0 || (s.target && !living(s.target).length)) {
     s.target = chooseTarget(s, squads, state);

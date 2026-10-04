@@ -13,7 +13,8 @@ Allt som beskriver styrkor, personer, vapen, grader, utmärkelser, texter och up
 | `scenarios/proto-1943.json` | År, vilka styrkor som möts, utgångslägen och snabbtangenter |
 | `rules/condition.json` | Tillståndsmodell och hotkarta (steg 2): nedhållning, sammanhållning, eldberedskap, obehag, rutnät och gränser för Pinned/Broken |
 | `rules/fire.json` | Eld och siktlinje (steg 3): skala meter per kartenhet, upptäcktsavstånd, skymmande terräng, eldtillfällen per vapentyp, träff- och nedhållningsfaktorer, flankering |
-| `rules/orders.json` | Delad grupp (steg 3): var Schützentrupp ställer sig vid delning och hur nära trupperna måste stå för att slås ihop |
+| `rules/orders.json` | Delad grupp (steg 3), förflyttningssätt med fart, exponering och upptäckt (steg 4), halv hastighet och snabbtangenter |
+| `rules/camera.json` | Zoomnivåer (hela kartan, pluton, enhet) med kamerastöt, ljud och effektstyrka per nivå, glidtid och panorering (steg 4) |
 | `rules/effects.json` | Grundeffekter (steg 3): nedslag per material, spårljus, kamerastöt (trauma), stridskontakt utanför bild |
 | `text/en.json` | All gränssnittstext på engelska. Förband, befattningar, grader och utmärkelser kommer från filerna ovan, på tyska respektive i rysk translitterering |
 

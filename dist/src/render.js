@@ -4,7 +4,7 @@ import { buildings, objective } from './scenario.js';
 import { state, alive, formationOffset, houseName, playerSquads, inContact, offScreen } from './sim.js';
 import { shakeAmount, effectRules } from './effects.js';
 import { fireRules } from './fire.js';
-import { cam, view, toScreen } from './camera.js';
+import { cam, view, toScreen, levelInfo } from './camera.js';
 import { buildingAt } from './terrain.js';
 import { drawUnit, isPrototype } from './art.js';
 import { t } from './text.js';
@@ -17,6 +17,17 @@ export function loadMap(src, onError) {
   mapImage.onload = () => (mapLoaded = true);
   mapImage.onerror = onError;
   mapImage.src = src;
+}
+
+// Labels and marks keep their screen size at every zoom level: draw(ctx) works in
+// screen pixels around the world anchor (x, y).
+const px = () => 1 / cam.zoom; // one screen pixel in world units
+function label(ctx, x, y, draw) {
+  ctx.save();
+  ctx.translate(x, y);
+  ctx.scale(px(), px());
+  draw(ctx);
+  ctx.restore();
 }
 
 function circle(ctx, x, y, r, color, fill = false) {
@@ -84,22 +95,26 @@ function drawBuildings(ctx) {
     ctx.moveTo(b.doorX - 18, b.y + b.h);
     ctx.lineTo(b.doorX + 18, b.y + b.h);
     ctx.stroke();
-    if (occupied) {
-      ctx.font = 'bold 10px system-ui';
-      ctx.textAlign = 'center';
-      ctx.fillStyle = '#f4ecd5';
-      ctx.fillText(houseName(b.id).toUpperCase(), b.midX, b.y - 9);
-    }
+    if (occupied)
+      label(ctx, b.midX, b.y - 9, (g) => {
+        g.font = 'bold 10px system-ui';
+        g.textAlign = 'center';
+        g.fillStyle = '#f4ecd5';
+        g.fillText(houseName(b.id).toUpperCase(), 0, 0);
+      });
   }
 }
 
 function drawObjective(ctx) {
   const { x, y, radius } = objective;
   ctx.save();
-  ctx.setLineDash([8, 6]);
-  ctx.lineWidth = 2;
+  ctx.setLineDash([8 * px(), 6 * px()]);
+  ctx.lineWidth = 2 * px();
   circle(ctx, x, y, radius, state.capture > 0 ? '#e6d8a8' : '#e8d9aa99');
   ctx.setLineDash([]);
+  ctx.translate(x, y);
+  ctx.scale(px(), px());
+  ctx.translate(-x, -y);
   ctx.fillStyle = '#182219dd';
   ctx.fillRect(x - 67, y - 33, 134, 24);
   ctx.fillStyle = '#efe4bd';
@@ -129,20 +144,33 @@ export function squadRadius(s) {
 
 function drawSquad(ctx, s) {
   const R = squadRadius(s);
-  if (s.id === state.selected && alive(s).length) {
-    ctx.lineWidth = 2;
+  if (state.selection?.includes(s.id) && alive(s).length) {
+    ctx.lineWidth = 2 * px();
     circle(ctx, s.x, s.y, R, '#e2d29c');
     if (s.path.length) {
       ctx.beginPath();
       ctx.moveTo(s.x, s.y);
       for (const p of s.path) ctx.lineTo(p.x, p.y);
-      ctx.setLineDash([7, 5]);
-      ctx.strokeStyle = '#e4d5a5c9';
-      ctx.lineWidth = 2;
+      ctx.setLineDash([7 * px(), 5 * px()]);
+      ctx.strokeStyle = s.moveMode === 'fast' ? '#f0c27ad0' : s.moveMode === 'crawl' ? '#b8c99ad0' : '#e4d5a5c9';
+      ctx.lineWidth = 2 * px();
       ctx.stroke();
       ctx.setLineDash([]);
       const dest = s.path.at(-1);
-      circle(ctx, dest.x, dest.y, 8, '#f5e9bd');
+      circle(ctx, dest.x, dest.y, 8 * px(), '#f5e9bd');
+    }
+    // Fire order: a line to the ordered target.
+    const ft = s.fireTarget != null ? state.squads[s.fireTarget] : null;
+    if (ft && ft.visible && alive(ft).length) {
+      ctx.setLineDash([3 * px(), 4 * px()]);
+      ctx.strokeStyle = '#ff9c7ab0';
+      ctx.lineWidth = 1.5 * px();
+      ctx.beginPath();
+      ctx.moveTo(s.x, s.y);
+      ctx.lineTo(ft.x, ft.y);
+      ctx.stroke();
+      ctx.setLineDash([]);
+      circle(ctx, ft.x, ft.y, 14 * px(), '#ff9c7a');
     }
   }
   if (!s.side && alive(s).length) drawReadiness(ctx, s, R);
@@ -150,27 +178,31 @@ function drawSquad(ctx, s) {
   if (!alive(s).length) return;
   // Squad tag (coloured by state) and cohesion bar
   const c = s.cond ?? {};
-  ctx.textAlign = 'center';
-  ctx.font = 'bold 12px system-ui';
-  const tag = s.side ? t('map.enemy') : s.name.toUpperCase();
-  const tw = Math.max(70, ctx.measureText(tag).width + 16);
-  ctx.fillStyle = c.broken ? '#7a2420f0' : c.pinned ? '#7a5c1cf0' : s.side ? '#572e26ee' : '#223224ee';
-  ctx.fillRect(s.x - tw / 2, s.y - R - 8, tw, 21);
-  ctx.fillStyle = c.broken ? '#ffc9bd' : c.pinned ? '#ffe3a3' : s.side ? '#f2b59d' : '#dce8bf';
-  ctx.fillText(tag, s.x, s.y - R + 7);
-  const status = [c.broken && t('status.broken'), c.pinned && t('status.pinned'), c.barrelChange && !s.side && t('status.barrel')].filter(Boolean).join('  ');
-  if (status) {
-    ctx.font = 'bold 10px system-ui';
-    const sw = ctx.measureText(status).width + 12;
-    ctx.fillStyle = c.broken ? '#c4483cf2' : c.pinned ? '#d9a23cf2' : '#b9c4cff2';
-    ctx.fillRect(s.x - sw / 2, s.y - R - 26, sw, 16);
-    ctx.fillStyle = '#1b1408';
-    ctx.fillText(status, s.x, s.y - R - 14);
-  }
-  ctx.fillStyle = '#18221a';
-  ctx.fillRect(s.x - 25, s.y + R - 12, 50, 4);
-  ctx.fillStyle = c.cohesion < 55 ? '#ddad74' : '#aaca86';
-  ctx.fillRect(s.x - 25, s.y + R - 12, (c.cohesion ?? 100) / 2, 4);
+  label(ctx, s.x, s.y - R, (g) => {
+    g.textAlign = 'center';
+    g.font = 'bold 12px system-ui';
+    const tag = s.side ? t('map.enemy') : s.name.toUpperCase();
+    const tw = Math.max(70, g.measureText(tag).width + 16);
+    g.fillStyle = c.broken ? '#7a2420f0' : c.pinned ? '#7a5c1cf0' : s.side ? '#572e26ee' : '#223224ee';
+    g.fillRect(-tw / 2, -8, tw, 21);
+    g.fillStyle = c.broken ? '#ffc9bd' : c.pinned ? '#ffe3a3' : s.side ? '#f2b59d' : '#dce8bf';
+    g.fillText(tag, 0, 7);
+    const status = [c.broken && t('status.broken'), c.pinned && t('status.pinned'), c.barrelChange && !s.side && t('status.barrel')].filter(Boolean).join('  ');
+    if (status) {
+      g.font = 'bold 10px system-ui';
+      const sw = g.measureText(status).width + 12;
+      g.fillStyle = c.broken ? '#c4483cf2' : c.pinned ? '#d9a23cf2' : '#b9c4cff2';
+      g.fillRect(-sw / 2, -26, sw, 16);
+      g.fillStyle = '#1b1408';
+      g.fillText(status, 0, -14);
+    }
+  });
+  label(ctx, s.x, s.y + R, (g) => {
+    g.fillStyle = '#18221a';
+    g.fillRect(-25, -12, 50, 4);
+    g.fillStyle = c.cohesion < 55 ? '#ddad74' : '#aaca86';
+    g.fillRect(-25, -12, (c.cohesion ?? 100) / 2, 4);
+  });
 }
 
 // Fire readiness: a ring just outside the unit that fills clockwise from the top;
@@ -179,7 +211,7 @@ function drawReadiness(ctx, s, R) {
   const r = R + 5;
   const v = (s.cond?.readiness ?? 0) / 100;
   ctx.save();
-  ctx.lineWidth = 3.5;
+  ctx.lineWidth = 3.5 * px();
   circle(ctx, s.x, s.y, r, '#0b120b80');
   if (v > 0) {
     ctx.strokeStyle = v >= 1 ? '#a9d36f99' : '#f2c65aee';
@@ -247,25 +279,24 @@ function drawDebug(ctx) {
 }
 
 function drawDebugValues(ctx) {
-  ctx.save();
-  ctx.font = 'bold 10px ui-monospace, monospace';
   for (const s of state.squads) {
     if (!alive(s).length || !s.cond) continue;
     const c = s.cond;
     const lines = t('debug.values', { sup: Math.round(c.suppression), coh: Math.round(c.cohesion), rdy: Math.round(c.readiness) }).split(' · ');
-    const w = Math.max(...lines.map((l) => ctx.measureText(l).width)) + 10;
     const R = squadRadius(s);
-    const left = s.x + R + 12 + w > W;
-    const x = left ? s.x - R - 12 - w : s.x + R + 12;
-    const y = s.y - 22;
-    ctx.globalAlpha = !s.side || s.visible ? 1 : 0.55;
-    ctx.fillStyle = '#0b0f0bdd';
-    ctx.fillRect(x, y, w, lines.length * 13 + 5);
-    ctx.fillStyle = s.side ? '#f2b59d' : '#e6f0c8';
-    ctx.textAlign = 'left';
-    lines.forEach((l, i) => ctx.fillText(l, x + 5, y + 13 + i * 13));
+    const left = s.x + R + 12 + 90 * px() > W;
+    label(ctx, left ? s.x - R - 12 : s.x + R + 12, s.y, (g) => {
+      g.font = 'bold 10px ui-monospace, monospace';
+      const w = Math.max(...lines.map((l) => g.measureText(l).width)) + 10;
+      const x = left ? -w : 0;
+      g.globalAlpha = !s.side || s.visible ? 1 : 0.55;
+      g.fillStyle = '#0b0f0bdd';
+      g.fillRect(x, -22, w, lines.length * 13 + 5);
+      g.fillStyle = s.side ? '#f2b59d' : '#e6f0c8';
+      g.textAlign = 'left';
+      lines.forEach((l, i) => g.fillText(l, x + 5, -9 + i * 13));
+    });
   }
-  ctx.restore();
 }
 
 function drawDebugLegend(ctx) {
@@ -275,13 +306,12 @@ function drawDebugLegend(ctx) {
     ['rgba(240,170,40,0.5)', t('debug.discomfort')],
     [null, t('debug.tool')],
     [null, t('debug.explode')],
-    [null, t('debug.zoom')],
   ];
   const x = W - 238;
-  const y = H - 166;
+  const y = H - 147;
   ctx.save();
   ctx.fillStyle = '#0b0f0be6';
-  ctx.fillRect(x, y, 226, 150);
+  ctx.fillRect(x, y, 226, 131);
   ctx.textAlign = 'left';
   ctx.fillStyle = '#f0e6c4';
   ctx.font = 'bold 11px system-ui';
@@ -405,6 +435,8 @@ function drawExplosion(ctx, e) {
 }
 
 function drawEffects(ctx) {
+  ctx.save();
+  ctx.globalAlpha = levelInfo().effects; // effect intensity per zoom level
   for (const e of state.effects) {
     if (e.kind === 'impact') drawImpact(ctx, e);
     else if (e.kind === 'tracer') drawTracer(ctx, e);
@@ -415,9 +447,10 @@ function drawEffects(ctx) {
       const y = e.y0 + (e.y1 - e.y0) * p - Math.sin(p * Math.PI) * 18;
       circle(ctx, x, y, 2.2, '#2b2a24', true);
     } else if (e.kind === 'order') {
-      circle(ctx, e.x, e.y, 12 + (1.5 - e.life) * 15, '#f1e4b5');
+      circle(ctx, e.x, e.y, 12 + (1.5 - e.life) * 15, e.fire ? '#ff9c7a' : '#f1e4b5');
     }
   }
+  ctx.restore();
 }
 
 // Camera shake from explosions (effects.js trauma). Only the map moves; the
@@ -425,13 +458,16 @@ function drawEffects(ctx) {
 let shakeStrength = 1;
 export const setShakeStrength = (v) => (shakeStrength = v);
 function shakeOffset(t) {
-  const a = shakeAmount(state) * effectRules().shake.maxOffsetPx * shakeStrength;
+  // Per zoom level (camera.json): still on the whole map, small on platoon level, full on unit level.
+  const a = shakeAmount(state) * effectRules().shake.maxOffsetPx * shakeStrength * levelInfo().shake;
   return { x: a * (Math.sin(t * 47.3) + Math.sin(t * 91.7 + 1.3)) / 2, y: a * (Math.sin(t * 53.9 + 0.7) + Math.sin(t * 77.1 + 2.1)) / 2 };
 }
 
 // Edge markers: own units in contact outside the view, shown as an arrow on the
 // map edge pointing at them, with the unit's name.
+export const edgeMarkers = []; // screen rectangles of the markers, for clicks (ui.js)
 function drawEdgeMarkers(ctx) {
+  edgeMarkers.length = 0;
   const v = state.view;
   const cx = v.x + v.w / 2;
   const cy = v.y + v.h / 2;
@@ -459,9 +495,11 @@ function drawEdgeMarkers(ctx) {
     const label = s.name.toUpperCase();
     const w = ctx.measureText(label).width + 10;
     const lx = Math.max(4, Math.min(W - w - 4, p.x - w / 2 - Math.cos(a) * (w / 2 + 14)));
-    const ly = Math.max(4, Math.min(H - 20, p.y - 8 - Math.sin(a) * 20));
+    // Label inside the map from the arrow (below it at the top edge, clear of the badges).
+    const ly = p.y < 40 ? p.y + 16 : Math.max(4, Math.min(H - 20, p.y - 8 - Math.sin(a) * 20));
     ctx.fillStyle = '#3a1c12e8';
     ctx.fillRect(lx, ly, w, 16);
+    edgeMarkers.push({ id: s.id, x: Math.min(lx, p.x - 14), y: Math.min(ly, p.y - 14), w: Math.max(lx + w, p.x + 14) - Math.min(lx, p.x - 14), h: Math.max(ly + 16, p.y + 14) - Math.min(ly, p.y - 14) });
     ctx.fillStyle = '#ffd2b8';
     ctx.textAlign = 'left';
     ctx.fillText(label, lx + 5, ly + 12);
