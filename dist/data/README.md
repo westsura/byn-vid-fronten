@@ -13,9 +13,10 @@ Allt som beskriver styrkor, personer, vapen, grader, utmärkelser, texter och up
 | `scenarios/proto-1943.json` | År, vilka styrkor som möts, utgångslägen och snabbtangenter |
 | `rules/condition.json` | Tillståndsmodell och hotkarta (steg 2): nedhållning, sammanhållning, eldberedskap, obehag, rutnät och gränser för Pinned/Broken |
 | `rules/fire.json` | Eld och siktlinje (steg 3): skala meter per kartenhet, upptäcktsavstånd, skymmande terräng, eldtillfällen per vapentyp, träff- och nedhållningsfaktorer, flankering |
-| `rules/orders.json` | Delad grupp (steg 3), förflyttningssätt med fart, exponering och upptäckt (steg 4), halv hastighet och snabbtangenter |
+| `rules/orders.json` | Delad grupp (steg 3), förflyttningssätt med fart, exponering och upptäckt (steg 4), halv hastighet och snabbtangenter, Cover Sector med öppningsavstånd (steg 5) |
 | `rules/camera.json` | Zoomnivåer (hela kartan, pluton, enhet) med kamerastöt, ljud och effektstyrka per nivå, glidtid och panorering (steg 4) |
 | `rules/effects.json` | Grundeffekter (steg 3): nedslag per material, spårljus, kamerastöt (trauma), stridskontakt utanför bild |
+| `rules/ai.json` | Fiendens AI (steg 5): kostnad för fara och obehag i vägvalet, när den väljer ny väg eller stannar |
 | `text/en.json` | All gränssnittstext på engelska. Förband, befattningar, grader och utmärkelser kommer från filerna ovan, på tyska respektive i rysk translitterering |
 
 ## Lägga till eller ändra

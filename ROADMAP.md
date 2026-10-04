@@ -7,7 +7,8 @@
 > - [x] Steg 2 – tillståndsmodell och hotkarta: nedhållning, sammanhållning, eldberedskap, obehag, debugläge (G) med testeld. Godkänt 2026-10-04.
 >   - Beslut 2026-10-04: det gamla moralsystemet ersätts helt i steg 3 (nedhållning och sammanhållning styr reträtt och panelens tillstånd). Parametrarna (t.ex. Pinned efter cirka 1 s under full eld) finjusteras i steg 3 mot riktig eld.
 > - [x] Steg 3 – eld och rörelse. Del A (eld, siktlinje, upptäckt, hotkarta från verklig eld, moral ersatt av tillståndsmodellen) godkänd 2026-10-04. Del B (delbar grupp med provisorisk Split-knapp/S, pipbyte MG34) klar. Del C (nedslag efter material, spårljus, handgranater med kamerastöt och reglage, kantmarkering vid kontakt utanför bild, provisorisk testzoom Z) klar. Godkänt 2026-10-04 (handgranater och husens material står kvar tills vidare).
-> - [ ] Steg 4 – order och kontroll: aktiv paus, halv hastighet, Move/Fast Move/Crawl/Defend/Fire/Retreat/Split-Merge, enhetspanel med halvkort, val och kamera (tre zoomnivåer, glidning, panorering), klick på kantmarkering, autopaus. Väntar på godkännande.
+> - [x] Steg 4 – order och kontroll: aktiv paus, halv hastighet, Move/Fast Move/Crawl/Defend/Fire/Retreat/Split-Merge, enhetspanel med halvkort, val och kamera (tre zoomnivåer, glidning, panorering), klick på kantmarkering, autopaus. Godkänt 2026-10-04.
+> - [ ] Steg 5 – defensiv eld: Cover Sector (dra en kon, V), öppningsavstånd, eld bara i sektorn, sektorns rutor i hotkartan när den skjuter, fiendens AI går runt bestrukna rutor eller stannar. Väntar på godkännande.
 >   - Beslut 2026-10-04: kartan byggs om för att kunna vara mycket större (Björn återkommer med assets); vapnens räckvidder får då betydelse.
 
 Status per fas. **Klart** betyder implementerat och verifierat (automatiskt test och/eller provspelning i webbläsare). Publicerat = på https://byn-vid-fronten.vercel.app (varje push till `main`).
