@@ -6,7 +6,8 @@
 > - [x] Steg 1 – enhetsdata: datafiler, personmodell, tysk Schützenzug 1943 och sovjetisk Strelkovyy vzvod på kartan, engelskt gränssnitt. Godkänt 2026-10-04.
 > - [x] Steg 2 – tillståndsmodell och hotkarta: nedhållning, sammanhållning, eldberedskap, obehag, debugläge (G) med testeld. Godkänt 2026-10-04.
 >   - Beslut 2026-10-04: det gamla moralsystemet ersätts helt i steg 3 (nedhållning och sammanhållning styr reträtt och panelens tillstånd). Parametrarna (t.ex. Pinned efter cirka 1 s under full eld) finjusteras i steg 3 mot riktig eld.
-> - [ ] Steg 3 – eld och rörelse. Del A (eld, siktlinje, upptäckt, hotkarta från verklig eld, moral ersatt av tillståndsmodellen) klar, väntar på godkännande vid mellanöverlämningen. Del B (delbar grupp, pipbyte) och del C (grundeffekter) återstår.
+> - [ ] Steg 3 – eld och rörelse. Del A (eld, siktlinje, upptäckt, hotkarta från verklig eld, moral ersatt av tillståndsmodellen) godkänd 2026-10-04. Del B (delbar grupp med provisorisk Split-knapp/S, pipbyte MG34) klar. Del C (grundeffekter) återstår.
+>   - Beslut 2026-10-04: kartan byggs om för att kunna vara mycket större (Björn återkommer med assets); vapnens räckvidder får då betydelse.
 
 Status per fas. **Klart** betyder implementerat och verifierat (automatiskt test och/eller provspelning i webbläsare). Publicerat = på https://byn-vid-fronten.vercel.app (varje push till `main`).
 

@@ -35,7 +35,9 @@ export const hooks = {
 
 export const alive = (s) => s.men.filter((m) => m.hp > 0);
 // Own units shown in the panel (a merged-away half is not a unit of its own).
-export const playerSquads = () => state.squads.filter((s) => !s.side && !s.absorbed);
+// Order: the force file's order, the two halves of a split Gruppe side by side.
+const unitOrder = (s) => forces.player.units.findIndex((u) => u.id === s.group) * 10 + (s.team ? s.teams.findIndex((tm) => tm.id === s.team) : 0);
+export const playerSquads = () => state.squads.filter((s) => !s.side && !s.absorbed).sort((a, b) => unitOrder(a) - unitOrder(b));
 
 export function soldierPose(m, s) {
   if (m.hp <= 0) return 'fallen';
