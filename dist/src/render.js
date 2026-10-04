@@ -5,6 +5,7 @@ import { state, alive, formationOffset, houseName } from './sim.js';
 import { buildingAt } from './terrain.js';
 import { drawUnit, isPrototype } from './art.js';
 import { t } from './text.js';
+import { grid, threatSources, CELL, COLS, ROWS } from './threat.js';
 
 const mapImage = new Image();
 let mapLoaded = false;
@@ -141,21 +142,156 @@ function drawSquad(ctx, s) {
       circle(ctx, dest.x, dest.y, 8, '#f5e9bd');
     }
   }
+  if (!s.side && alive(s).length) drawReadiness(ctx, s, R);
   for (const m of s.men) if (m.hp > 0) drawUnit(ctx, m, s, state.elapsed, 1.12);
   if (!alive(s).length) return;
-  // Squad tag and morale bar
+  // Squad tag (coloured by state) and morale bar
+  const c = s.cond ?? {};
   ctx.textAlign = 'center';
   ctx.font = 'bold 12px system-ui';
   const tag = s.side ? t('map.enemy') : s.name.toUpperCase();
   const tw = Math.max(70, ctx.measureText(tag).width + 16);
-  ctx.fillStyle = s.side ? '#572e26ee' : '#223224ee';
+  ctx.fillStyle = c.broken ? '#7a2420f0' : c.pinned ? '#7a5c1cf0' : s.side ? '#572e26ee' : '#223224ee';
   ctx.fillRect(s.x - tw / 2, s.y - R - 8, tw, 21);
-  ctx.fillStyle = s.side ? '#f2b59d' : '#dce8bf';
+  ctx.fillStyle = c.broken ? '#ffc9bd' : c.pinned ? '#ffe3a3' : s.side ? '#f2b59d' : '#dce8bf';
   ctx.fillText(tag, s.x, s.y - R + 7);
+  const status = [c.broken && t('status.broken'), c.pinned && t('status.pinned')].filter(Boolean).join('  ');
+  if (status) {
+    ctx.font = 'bold 10px system-ui';
+    const sw = ctx.measureText(status).width + 12;
+    ctx.fillStyle = c.broken ? '#c4483cf2' : '#d9a23cf2';
+    ctx.fillRect(s.x - sw / 2, s.y - R - 26, sw, 16);
+    ctx.fillStyle = '#1b1408';
+    ctx.fillText(status, s.x, s.y - R - 14);
+  }
   ctx.fillStyle = '#18221a';
   ctx.fillRect(s.x - 25, s.y + R - 12, 50, 4);
   ctx.fillStyle = s.morale < 40 ? '#ddad74' : '#aaca86';
   ctx.fillRect(s.x - 25, s.y + R - 12, s.morale / 2, 4);
+}
+
+// Fire readiness: a ring just outside the unit that fills clockwise from the top;
+// amber while building, a fainter green when full.
+function drawReadiness(ctx, s, R) {
+  const r = R + 5;
+  const v = (s.cond?.readiness ?? 0) / 100;
+  ctx.save();
+  ctx.lineWidth = 3.5;
+  circle(ctx, s.x, s.y, r, '#0b120b80');
+  if (v > 0) {
+    ctx.strokeStyle = v >= 1 ? '#a9d36f99' : '#f2c65aee';
+    ctx.beginPath();
+    ctx.arc(s.x, s.y, r, -Math.PI / 2, -Math.PI / 2 + v * Math.PI * 2);
+    ctx.stroke();
+  }
+  ctx.restore();
+}
+
+// Debug view: threat map and discomfort as coloured cells, sources with who
+// fires, and the state values of every unit as numbers.
+function drawDebug(ctx) {
+  ctx.save();
+  for (let r = 0; r < ROWS; r++)
+    for (let c = 0; c < COLS; c++) {
+      const i = r * COLS + c;
+      const k = Math.max(grid.discomfort[0][i], grid.discomfort[1][i]) / 100;
+      const d0 = grid.danger[0][i];
+      const d1 = grid.danger[1][i];
+      const x = c * CELL;
+      const y = r * CELL;
+      if (k > 0.01) {
+        ctx.fillStyle = `rgba(240,170,40,${0.12 + 0.38 * k})`;
+        ctx.fillRect(x, y, CELL, CELL);
+      }
+      if (d0 > 0) {
+        ctx.fillStyle = `rgba(225,45,35,${0.15 + 0.25 * d0})`;
+        ctx.fillRect(x, y, CELL, CELL / (d1 > 0 ? 2 : 1));
+      }
+      if (d1 > 0) {
+        ctx.fillStyle = `rgba(60,120,235,${0.15 + 0.25 * d1})`;
+        ctx.fillRect(x, y + (d0 > 0 ? CELL / 2 : 0), CELL, CELL / (d0 > 0 ? 2 : 1));
+      }
+    }
+  ctx.strokeStyle = '#ffffff14';
+  ctx.lineWidth = 1;
+  ctx.beginPath();
+  for (let c = 0; c <= COLS; c++) {
+    ctx.moveTo(c * CELL, 0);
+    ctx.lineTo(c * CELL, H);
+  }
+  for (let r = 0; r <= ROWS; r++) {
+    ctx.moveTo(0, r * CELL);
+    ctx.lineTo(W, r * CELL);
+  }
+  ctx.stroke();
+  ctx.font = 'bold 9px system-ui';
+  ctx.textAlign = 'center';
+  const placed = [];
+  for (const src of threatSources()) {
+    const lx = (src.c + 0.5) * CELL;
+    const ly = (src.r - src.radius) * CELL - 4;
+    if (placed.some(([px, py]) => Math.abs(px - lx) < 60 && Math.abs(py - ly) < 14)) continue; // one label per cluster
+    placed.push([lx, ly]);
+    const who = src.by === 'test' ? t('debug.test') : state.squads[src.by]?.name ?? String(src.by);
+    const x = (src.c + 0.5) * CELL;
+    const y = (src.r - src.radius) * CELL - 4;
+    ctx.fillStyle = '#000000b0';
+    ctx.fillRect(x - 18, y - 9, 36, 12);
+    ctx.fillStyle = '#ffd7cf';
+    ctx.fillText(who, x, y);
+  }
+  ctx.restore();
+}
+
+function drawDebugValues(ctx) {
+  ctx.save();
+  ctx.font = 'bold 10px ui-monospace, monospace';
+  for (const s of state.squads) {
+    if (!alive(s).length || !s.cond) continue;
+    const c = s.cond;
+    const lines = t('debug.values', { sup: Math.round(c.suppression), coh: Math.round(c.cohesion), rdy: Math.round(c.readiness) }).split(' · ');
+    const w = Math.max(...lines.map((l) => ctx.measureText(l).width)) + 10;
+    const R = squadRadius(s);
+    const left = s.x + R + 12 + w > W;
+    const x = left ? s.x - R - 12 - w : s.x + R + 12;
+    const y = s.y - 22;
+    ctx.globalAlpha = !s.side || s.visible ? 1 : 0.55;
+    ctx.fillStyle = '#0b0f0bdd';
+    ctx.fillRect(x, y, w, lines.length * 13 + 5);
+    ctx.fillStyle = s.side ? '#f2b59d' : '#e6f0c8';
+    ctx.textAlign = 'left';
+    lines.forEach((l, i) => ctx.fillText(l, x + 5, y + 13 + i * 13));
+  }
+  ctx.restore();
+}
+
+function drawDebugLegend(ctx) {
+  const rows = [
+    ['rgba(225,45,35,0.6)', t('debug.threatOwn')],
+    ['rgba(60,120,235,0.6)', t('debug.threatEnemy')],
+    ['rgba(240,170,40,0.5)', t('debug.discomfort')],
+    [null, t('debug.tool')],
+  ];
+  const x = W - 238;
+  const y = H - 128;
+  ctx.save();
+  ctx.fillStyle = '#0b0f0be6';
+  ctx.fillRect(x, y, 226, 112);
+  ctx.textAlign = 'left';
+  ctx.fillStyle = '#f0e6c4';
+  ctx.font = 'bold 11px system-ui';
+  ctx.fillText(t('debug.title'), x + 10, y + 18);
+  ctx.font = '11px system-ui';
+  rows.forEach(([col, text], i) => {
+    const ry = y + 38 + i * 19;
+    if (col) {
+      ctx.fillStyle = col;
+      ctx.fillRect(x + 10, ry - 10, 14, 12);
+    }
+    ctx.fillStyle = '#e6e0c8';
+    ctx.fillText(text, x + (col ? 32 : 10), ry);
+  });
+  ctx.restore();
 }
 
 function drawEffects(ctx) {
@@ -196,10 +332,15 @@ export function drawMap(ctx, cursor) {
     ctx.setLineDash([]);
   }
   drawObjective(ctx);
+  if (state.debug) drawDebug(ctx);
   // Fallen soldiers first, so they lie under every living soldier.
   for (const s of state.squads) if (!s.side || s.visible) for (const m of s.men) if (m.hp <= 0) drawUnit(ctx, m, s, state.elapsed, 1.12);
   for (const s of state.squads) if (!s.side || s.visible) drawSquad(ctx, s);
   drawEffects(ctx);
+  if (state.debug) {
+    drawDebugValues(ctx);
+    drawDebugLegend(ctx);
+  }
 
   if (cursor) {
     ctx.strokeStyle = '#fff';

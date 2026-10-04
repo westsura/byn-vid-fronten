@@ -5,6 +5,7 @@ import { buildingAt, coverAt } from './terrain.js';
 import { setSound, soundEnabled, resumeAudio } from './audio.js';
 import { MODES, artMode, isPrototype, urlForMode, modeBadge } from './art.js';
 import { t } from './text.js';
+import { toggleTestFire } from './threat.js';
 import { squadRadius } from './render.js';
 
 const $ = (id) => document.getElementById(id);
@@ -102,6 +103,13 @@ export function bindInput(canvas, W, H) {
     const r = canvas.getBoundingClientRect();
     const x = ((e.clientX - r.left) * W) / r.width;
     const y = ((e.clientY - r.top) * H) / r.height;
+    if (state.debug && e.shiftKey) {
+      // Debug test tool: toggle test fire on the cell.
+      const on = toggleTestFire(x, y);
+      toast(t(on ? (state.started && !state.paused ? 'debug.fireOnRunning' : 'debug.fireOn') : 'debug.fireOff'));
+      canvas.focus();
+      return;
+    }
     const hit = playerSquads().find((s) => alive(s).length && Math.hypot(s.x - x, s.y - y) < squadRadius(s) - 6);
     if (hit && e.button !== 2) select(hit.id);
     else issue(x, y);
@@ -135,6 +143,10 @@ export function bindInput(canvas, W, H) {
     const hot = playerSquads().find((q) => q.hotkey === e.key);
     if (hot) select(hot.id);
     if (e.key.toLowerCase() === 'd') defend();
+    if (e.key.toLowerCase() === 'g') {
+      state.debug = !state.debug;
+      toast(t(state.debug ? 'debug.on' : 'debug.off'));
+    }
     if (e.key.startsWith('Arrow')) {
       e.preventDefault();
       const s = state.squads[state.selected];

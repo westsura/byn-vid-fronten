@@ -22,7 +22,14 @@
     "enemy": "ENEMY",
     "pausedBanner": "PAUSED — GIVE YOUR ORDERS",
     "ariaLabel": "Battle map. Select a unit with 1–4. Click the map to move. Arrow keys move the order cursor and Enter gives the order.",
-    "buildings": ["West house", "Farmhouse", "East house", "Barn", "South house", "Storehouse"],
+    "buildings": [
+      "West house",
+      "Farmhouse",
+      "East house",
+      "Barn",
+      "South house",
+      "Storehouse"
+    ],
     "legendOwn": "Own unit",
     "legendEnemy": "Spotted enemy",
     "legendObjective": "Objective"
@@ -78,10 +85,20 @@
     "keysSpace": "SPACE",
     "keysSpaceText": "Pause",
     "keysDefend": "D",
-    "keysDefendText": "Defend"
+    "keysDefendText": "Defend",
+    "keysDebug": "G",
+    "keysDebugText": "Debug view"
   },
-  "morale": { "steady": "Steady", "shaken": "Shaken", "broken": "Broken" },
-  "cover": { "building": "Building", "vegetation": "Vegetation", "open": "Open ground" },
+  "morale": {
+    "steady": "Steady",
+    "shaken": "Shaken",
+    "broken": "Broken"
+  },
+  "cover": {
+    "building": "Building",
+    "vegetation": "Vegetation",
+    "open": "Open ground"
+  },
   "posture": {
     "out": "Out of action",
     "pinned": "Pinned · taking cover",
@@ -128,5 +145,23 @@
     "sprites": "Sprites (v4, approved style)",
     "code": "Code-drawn (fallback)",
     "badge": "WALK CYCLE V2 / FALLEN – NOT APPROVED"
+  },
+  "status": {
+    "pinned": "▼ PINNED",
+    "broken": "✕ BROKEN"
+  },
+  "debug": {
+    "title": "DEBUG VIEW",
+    "threatOwn": "Fire against own units",
+    "threatEnemy": "Fire against enemy",
+    "discomfort": "Discomfort (lingers)",
+    "tool": "Shift+click: test fire on/off",
+    "values": "SUP {sup} · COH {coh} · RDY {rdy}",
+    "test": "TEST",
+    "fireOn": "Test fire on the cell. Start the battle to see the effect.",
+    "fireOnRunning": "Test fire on the cell.",
+    "fireOff": "Test fire removed.",
+    "on": "Debug view on. Shift+click a cell for test fire.",
+    "off": "Debug view off."
   }
 }
