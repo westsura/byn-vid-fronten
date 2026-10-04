@@ -1,6 +1,6 @@
 # Byn vid fronten – speldesign
 
-Senast uppdaterad 2026-10-02 (inklusive Björns beslut efter steg 0). Källa: designdokumentet i claude.ai-projektet "Close Combat".
+Senast uppdaterad 2026-10-04 (inklusive Björns beslut efter steg 0 och steg 1). Källa: designdokumentet i claude.ai-projektet "Close Combat".
 
 ## Grundläge
 
