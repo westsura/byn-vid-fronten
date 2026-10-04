@@ -17,6 +17,8 @@ Allt som beskriver styrkor, personer, vapen, grader, utmärkelser, texter och up
 | `rules/camera.json` | Zoomnivåer (hela kartan, pluton, enhet) med kamerastöt, ljud och effektstyrka per nivå, glidtid och panorering (steg 4) |
 | `rules/effects.json` | Grundeffekter (steg 3): nedslag per material, spårljus, kamerastöt (trauma), stridskontakt utanför bild |
 | `rules/ai.json` | Fiendens AI (steg 5): kostnad för fara och obehag i vägvalet, när den väljer ny väg eller stannar |
+| `leaders/*.json` | Ledarvärden (Leadership, Fire Control, Rally 1–5) och egenskap per person; `leaders/traits.json`: egenskaperna med sina effekter (steg 6) |
+| `rules/leaders.json` | Vad ledarvärdena och plutonsledarnas lägen gör: radie, ordertid, faktorer (steg 6) |
 | `text/en.json` | All gränssnittstext på engelska. Förband, befattningar, grader och utmärkelser kommer från filerna ovan, på tyska respektive i rysk translitterering |
 
 ## Lägga till eller ändra
