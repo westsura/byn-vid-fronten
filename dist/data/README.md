@@ -12,6 +12,7 @@ Allt som beskriver styrkor, personer, vapen, grader, utmärkelser, texter och up
 | `forces/*.json` | En styrka: vilka förband som ingår och vilka personer som står på vilka platser |
 | `scenarios/proto-1943.json` | År, vilka styrkor som möts, utgångslägen och snabbtangenter |
 | `rules/condition.json` | Tillståndsmodell och hotkarta (steg 2): nedhållning, sammanhållning, eldberedskap, obehag, rutnät och gränser för Pinned/Broken |
+| `rules/fire.json` | Eld och siktlinje (steg 3): skala meter per kartenhet, upptäcktsavstånd, skymmande terräng, eldtillfällen per vapentyp, träff- och nedhållningsfaktorer, flankering |
 | `text/en.json` | All gränssnittstext på engelska. Förband, befattningar, grader och utmärkelser kommer från filerna ovan, på tyska respektive i rysk translitterering |
 
 ## Lägga till eller ändra
