@@ -138,6 +138,13 @@ function chooseTarget(s, squads, state) {
 
 // One update of fire for unit s. `ev` = { log(key, params), shot(squad), effect(e) }.
 export function fireUnit(s, dt, squads, state, ev) {
+  // A barrel change runs its course whether or not the unit has a target.
+  for (const m of s.men) {
+    if (m.barrelChange > 0) {
+      m.barrelChange = Math.max(0, m.barrelChange - dt);
+      if (m.barrelChange === 0 && m.hp > 0) ev.log('log.barrelDone', { unit: s.name });
+    }
+  }
   if (s.routed) return;
   s.retarget = (s.retarget ?? 0) - dt;
   if (s.retarget <= 0 || (s.target && !living(s.target).length)) {
@@ -150,7 +157,7 @@ export function fireUnit(s, dt, squads, state, ev) {
     const w = weapons[m.weapon];
     if (!w) continue;
     m.fireTimer = (m.fireTimer ?? random() * fireInterval(w)) - dt;
-    if (m.fireTimer > 0 || m.ammo <= 0) continue;
+    if (m.fireTimer > 0 || m.ammo <= 0 || m.barrelChange > 0) continue;
     const victims = living(t)
       .map((v) => ({ v, h: metres(m, v) < w.maxRangeM ? sight(m, v) : null }))
       .filter((x) => x.h !== null);
@@ -159,6 +166,16 @@ export function fireUnit(s, dt, squads, state, ev) {
     const { v, h } = victims[Math.floor(random() * victims.length)];
     const rounds = Math.min(m.ammo, P.fire.roundsPerEvent[w.type] ?? 1);
     m.ammo -= rounds;
+    // MG: after a number of rounds the hot barrel must be changed; the gun is
+    // silent meanwhile and the unit's fire readiness stops building (condition.js).
+    if (w.barrelChange) {
+      m.roundsSinceChange = (m.roundsSinceChange ?? 0) + rounds;
+      if (m.roundsSinceChange >= w.barrelChange.afterRounds) {
+        m.roundsSinceChange = 0;
+        m.barrelChange = w.barrelChange.durationS;
+        ev.log('log.barrelChange', { unit: s.name, weapon: w.name });
+      }
+    }
     m.flash = 0.12;
     m.aim = 1.2;
     m.angle = Math.atan2(v.y - m.y, v.x - m.x);

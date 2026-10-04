@@ -47,7 +47,9 @@
     "move": "↗ Move",
     "defend": "⊙ Defend",
     "beginBrief": "Start battle",
-    "again": "Play again →"
+    "again": "Play again →",
+    "split": "⑂ Split",
+    "merge": "⑃ Merge"
   },
   "brief": {
     "eyebrow": "YOUR MISSION",
@@ -87,7 +89,9 @@
     "keysDefend": "D",
     "keysDefendText": "Defend",
     "keysDebug": "G",
-    "keysDebugText": "Debug view"
+    "keysDebugText": "Debug view",
+    "keysSplit": "S",
+    "keysSplitText": "Split / merge"
   },
   "morale": {
     "steady": "Steady",
@@ -127,7 +131,11 @@
     "won": "Mission accomplished.",
     "ended": "The battle is over.",
     "rallied": "{unit} has rallied.",
-    "enemyRallied": "Enemy {unit} has rallied."
+    "enemyRallied": "Enemy {unit} has rallied.",
+    "split": "{unit} splits into MG-Trupp and Schützentrupp.",
+    "merge": "{unit} is together again.",
+    "barrelChange": "{unit}: {weapon} barrel change.",
+    "barrelDone": "{unit}: barrel changed, MG firing again."
   },
   "toast": {
     "recovering": "The unit is recovering and cannot take orders.",
@@ -136,7 +144,9 @@
     "dataFailed": "Game data could not be loaded.",
     "graphicsFailed": "The sprite graphics could not be loaded. Code-drawn graphics are used.",
     "confirmRestart": "End this battle and start over?",
-    "confirmGraphics": "Changing graphics restarts the battle. Continue?"
+    "confirmGraphics": "Changing graphics restarts the battle. Continue?",
+    "cannotSplit": "This unit cannot split. A Gruppe needs both its Gruppenführer and Truppführer to split.",
+    "tooFarToMerge": "The two Trupps are too far apart to merge. Move them together first."
   },
   "result": {
     "held": "You held the objective for {hold} seconds.",
@@ -151,7 +161,8 @@
   },
   "status": {
     "pinned": "▼ PINNED",
-    "broken": "✕ BROKEN"
+    "broken": "✕ BROKEN",
+    "barrel": "⟳ BARREL CHANGE"
   },
   "debug": {
     "title": "DEBUG VIEW",
@@ -166,5 +177,8 @@
     "fireOff": "Test fire removed.",
     "on": "Debug view on. Shift+click a cell for test fire.",
     "off": "Debug view off."
+  },
+  "units": {
+    "teamName": "{unit} · {team}"
   }
 }

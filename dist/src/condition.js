@@ -80,7 +80,7 @@ export function updateCondition(s, dt, allSquads, now = 0) {
     c.cohesion = clamp(c.cohesion - lost * P2.perCasualty);
     c.aliveSeen = men.length;
   }
-  const leader = s.men.find((m) => m.role === 'leader');
+  const leader = s.men.find((m) => (s.leaderSlot ? m.slot === s.leaderSlot : m.role === 'leader'));
   if (c.leaderAlive && leader && leader.hp <= 0) {
     c.leaderAlive = false;
     c.cohesion = clamp(c.cohesion - P2.leaderLost);
@@ -99,7 +99,11 @@ export function updateCondition(s, dt, allSquads, now = 0) {
   else if (c.broken && c.cohesion >= P2.rallyAt) c.broken = false;
 
   // Fire readiness: zero while the unit moves, builds while it stands still
-  // (also a pinned unit that has a move order but cannot advance).
+  // (also a pinned unit that has a move order but cannot advance), interrupted
+  // while the unit's MG changes barrel.
+  c.barrelChange = s.men.some((m) => m.hp > 0 && m.barrelChange > 0);
   if (s.path.length && s.advancing) c.readiness = 0;
-  else c.readiness = clamp(c.readiness + (100 / readyTime(s)) * (c.pinned ? P.readiness.pinnedFactor : 1) * dt);
+  else if (c.barrelChange) {
+    // interrupted: no build-up while the MG barrel is being changed
+  } else c.readiness = clamp(c.readiness + (100 / readyTime(s)) * (c.pinned ? P.readiness.pinnedFactor : 1) * dt);
 }

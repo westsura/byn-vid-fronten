@@ -1,6 +1,6 @@
 // DOM side panel, overlays and input handling.
 import { MISSION_TIME, HOLD_TIME } from './config.js';
-import { state, alive, playerSquads, select, issue, defend, setMode, togglePause, reset, orderText, houseName } from './sim.js';
+import { state, alive, playerSquads, select, issue, defend, split, canSplit, setMode, togglePause, reset, orderText, houseName } from './sim.js';
 import { buildingAt, coverAt } from './terrain.js';
 import { setSound, soundEnabled, resumeAudio } from './audio.js';
 import { MODES, artMode, isPrototype, urlForMode, modeBadge } from './art.js';
@@ -63,7 +63,7 @@ export function renderUI() {
   $('forceCount').textContent = t('panel.men', { n: playerSquads().reduce((sum, q) => sum + alive(q).length, 0) });
   setHTML($('squads'), playerSquads().map(squadCard).join(''));
 
-  const lead = s.men[0];
+  const lead = s.men.find((m) => m.slot === s.leaderSlot && m.hp > 0) ?? alive(s)[0] ?? s.men[0];
   $('selectedName').textContent = s.name + (lead?.rank ? ' · ' + lead.rank.abbr + ' ' + lead.last : '');
   const house = buildingAt(s.x, s.y);
   const cover = coverAt(s.x, s.y);
@@ -76,6 +76,9 @@ export function renderUI() {
     : s.order === 'defend' ? 'posture.defending'
     : s.path.length ? 'posture.moving' : 'posture.ready',
   );
+  // Split / Merge (provisional button; the panel is rebuilt in step 4).
+  $('split').textContent = t(s.team ? 'buttons.merge' : 'buttons.split');
+  $('split').disabled = state.ended || !n || (!s.team && !canSplit(s));
   $('move').classList.toggle('active', state.mode === 'move');
   $('defend').classList.toggle('active', state.mode === 'defend');
   $('orderHelp').textContent = t(state.mode === 'move' ? 'panel.helpMove' : 'panel.helpDefend');
@@ -130,6 +133,7 @@ export function bindInput(canvas, W, H) {
   });
   $('move').onclick = () => setMode('move');
   $('defend').onclick = defend;
+  $('split').onclick = () => split();
   $('pause').onclick = startOrToggle;
   $('begin').onclick = startOrToggle;
   $('again').onclick = restart;
@@ -151,6 +155,7 @@ export function bindInput(canvas, W, H) {
     const hot = playerSquads().find((q) => q.hotkey === e.key);
     if (hot) select(hot.id);
     if (e.key.toLowerCase() === 'd') defend();
+    if (e.key.toLowerCase() === 's') split();
     if (e.key.toLowerCase() === 'g') {
       state.debug = !state.debug;
       toast(t(state.debug ? 'debug.on' : 'debug.off'));

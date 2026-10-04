@@ -155,11 +155,11 @@ function drawSquad(ctx, s) {
   ctx.fillRect(s.x - tw / 2, s.y - R - 8, tw, 21);
   ctx.fillStyle = c.broken ? '#ffc9bd' : c.pinned ? '#ffe3a3' : s.side ? '#f2b59d' : '#dce8bf';
   ctx.fillText(tag, s.x, s.y - R + 7);
-  const status = [c.broken && t('status.broken'), c.pinned && t('status.pinned')].filter(Boolean).join('  ');
+  const status = [c.broken && t('status.broken'), c.pinned && t('status.pinned'), c.barrelChange && !s.side && t('status.barrel')].filter(Boolean).join('  ');
   if (status) {
     ctx.font = 'bold 10px system-ui';
     const sw = ctx.measureText(status).width + 12;
-    ctx.fillStyle = c.broken ? '#c4483cf2' : '#d9a23cf2';
+    ctx.fillStyle = c.broken ? '#c4483cf2' : c.pinned ? '#d9a23cf2' : '#b9c4cff2';
     ctx.fillRect(s.x - sw / 2, s.y - R - 26, sw, 16);
     ctx.fillStyle = '#1b1408';
     ctx.fillText(status, s.x, s.y - R - 14);

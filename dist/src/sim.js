@@ -34,7 +34,8 @@ export const hooks = {
 };
 
 export const alive = (s) => s.men.filter((m) => m.hp > 0);
-export const playerSquads = () => state.squads.filter((s) => !s.side);
+// Own units shown in the panel (a merged-away half is not a unit of its own).
+export const playerSquads = () => state.squads.filter((s) => !s.side && !s.absorbed);
 
 export function soldierPose(m, s) {
   if (m.hp <= 0) return 'fallen';
@@ -59,11 +60,13 @@ export function setForces(f) {
 export const currentForces = () => forces;
 
 let weapons = {};
+let orderRules = null;
 // State-model, threat-map and fire parameters (data/rules/condition.json) and the weapon table.
 export function setRules(db) {
   setThreatRules(db.rules.condition);
   setConditionRules(db.rules.condition, db.weapons);
   setFireRules(db.rules.fire, db.weapons, CELL);
+  orderRules = db.rules.orders;
   fireRulesCheck = db.rules.fire.spotting.checkS;
   weapons = db.weapons;
 }
@@ -99,6 +102,11 @@ function buildSquad(unit, id, side) {
     hotkey: unit.hotkey ?? null,
     teams: unit.teams ?? null,
     split: unit.split ?? false,
+    group: unit.id, // the Gruppe a half belongs to
+    team: null, // 'mg-trupp' / 'schuetzentrupp' while split
+    leaderSlot: unit.leaderSlot ?? null,
+    groupName: unit.name,
+    absorbed: false,
     nation: side ? forces.enemy.nation : forces.player.nation,
     faction: (side ? forces.enemy.nation : forces.player.nation) === 'de' ? 'german' : 'soviet',
     order: 'hold',
@@ -125,6 +133,8 @@ function buildSquad(unit, id, side) {
         role: def.role,
         weapon: def.weapon,
         ammo: weapons[def.weapon] ? weapons[def.weapon].ammoCarried + weapons[def.weapon].magazine : 0,
+        roundsSinceChange: 0, // MG: rounds fired on the current barrel
+        barrelChange: 0, // MG: seconds left of a barrel change
         ammoFull: weapons[def.weapon] ? weapons[def.weapon].ammoCarried + weapons[def.weapon].magazine : 0,
         fireTimer: null,
         sprite: def.sprite ?? null,
@@ -220,6 +230,107 @@ export function defend() {
   hooks.changed();
 }
 
+// ---- Split and merge (DESIGN.md, Gruppen) ------------------------------------
+// A Gruppe splits into MG-Trupp (led by the Gruppenführer) and Schützentrupp (led
+// by the Truppführer). The Gruppe's object becomes the MG-Trupp; the Schützentrupp
+// is a second unit object that is reused if the Gruppe splits again. Both halves
+// inherit the Gruppe's state values.
+const teamName = (s, team) => t('units.teamName', { unit: s.groupName, team: team.name });
+const halfOf = (s) => state.squads.find((o) => o !== s && o.group === s.group && o.side === s.side && o.team && !o.absorbed);
+
+export function canSplit(s) {
+  if (!s || s.side || s.routed || !s.teams || s.team || !alive(s).length) return false;
+  return s.teams.every((tm) => s.men.some((m) => m.slot === tm.leader && m.hp > 0));
+}
+
+export function split(id = state.selected) {
+  const s = state.squads[id];
+  if (state.ended || !s) return false;
+  if (s.team) return merge(id);
+  if (!canSplit(s)) {
+    hooks.toast(t(s?.routed ? 'toast.recovering' : 'toast.cannotSplit'));
+    return false;
+  }
+  const [ta, tb] = s.teams;
+  let b = state.squads.find((o) => o.group === s.group && o.absorbed);
+  if (!b) {
+    b = { ...s, id: state.squads.length, hotkey: null, cond: { ...s.cond, incoming: [] } };
+    state.squads.push(b);
+  }
+  const menB = s.men.filter((m) => m.team === tb.id);
+  // Schützentrupp a little behind, on the side away from the enemy (west for the player).
+  const back = orderRules.split.offsetUnits * (s.side ? 1 : -1);
+  Object.assign(b, {
+    absorbed: false,
+    name: teamName(s, tb),
+    team: tb.id,
+    leaderSlot: tb.leader,
+    men: menB,
+    x: s.x + back,
+    y: s.y,
+    path: [],
+    order: 'hold',
+    orderHouse: null,
+    routed: false,
+    target: null,
+    hotkey: null,
+    cond: { ...s.cond, incoming: [], aliveSeen: menB.filter((m) => m.hp > 0).length, losses: menB.filter((m) => m.hp <= 0).length },
+  });
+  if (blocked(b.x, b.y) || !canWalk(s, b)) Object.assign(b, { x: s.x, y: s.y });
+  s.men = s.men.filter((m) => m.team === ta.id);
+  s.name = teamName(s, ta);
+  s.team = ta.id;
+  s.leaderSlot = ta.leader;
+  s.cond.aliveSeen = alive(s).length;
+  s.cond.losses = s.men.length - alive(s).length;
+  s.split = b.split = true;
+  addLog(t('log.split', { unit: s.groupName }));
+  hooks.changed();
+  return true;
+}
+
+export function merge(id = state.selected) {
+  const a0 = state.squads[id];
+  const other = a0 && halfOf(a0);
+  if (state.ended || !a0?.team || !other) return false;
+  // The Gruppe's own object (the first team, MG-Trupp) takes the men back.
+  const [a, b] = a0.team === a0.teams[0].id ? [a0, other] : [other, a0];
+  if (a.routed || b.routed) {
+    hooks.toast(t('toast.recovering'));
+    return false;
+  }
+  if (dist(a, b) > orderRules.split.mergeRangeUnits) {
+    hooks.toast(t('toast.tooFarToMerge'));
+    return false;
+  }
+  const na = alive(a).length;
+  const nb = alive(b).length;
+  a.cond = {
+    ...a.cond,
+    suppression: Math.max(a.cond.suppression, b.cond.suppression),
+    cohesion: na + nb ? (a.cond.cohesion * na + b.cond.cohesion * nb) / (na + nb) : a.cond.cohesion,
+    readiness: Math.min(a.cond.readiness, b.cond.readiness),
+    pinned: a.cond.pinned || b.cond.pinned,
+    losses: a.cond.losses + b.cond.losses,
+    aliveSeen: na + nb,
+    leaderAlive: a.cond.leaderAlive,
+  };
+  a.men = [...a.men, ...b.men];
+  // Back to the Gruppe's original slot order (Gruppenführer first).
+  const unit = [...forces.player.units, ...forces.enemy.units].find((u) => u.id === a.group);
+  if (unit) {
+    const rank = Object.fromEntries(unit.men.map((m, i) => [m.slot, i]));
+    a.men.sort((p, q) => rank[p.slot] - rank[q.slot]);
+  }
+  a.men.forEach((m, i) => (m.idx = i));
+  Object.assign(a, { name: a.groupName, team: null, leaderSlot: unit?.leaderSlot ?? a.leaderSlot, split: false });
+  Object.assign(b, { men: [], absorbed: true, path: [], target: null, split: false });
+  if (state.selected === b.id) state.selected = a.id;
+  addLog(t('log.merge', { unit: a.groupName }));
+  hooks.changed();
+  return true;
+}
+
 export function togglePause() {
   if (state.ended) return;
   state.started = true;
@@ -275,7 +386,7 @@ function updateEnemyAI(s) {
     s.path = [];
     s.order = 'defend';
   } else {
-    const e = s.id - playerSquads().length; // index among enemy units
+    const e = state.squads.filter((q) => q.side).indexOf(s); // index among enemy units
     s.path = pathTo(s, 820 + e * 50, 330 + e * 80) || [];
     s.order = 'move';
   }

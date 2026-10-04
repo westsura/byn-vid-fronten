@@ -1,0 +1,8 @@
+{
+  "_comment": "Order och förbandshantering (PROMPTER steg 3 del B). Delad grupp: MG-Trupp (Gruppenführer) och Schützentrupp (Truppführer). Avstånd i kartenheter (1 enhet ≈ 0,1 m).",
+  "split": {
+    "_comment": "Vid delning ställer sig Schützentrupp offsetUnits bakom MG-Trupp (sett från fienden). Sammanslagning kräver att trupperna står inom mergeRangeUnits från varandra och att båda trupperna har sin ledare vid liv vid delning.",
+    "offsetUnits": 45,
+    "mergeRangeUnits": 120
+  }
+}
