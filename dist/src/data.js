@@ -7,7 +7,7 @@ const AWARD_FILES = ['de', 'su'];
 
 export async function loadData(read, scenarioId = 'proto-1943') {
   const scenario = await read(`scenarios/${scenarioId}.json`);
-  const [weapons, text, condition, fire, orders, effects, camera, ai, ...rest] = await Promise.all([
+  const [weapons, text, condition, fire, orders, effects, camera, ai, leaderRules, traits, ...rest] = await Promise.all([
     read('weapons.json'),
     read('text/en.json'),
     read('rules/condition.json'),
@@ -16,6 +16,8 @@ export async function loadData(read, scenarioId = 'proto-1943') {
     read('rules/effects.json'),
     read('rules/camera.json'),
     read('rules/ai.json'),
+    read('rules/leaders.json'),
+    read('leaders/traits.json'),
     ...RANK_FILES.map((f) => read(`ranks/${f}.json`)),
     ...AWARD_FILES.map((f) => read(`awards/${f}.json`)),
   ]);
@@ -24,16 +26,20 @@ export async function loadData(read, scenarioId = 'proto-1943') {
   const forces = {};
   const units = {};
   const people = {};
+  const leaders = {}; // personId → { leadership, fireControl, rally, trait }
   for (const side of ['player', 'enemy']) {
     const f = await read(`forces/${scenario[side].forces}.json`);
     forces[side] = f;
     units[f.nation] ??= await read(`units/${f.unitsFile}.json`);
     for (const p of (await read(`people/${f.peopleFile}.json`)).people) people[p.id] = p;
+    Object.assign(leaders, (await read(`leaders/${f.peopleFile}.json`)).leaders);
   }
   return {
     scenario,
     text,
-    rules: { condition, fire, orders, effects, camera, ai },
+    rules: { condition, fire, orders, effects, camera, ai, leaders: leaderRules },
+    traits: Object.fromEntries(traits.traits.map((x) => [x.id, x])),
+    leaders,
     weapons: Object.fromEntries(weapons.weapons.map((w) => [w.id, w])),
     ranks,
     awards,
@@ -89,6 +95,20 @@ export function validate(db) {
       }
       for (const s of t.slots) if (!unit.members[s.slot]) errors.push(`${unit.id}: slot ${s.slot} is empty`);
     }
+    // Leaders: every unit's leader (and deputy) has values 1–5 and a known trait.
+    for (const unit of f.units) {
+      const t = unitType(db, f.nation, unit.type);
+      for (const slot of [t?.leader, t?.deputy, ...(t?.teams ?? []).map((tm) => tm.leader)].filter(Boolean)) {
+        const pid = unit.members[slot];
+        const l = db.leaders?.[pid];
+        if (!l) {
+          errors.push(`${unit.id}/${slot}: leader ${pid} has no leader values`);
+          continue;
+        }
+        for (const k of ['leadership', 'fireControl', 'rally']) if (!(l[k] >= 1 && l[k] <= 5)) errors.push(`${pid}: ${k} must be 1–5`);
+        if (l.trait && !db.traits?.[l.trait]) errors.push(`${pid}: unknown trait ${l.trait}`);
+      }
+    }
     for (const [pos, def] of Object.entries(u?.positions ?? {})) {
       if (def.weapon && !db.weapons[def.weapon]) errors.push(`position ${pos}: unknown weapon ${def.weapon}`);
       if (!db.ranks[f.formation]?.ranks.some((r) => r.id === def.prescribedRank)) errors.push(`position ${pos}: unknown rank ${def.prescribedRank}`);
@@ -141,6 +161,7 @@ export function buildSide(db, side) {
               sprite: s.sprite ?? pos.sprite,
               role: s.slot === t.leader ? 'leader' : weapon?.type === 'lmg' ? 'mg' : 'rifleman',
               team: t.teams?.find((tm) => tm.slots.includes(s.slot))?.id ?? null,
+              leader: db.leaders?.[p.id] ? { ...db.leaders[p.id] } : null,
             };
           }),
       };

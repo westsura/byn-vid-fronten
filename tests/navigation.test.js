@@ -111,6 +111,7 @@ test('fire only happens along clear lines of sight', () => {
 test('pause stops the simulation; resuming continues it', () => {
   sim.reset();
   sim.issue(640, 330);
+  player().orderDelay = 0; // no wait for the order (leaders.js) in this test
   assert.equal(sim.step(DT), false, 'paused at start');
   const x = player().x;
   sim.togglePause();

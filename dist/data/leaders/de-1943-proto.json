@@ -1,0 +1,13 @@
+{
+  "_comment": "Ledarvärden för prototypens tyska pluton (personer i people/de-1943-proto.json). Värden 1–5: leadership (radie och hur snabbt order verkställs), fireControl (eldberedskap och träff), rally (återsamling). Egenskapen förklaras av personens utmärkelser och bakgrund (t.ex. Eastern Front Veteran: Ostmedaille och ISA). Truppführer har ingen egenskap: tar han över efter Gruppenführer gör han det med sina egna, svagare värden.",
+  "leaders": {
+    "de-001": { "leadership": 4, "fireControl": 3, "rally": 5, "trait": "veteran" },
+    "de-002": { "leadership": 3, "fireControl": 4, "rally": 3, "trait": "cautious" },
+    "de-007": { "leadership": 3, "fireControl": 4, "rally": 3, "trait": "veteran" },
+    "de-011": { "leadership": 2, "fireControl": 2, "rally": 2, "trait": null },
+    "de-017": { "leadership": 2, "fireControl": 3, "rally": 2, "trait": "daredevil" },
+    "de-021": { "leadership": 2, "fireControl": 2, "rally": 2, "trait": null },
+    "de-027": { "leadership": 4, "fireControl": 4, "rally": 3, "trait": "mgSpecialist" },
+    "de-031": { "leadership": 1, "fireControl": 2, "rally": 2, "trait": null }
+  }
+}

@@ -3,6 +3,7 @@ import { W, H } from './config.js';
 import { buildings, objective } from './scenario.js';
 import { state, alive, formationOffset, houseName, playerSquads, inContact, offScreen } from './sim.js';
 import { shakeAmount, effectRules } from './effects.js';
+import { radiusOf } from './leaders.js';
 import { fireRules } from './fire.js';
 import { cam, view, toScreen, levelInfo } from './camera.js';
 import { buildingAt } from './terrain.js';
@@ -168,7 +169,42 @@ function drawSector(ctx, s, sec, draft = false) {
   ctx.restore();
 }
 
+// Platoon leaders: radius and mode around the Zugführer and Zugtruppführer when
+// the Zugtrupp is selected (dashed when no mode is chosen).
+const MODE_COLOUR = { directFire: '#f0b45a', leadAssault: '#e98a6a', rally: '#8fd0a0' };
+function drawLeaderRadii(ctx) {
+  for (const s of state.squads) {
+    if (s.side || s.kind !== 'hq' || !state.selection?.includes(s.id)) continue;
+    for (const m of s.men) {
+      if (m.hp <= 0 || !m.leader) continue;
+      const mode = state.leaderModes?.[m.personId] ?? null;
+      const r = radiusOf(m.leader);
+      ctx.save();
+      ctx.lineWidth = 2 * px();
+      if (!mode) ctx.setLineDash([6 * px(), 6 * px()]);
+      ctx.strokeStyle = (MODE_COLOUR[mode] ?? '#d9d3b0') + (mode ? 'd0' : '80');
+      ctx.fillStyle = (MODE_COLOUR[mode] ?? '#d9d3b0') + (mode ? '18' : '08');
+      ctx.beginPath();
+      ctx.arc(m.x, m.y, r, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.stroke();
+      ctx.restore();
+      label(ctx, m.x, m.y - r, (g) => {
+        const txt = `${m.rank.abbr} ${m.last} · ${t('leaders.modes.' + mode)}`;
+        g.font = 'bold 10px system-ui';
+        g.textAlign = 'center';
+        const w = g.measureText(txt).width + 10;
+        g.fillStyle = '#10160fe0';
+        g.fillRect(-w / 2, -8, w, 15);
+        g.fillStyle = MODE_COLOUR[mode] ?? '#e8e2c4';
+        g.fillText(txt, 0, 3);
+      });
+    }
+  }
+}
+
 export function drawSectors(ctx) {
+  drawLeaderRadii(ctx);
   for (const s of state.squads) {
     if (s.side || !s.sector || !alive(s).length) continue;
     if (state.paused || state.selection?.includes(s.id)) drawSector(ctx, s, s.sector);

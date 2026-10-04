@@ -185,7 +185,13 @@
     "positionOrder": "{unit}: moving to a defensive position.",
     "fireOrder": "{unit}: concentrate fire!",
     "retreatOrder": "{unit}: falling back.",
-    "sectorOrder": "{unit}: covering sector."
+    "sectorOrder": "{unit}: covering sector.",
+    "rallies": "{leader} rallies {unit}.",
+    "leaderFell": "{leader} has fallen ({unit}).",
+    "takesCommand": "{leader} takes command of {unit}.",
+    "noLeader": "{unit} has no leader left.",
+    "leaderMode": "{leader}: {mode}.",
+    "leaderModeOff": "{leader}: no mode."
   },
   "toast": {
     "recovering": "The unit is recovering and cannot take orders.",
@@ -235,5 +241,58 @@
   },
   "units": {
     "teamName": "{unit} · {team}"
+  },
+  "leaders": {
+    "title": "Leaders",
+    "leadership": "Leadership",
+    "fireControl": "Fire Control",
+    "rally": "Rally",
+    "noTrait": "No trait",
+    "standIn": "stand-in",
+    "modeLabel": "Mode",
+    "modeOff": "None",
+    "modes": {
+      "directFire": "Direct Fire",
+      "leadAssault": "Lead Assault",
+      "rally": "Rally",
+      "null": "None"
+    },
+    "modeHelp": {
+      "directFire": "Units within the radius build fire readiness faster and hit better.",
+      "leadAssault": "Units within the radius take orders faster, are slowed less by suppression and lose less cohesion from casualties.",
+      "rally": "Units within the radius regain cohesion faster when out of fire – also broken units."
+    }
+  },
+  "traits": {
+    "daredevil": {
+      "name": "Daredevil",
+      "pro": "Faster assault, breaks less easily when advancing",
+      "con": "Hard to pull back, heavier losses"
+    },
+    "cautious": {
+      "name": "Cautious",
+      "pro": "Holds a position better",
+      "con": "Slow to advance from cover"
+    },
+    "veteran": {
+      "name": "Eastern Front Veteran",
+      "pro": "Better in buildings and close combat",
+      "con": "Costs more"
+    },
+    "green": {
+      "name": "Green",
+      "pro": "Cheap",
+      "con": "Weak rally, can be pinned himself"
+    },
+    "mgSpecialist": {
+      "name": "MG Specialist",
+      "pro": "Faster barrel change and MG readiness",
+      "con": "No help to the Schützentrupp"
+    },
+    "forwardObserver": {
+      "name": "Forward Observer",
+      "pro": "Can call in artillery without an observer",
+      "con": "Needs line of sight and must stand still"
+    }
   }
 }

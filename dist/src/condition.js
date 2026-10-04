@@ -5,6 +5,7 @@
 // a broken unit falls back (sim.js), readiness scales fire effect (fire.js).
 import { dangerAt } from './threat.js';
 import { flanked, fireRules } from './fire.js';
+import { readinessFactor, recovery, cohesionLossFactor, suppressionRiseFactor } from './leaders.js';
 
 let P = null;
 let weapons = {};
@@ -65,7 +66,7 @@ export function updateCondition(s, dt, allSquads, now = 0) {
   const target = 100 * threat;
   c.suppression =
     c.suppression < target
-      ? Math.min(target, c.suppression + P.suppression.risePerS * threat * dt)
+      ? Math.min(target, c.suppression + P.suppression.risePerS * threat * suppressionRiseFactor(s) * dt)
       : Math.max(target, c.suppression - P.suppression.decayPerS * dt);
   if (!c.pinned && c.suppression >= P.suppression.pinnedAt) c.pinned = true;
   else if (c.pinned && c.suppression <= P.suppression.unpinnedAt) c.pinned = false;
@@ -77,7 +78,7 @@ export function updateCondition(s, dt, allSquads, now = 0) {
   if (men.length < c.aliveSeen) {
     const lost = c.aliveSeen - men.length;
     c.losses += lost;
-    c.cohesion = clamp(c.cohesion - lost * P2.perCasualty);
+    c.cohesion = clamp(c.cohesion - lost * P2.perCasualty * cohesionLossFactor(s, 'casualty'));
     c.aliveSeen = men.length;
   }
   const leader = s.men.find((m) => (s.leaderSlot ? m.slot === s.leaderSlot : m.role === 'leader'));
@@ -87,12 +88,14 @@ export function updateCondition(s, dt, allSquads, now = 0) {
   }
   const friends = allSquads.some((o) => o !== s && o.side === s.side && o.men.some((m) => m.hp > 0) && Math.hypot(o.x - s.x, o.y - s.y) <= P2.isolationRadius);
   c.isolated = !friends;
-  if (c.isolated) c.cohesion = clamp(c.cohesion - (P2.isolationPerMin / 60) * dt);
+  const drain = cohesionLossFactor(s, 'drain');
+  const rec = recovery(s); // the unit's own leader, and a rallying platoon leader nearby
+  if (c.isolated && !rec.rally) c.cohesion = clamp(c.cohesion - (P2.isolationPerMin / 60) * drain * dt);
   c.flanked = flanked(s, now);
-  if (c.flanked) c.cohesion = clamp(c.cohesion - (fireRules().flanking.cohesionPerMin / 60) * dt);
+  if (c.flanked) c.cohesion = clamp(c.cohesion - (fireRules().flanking.cohesionPerMin / 60) * drain * dt);
   const ceiling = 100 - P2.ceilingLossAtFullLosses * (c.losses / s.men.length);
-  if (threat === 0 && c.suppression === 0 && !c.isolated && c.cohesion < ceiling) {
-    const rate = (P2.recoverPerMin / 60) * (c.leaderAlive ? P2.recoverWithLeader : 1);
+  if (threat === 0 && c.suppression === 0 && (!c.isolated || rec.rally) && c.cohesion < ceiling) {
+    const rate = (P2.recoverPerMin / 60) * (c.leaderAlive ? P2.recoverWithLeader : 1) * rec.factor;
     c.cohesion = Math.min(ceiling, c.cohesion + rate * dt);
   }
   if (!c.broken && c.cohesion < P2.brokenAt) c.broken = true;
@@ -105,5 +108,8 @@ export function updateCondition(s, dt, allSquads, now = 0) {
   if (s.path.length && s.advancing) c.readiness = 0;
   else if (c.barrelChange) {
     // interrupted: no build-up while the MG barrel is being changed
-  } else c.readiness = clamp(c.readiness + (100 / readyTime(s)) * (c.pinned ? P.readiness.pinnedFactor : 1) * dt);
+  } else {
+    const lmg = men.some((m) => weapons[m.weapon]?.type === 'lmg') ? 'lmg' : null;
+    c.readiness = clamp(c.readiness + (100 / readyTime(s)) * readinessFactor(s, lmg) * (c.pinned ? P.readiness.pinnedFactor : 1) * dt);
+  }
 }

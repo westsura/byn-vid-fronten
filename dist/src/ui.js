@@ -1,6 +1,7 @@
 // DOM side panel, overlays and input handling.
 import { MISSION_TIME, HOLD_TIME } from './config.js';
-import { state, alive, playerSquads, select, selectGroup, groupUnits, issue, defend, retreat, split, merge, canSplit, setMode, setHalfSpeed, togglePause, reset, orderText, houseName, testGrenade, orderRulesUI, setSector, setOpening, unitsPerMetre } from './sim.js';
+import { state, alive, playerSquads, select, selectGroup, groupUnits, issue, defend, retreat, split, merge, canSplit, setMode, setHalfSpeed, togglePause, reset, orderText, houseName, testGrenade, orderRulesUI, setSector, setOpening, unitsPerMetre, setLeaderMode } from './sim.js';
+import { leaderInfo, traitOf, MODES as LEADER_MODES } from './leaders.js';
 import { buildingAt, coverAt } from './terrain.js';
 import { setSound, soundEnabled, resumeAudio } from './audio.js';
 import { MODES, artMode, isPrototype, urlForMode, modeBadge } from './art.js';
@@ -39,9 +40,32 @@ function setHTML(el, html) {
 // half-cards (MG-Trupp, Schützentrupp) that can be selected one at a time or
 // together (click the block's header), and a Merge button.
 const stateKey = (c) => (c.broken ? 'broken' : c.pinned ? 'pinned' : c.cohesion < 55 ? 'shaken' : 'steady');
+// Compact leader on the card: rank abbreviation, surname and trait icon ("Fw. Krause ⚑").
 function leaderText(s) {
-  const lead = s.men.find((m) => m.slot === s.leaderSlot && m.hp > 0);
-  return lead?.rank ? `${lead.rank.abbr} ${lead.last}` : t('panel.noLeader');
+  const info = leaderInfo(s);
+  if (!info.man) return t('panel.noLeader');
+  const tr = info.trait;
+  const icon = tr ? ` <span class="trait-icon" title="${t('traits.' + tr.id + '.name')}: + ${t('traits.' + tr.id + '.pro')} / − ${t('traits.' + tr.id + '.con')}">${tr.icon}</span>` : '';
+  return `${info.man.rank.abbr} ${info.man.last}${icon}${info.standIn ? ` <span class="standin">(${t('leaders.standIn')})</span>` : ''}`;
+}
+
+// Leader block in the orders panel: values as five boxes, the trait with its
+// advantage and drawback, and for platoon leaders the mode buttons.
+const boxes = (v) => '■'.repeat(v) + '□'.repeat(5 - v);
+function leaderBlock(m, values, trait, withModes) {
+  const mode = state.leaderModes?.[m.personId] ?? null;
+  const tr = trait ? `<div class="trait"><span class="trait-icon">${trait.icon}</span> <b>${t('traits.' + trait.id + '.name')}</b><span class="pro">+ ${t('traits.' + trait.id + '.pro')}</span><span class="con">− ${t('traits.' + trait.id + '.con')}</span></div>` : `<div class="trait muted">${t('leaders.noTrait')}</div>`;
+  const modes = withModes
+    ? `<div class="modes" role="group">${[...LEADER_MODES, null].map((md) => `<button class="mini ${mode === md ? 'active' : ''}" data-mode="${md}" data-person="${m.personId}" title="${md ? t('leaders.modeHelp.' + md) : ''}">${t('leaders.modes.' + md)}</button>`).join('')}</div>`
+    : '';
+  return `<div class="leader-card ${m.hp > 0 ? '' : 'out'}"><div class="lc-head"><span class="pos">${m.title}</span><b>${m.rank.abbr} ${m.name}</b></div>
+<div class="values"><span>${t('leaders.leadership')}</span><span class="bx">${boxes(values.leadership)}</span><span>${t('leaders.fireControl')}</span><span class="bx">${boxes(values.fireControl)}</span><span>${t('leaders.rally')}</span><span class="bx">${boxes(values.rally)}</span></div>${tr}${modes}</div>`;
+}
+function leadersHTML(s) {
+  if (!s || !alive(s).length) return '';
+  if (s.kind === 'hq') return s.men.filter((m) => m.leader).map((m) => leaderBlock(m, m.leader, traitOf(m.leader.trait), m.hp > 0)).join('');
+  const info = leaderInfo(s);
+  return info.man ? leaderBlock(info.man, info.values, info.trait, false) : '';
 }
 
 function unitCard(s, half = false) {
@@ -130,6 +154,7 @@ export function renderUI() {
   $('autopause').textContent = t(state.autoPause ? 'header.autoPauseOn' : 'header.autoPauseOff');
   $('autopause').setAttribute('aria-pressed', String(!!state.autoPause));
   document.getElementById('map').classList.toggle('fire-mode', state.mode === 'fire' || state.mode === 'sector');
+  setHTML($('leaders'), leadersHTML(s));
   setHTML($('log'), state.logs.map((l) => `<li><time>${clock(l.t)}</time>${l.text}</li>`).join(''));
 }
 
@@ -294,6 +319,10 @@ export function bindInput(canvas, W, H) {
   // Orders
   for (const m of ['move', 'fast', 'crawl', 'fire', 'sector']) $(m).onclick = () => setMode(m);
   $('opening').oninput = () => setOpening(+$('opening').value);
+  $('leaders').addEventListener('click', (e) => {
+    const b = e.target.closest('[data-mode]');
+    if (b) setLeaderMode(b.dataset.person, b.dataset.mode === 'null' ? null : b.dataset.mode);
+  });
   $('defend').onclick = defend;
   $('retreat').onclick = retreat;
   $('split').onclick = () => split();

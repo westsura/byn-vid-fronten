@@ -4,6 +4,7 @@ import assert from 'node:assert/strict';
 import { sim, state, player, run, db } from './helpers.js';
 import { grid, cellOf, dangerAt, discomfortAt, toggleTestFire, addSource, stepThreat, ROWS, COLS } from '../dist/src/threat.js';
 import { readyTime } from '../dist/src/condition.js';
+import { recovery, readinessFactor } from '../dist/src/leaders.js';
 
 const P = db.rules.condition;
 // Long runs: keep the mission clock from ending the battle.
@@ -94,6 +95,7 @@ test('fire readiness resets on movement and builds in the weapons\' ready time; 
   const s = player();
   assert.equal(s.cond.readiness, 100);
   sim.issue(s.x + 60, s.y);
+  s.orderDelay = 0;
   run(2);
   assert.equal(s.cond.readiness, 0);
   run(200);
@@ -104,7 +106,8 @@ test('fire readiness resets on movement and builds in the weapons\' ready time; 
   assert.ok(r0 > 0);
   s.cond.readiness = 0;
   run(Math.round((t / 2) / 0.05));
-  assert.ok(Math.abs(s.cond.readiness - 50) < 3, `half time → ${s.cond.readiness}`);
+  const lf = readinessFactor(s, 'lmg'); // the Gruppenführer's Fire Control (leaders.js)
+  assert.ok(Math.abs(s.cond.readiness - 50 * lf) < 3, `half time → ${s.cond.readiness}`);
   s.cond.readiness = 0;
   s.cond.pinned = true;
   s.cond.suppression = 100;
@@ -126,9 +129,10 @@ test('cohesion: casualties and a lost leader cost at once, the unit can break an
   s.cond.cohesion = P.cohesion.brokenAt - 1;
   run(1);
   assert.equal(s.cond.broken, true);
-  runLong(20 * 60); // 1 min out of fire, no leader: recoverPerMin
-  assert.ok(Math.abs(s.cond.cohesion - (P.cohesion.brokenAt - 1 + P.cohesion.recoverPerMin)) < 1.5, `${s.cond.cohesion}`);
-  runLong(20 * 120);
+  runLong(20 * 60); // 1 min out of fire, Gruppenführer dead: recoverPerMin × the stand-in's Rally factor
+  const f = recovery(s).factor;
+  assert.ok(Math.abs(s.cond.cohesion - (P.cohesion.brokenAt - 1 + P.cohesion.recoverPerMin * f)) < 1.5, `${s.cond.cohesion}`);
+  runLong(20 * 180);
   assert.equal(s.cond.broken, false, 'rallies above rallyAt');
   const ceiling = 100 - P.cohesion.ceilingLossAtFullLosses * (6 / 10);
   runLong(20 * 600);

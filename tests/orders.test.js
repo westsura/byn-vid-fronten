@@ -19,6 +19,7 @@ const travelled = (mode) => {
   sim.setMode(mode);
   const x0 = s.x;
   sim.issue(s.x + 300, s.y);
+  s.orderDelay = 0; // the leader's order delay is tested separately
   run(40); // 2 s
   return s.x - x0;
 };
@@ -47,6 +48,7 @@ test('a pinned unit cannot move but can crawl at reduced speed', () => {
   assert.equal(s.x, x0);
   sim.setMode('crawl');
   sim.issue(s.x + 300, s.y);
+  s.orderDelay = 0;
   s.cond.pinned = true;
   s.cond.suppression = 100;
   sim.update(0.5);
@@ -73,6 +75,7 @@ test('Retreat: falls back towards the own edge at speed, without firing, then de
   const s = player();
   const x0 = s.x;
   sim.retreat();
+  s.orderDelay = 0;
   assert.equal(s.order, 'retreat');
   assert.ok(s.path.length);
   run(20);

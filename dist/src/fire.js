@@ -16,6 +16,7 @@ import { woods } from './scenario.js';
 import { los, coverAt, buildingAt } from './terrain.js';
 import { addSource, addCellSource } from './threat.js';
 import { addImpacts, addTracers, addTrauma, effectRules } from './effects.js';
+import { hitFactor, exposureFactor, barrelFactor } from './leaders.js';
 import { random } from './rng.js';
 
 let P = null;
@@ -131,7 +132,8 @@ export function hitChance(w, s, m, t, v, hinderCells) {
   const ready = F.readinessFloor + (1 - F.readinessFloor) * (s.cond.readiness / 100);
   const cover = Math.min(0.9, coverAt(v.x, v.y) + (t.cond.pinned || t.order === 'defend' ? F.proneCover : 0));
   const shooterSup = 1 - F.shooterSuppressionPenalty * (s.cond.suppression / 100);
-  return w.baseHit * F.hitScale * rangeFactor(w, metres(m, v)) * ready * (1 - cover) * shooterSup * movementOf(t).exposure * P.sight.perCellHitFactor ** hinderCells;
+  const lead = hitFactor(s, m, v, metres(m, v), !!buildingAt(v.x, v.y));
+  return w.baseHit * F.hitScale * rangeFactor(w, metres(m, v)) * ready * (1 - cover) * shooterSup * lead * movementOf(t).exposure * exposureFactor(t) * P.sight.perCellHitFactor ** hinderCells;
 }
 
 // ---- Cover Sector (DESIGN.md, Defensiv eld och bevakningssektorer) -----------
@@ -251,7 +253,7 @@ export function fireUnit(s, dt, squads, state, ev) {
       m.roundsSinceChange = (m.roundsSinceChange ?? 0) + rounds;
       if (m.roundsSinceChange >= w.barrelChange.afterRounds) {
         m.roundsSinceChange = 0;
-        m.barrelChange = w.barrelChange.durationS;
+        m.barrelChange = w.barrelChange.durationS * barrelFactor(s);
         ev.log('log.barrelChange', { unit: s.name, weapon: w.name });
       }
     }

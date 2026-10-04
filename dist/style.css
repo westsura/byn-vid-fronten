@@ -850,3 +850,30 @@ canvas.fire-mode {
 .opening[hidden] {
   display:none;
 }
+/* ---- Step 6: leaders ---- */
+.trait-icon { color:var(--accent); }
+.standin { color:var(--muted); font-size:11px; }
+.leaders { display:grid; gap:8px; margin:0 0 12px; }
+.leader-card {
+  border:1px solid #3a4636;
+  background:#1d241c;
+  border-radius:3px;
+  padding:8px 10px;
+  font-size:12px;
+}
+.leader-card.out { opacity:.45; }
+.lc-head { display:flex; justify-content:space-between; gap:8px; }
+.lc-head .pos { color:var(--muted); text-transform:uppercase; letter-spacing:.5px; font-size:11px; }
+.values {
+  display:grid;
+  grid-template-columns:auto 1fr;
+  gap:1px 10px;
+  margin:5px 0;
+}
+.values .bx { color:#d9c58a; letter-spacing:1px; }
+.trait { display:flex; flex-wrap:wrap; gap:2px 6px; align-items:baseline; }
+.trait .pro { color:#a4bd83; width:100%; }
+.trait .con { color:#d89b70; width:100%; }
+.trait.muted { color:var(--muted); }
+.modes { display:flex; gap:4px; margin-top:6px; flex-wrap:wrap; }
+.modes .mini { margin-left:0; flex:1; }

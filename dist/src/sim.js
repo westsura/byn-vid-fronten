@@ -9,6 +9,7 @@ import { pathTo, routeDanger } from './nav.js';
 import { setThreatRules, resetThreat, stepThreat, CELL, dangerAt, discomfortAt } from './threat.js';
 import { setFireRules, updateSpotting, fireUnit, grenadesFor, throwGrenades, detonate } from './fire.js';
 import { setEffectRules, stepEffects } from './effects.js';
+import { setLeaderRules, updateAuras, leaderInfo, orderDelay, speedFactor, suppressionSlowFactor, rallyAura, MODES as LEADER_MODES } from './leaders.js';
 import { setConditionRules, newCondition, updateCondition } from './condition.js';
 
 export const state = {
@@ -78,6 +79,7 @@ export function setRules(db) {
   metresPerUnit = db.rules.fire.metresPerUnit;
   orderRules = db.rules.orders;
   setEffectRules(db.rules.effects);
+  setLeaderRules(db.rules.leaders, db.traits);
   effectRules = db.rules.effects;
   fireRulesCheck = db.rules.fire.spotting.checkS;
   weapons = db.weapons;
@@ -117,6 +119,7 @@ function buildSquad(unit, id, side) {
     group: unit.id, // the Gruppe a half belongs to
     team: null, // 'mg-trupp' / 'schuetzentrupp' while split
     leaderSlot: unit.leaderSlot ?? null,
+    deputySlot: unit.deputySlot ?? null,
     groupName: unit.name,
     absorbed: false,
     nation: side ? forces.enemy.nation : forces.player.nation,
@@ -155,6 +158,7 @@ function buildSquad(unit, id, side) {
         fireTimer: null,
         sprite: def.sprite ?? null,
         personId: def.personId ?? null,
+        leader: def.leader ?? null, // leader values and trait (leaders.js)
         name: def.name ?? null,
         last: def.last ?? null,
         rank: def.rank ?? null,
@@ -194,9 +198,13 @@ export function reset() {
     view: state.view ?? { x: 0, y: 0, w: W, h: H }, // the part of the map on screen (set by render.js)
     selection: [],
     speed: 1,
+    leaderModes: {}, // personId → 'directFire' | 'leadAssault' | 'rally' (Zugführer, Zugtruppführer)
+    auras: [],
     autoPause: state.autoPause ?? false,
   });
   state.selection = [state.selected];
+  updateAuras(state);
+  for (const q of state.squads) q.leadId = leaderInfo(q).man?.personId ?? null;
   addLog(t('log.ready', { units: forces.player.units.length }));
   hooks.changed();
 }
@@ -279,6 +287,7 @@ function moveOrder(s, x, y) {
   }
   const mode = MOVE_MODES.includes(state.mode) ? state.mode : 'move';
   s.path = path;
+  s.orderDelay = orderDelay(s, 'move');
   s.moveMode = mode === 'position' ? 'move' : mode;
   s.fireTarget = null;
   s.sector = null;
@@ -339,6 +348,7 @@ export function retreat() {
     for (let k = 1; k >= 0.25 && !path; k -= 0.25) path = pathTo(s, Math.max(20, Math.min(W - 20, s.x + dir * back * k)), s.y);
     if (!path) continue;
     s.path = path;
+    s.orderDelay = orderDelay(s, 'retreat');
     s.moveMode = 'retreat';
     s.fireTarget = null;
     s.sector = null;
@@ -437,6 +447,7 @@ export function split(id = state.selected) {
     name: teamName(s, tb),
     team: tb.id,
     leaderSlot: tb.leader,
+    deputySlot: null,
     men: menB,
     x: s.x + back,
     y: s.y,
@@ -455,6 +466,7 @@ export function split(id = state.selected) {
   s.name = teamName(s, ta);
   s.team = ta.id;
   s.leaderSlot = ta.leader;
+  s.deputySlot = null;
   s.cond.aliveSeen = alive(s).length;
   s.cond.losses = s.men.length - alive(s).length;
   s.split = b.split = true;
@@ -499,7 +511,7 @@ export function merge(id = state.selected) {
     a.men.sort((p, q) => rank[p.slot] - rank[q.slot]);
   }
   a.men.forEach((m, i) => (m.idx = i));
-  Object.assign(a, { sector: null, name: a.groupName, team: null, leaderSlot: unit?.leaderSlot ?? a.leaderSlot, split: false });
+  Object.assign(a, { sector: null, name: a.groupName, team: null, leaderSlot: unit?.leaderSlot ?? a.leaderSlot, deputySlot: unit?.deputySlot ?? null, split: false });
   Object.assign(b, { men: [], absorbed: true, path: [], target: null, split: false });
   if (state.selected === b.id) state.selected = a.id;
   state.selection = [...new Set(state.selection.map((id) => (id === b.id ? a.id : id)))];
@@ -542,6 +554,32 @@ function finish(win, reason) {
 // ---- per-squad update steps -------------------------------------------------
 
 // A broken unit falls back towards its own map edge; it stops when it has rallied.
+export const leaderName = (m) => (m ? `${m.rank?.abbr ?? ''} ${m.last ?? ''}`.trim() : '');
+
+// A leader falls: the deputy takes command (leaders.js), and the log says so.
+function updateCommand(s) {
+  const info = leaderInfo(s);
+  const id = info.man?.personId ?? null;
+  if (id === s.leadId) return;
+  const fallen = s.men.find((m) => m.personId === s.leadId);
+  s.leadId = id;
+  if (s.side) return;
+  if (fallen && fallen.hp <= 0) addLog(t('log.leaderFell', { leader: leaderName(fallen), unit: s.name }));
+  if (info.man) addLog(t('log.takesCommand', { leader: leaderName(info.man), unit: s.name }));
+  else addLog(t('log.noLeader', { unit: s.name }));
+}
+
+// Platoon leaders' mode (Zugführer, Zugtruppführer).
+export function setLeaderMode(personId, mode) {
+  const m = state.squads.flatMap((q) => (q.side ? [] : q.men)).find((x) => x.personId === personId);
+  if (!m || m.hp <= 0 || (mode && !LEADER_MODES.includes(mode))) return false;
+  state.leaderModes[personId] = mode;
+  updateAuras(state);
+  addLog(t(mode ? 'log.leaderMode' : 'log.leaderModeOff', { leader: leaderName(m), mode: t('leaders.modes.' + mode) }));
+  hooks.changed();
+  return true;
+}
+
 function updateBroken(s) {
   const c = s.cond;
   if (c.broken && !s.routed) {
@@ -558,7 +596,9 @@ function updateBroken(s) {
     s.routed = false;
     s.order = 'hold';
     s.path = [];
-    addLog(t(s.side ? 'log.enemyRallied' : 'log.rallied', { unit: s.name }));
+    const ra = rallyAura(s);
+    if (ra && !s.side) addLog(t('log.rallies', { leader: leaderName(ra.man), unit: s.name }));
+    else addLog(t(s.side ? 'log.enemyRallied' : 'log.rallied', { unit: s.name }));
   }
 }
 
@@ -583,6 +623,7 @@ export function aiMove(s, x, y) {
     s.aiHalted = true;
     return false;
   }
+  if (!s.path.length) s.orderDelay = orderDelay(s, 'move');
   s.path = path;
   s.order = 'move';
   s.aiHalted = false;
@@ -613,6 +654,11 @@ function updateEnemyAI(s) {
 function moveSquad(s, dt) {
   s.advancing = false;
   if (!s.path.length) return;
+  // The order takes a moment to reach the men (leader's Leadership, leaders.js).
+  if (s.orderDelay > 0 && !s.routed) {
+    s.orderDelay -= dt;
+    return;
+  }
   const p = s.path[0];
   const d = dist(s, p);
   // Suppression slows a unit; a pinned unit does not advance (a broken one still falls back).
@@ -620,7 +666,7 @@ function moveSquad(s, dt) {
   const M = orderRules.movement;
   const mode = s.routed ? 'broken' : s.moveMode ?? 'move';
   const base = M[mode]?.unitSpeed ?? M.move.unitSpeed;
-  const speed = s.routed ? base : c.pinned ? (mode === 'crawl' ? base * M.crawl.pinnedFactor : 0) : base * (1 - c.suppression / 200);
+  const speed = s.routed ? base : c.pinned ? (mode === 'crawl' ? base * M.crawl.pinnedFactor : 0) : base * speedFactor(s) * (1 - (c.suppression / 200) * suppressionSlowFactor(s));
   s.advancing = speed > 0;
   if (!speed) return;
   const step = Math.min(d, speed * dt);
@@ -831,6 +877,7 @@ export function update(dt) {
   state.effects = state.effects.filter((e) => (e.life -= dt) > 0);
   stepThreat(dt);
   stepEffects(state, dt);
+  updateAuras(state);
   const focus = state.squads[state.selected];
   for (const e of state.pending.filter((p) => p.at <= state.elapsed)) detonate(e, state.squads, state, fireEvents, focus);
   state.pending = state.pending.filter((p) => p.at > state.elapsed);
@@ -848,6 +895,7 @@ export function update(dt) {
     throwGrenades(s, dt, state);
     logContact(s);
     updateCondition(s, dt, state.squads, state.elapsed);
+    updateCommand(s);
     updateBroken(s);
   }
   updateObjective(dt);
