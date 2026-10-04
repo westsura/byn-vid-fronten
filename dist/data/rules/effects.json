@@ -4,11 +4,18 @@
     "_comment": "Nedslag per eldtillfälle (högst perEvent). Bom sprids inom missScatter runt målet. Material: trä (trähus), sten (stenhus), jord (allt annat).",
     "perEvent": 3,
     "missScatter": 26,
-    "lifeS": { "wood": 0.6, "stone": 0.9, "earth": 0.7 }
+    "lifeS": {
+      "wood": 0.6,
+      "stone": 0.9,
+      "earth": 0.7
+    }
   },
   "tracers": {
     "_comment": "Spårljus för kulsprutor: ett spårljus per everyRounds skott, som en kort ljusstreck som färdas mot målet. Från en oupptäckt skytt börjar strecket hiddenStart av vägen fram, så att riktningen syns men inte skyttens plats.",
-    "weaponTypes": ["lmg"],
+    "weaponTypes": [
+      "lmg",
+      "hmg"
+    ],
     "everyRounds": 3,
     "speed": 1400,
     "length": 30,
@@ -20,7 +27,8 @@
     "rangeUnits": 700,
     "decayPerS": 1.3,
     "cap": 0.8,
-    "maxOffsetPx": 16
+    "maxOffsetPx": 16,
+    "mortarTrauma": 0.8
   },
   "contact": {
     "_comment": "Stridskontakt: en egen enhet som skjuter eller beskjuts är i kontakt i holdS sekunder. Utanför bild visas en markering i kartkanten och en rad i loggen (högst en per enhet per logEveryS).",

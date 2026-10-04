@@ -1,0 +1,39 @@
+{
+  "_comment": "Köpskärmen (steg 7). Ledarpris = (grundpris för befattningen + tillägg för graden + perValuePoint × (summa värden − 9)) × egenskapens cost, avrundat. En Leutnant som Zugführer är dyr och ovanlig, en Oberfeldwebel det vanliga; en Obergefreiter som Gruppenführer är billig.",
+  "leaderPrice": {
+    "base": {
+      "zugfuehrer": 20,
+      "zugtruppfuehrer": 12,
+      "gruppenfuehrer": 10
+    },
+    "rank": {
+      "leutnant": 25,
+      "oberfeldwebel": 8,
+      "feldwebel": 6,
+      "unterfeldwebel": 4,
+      "unteroffizier": 3,
+      "stabsgefreiter": 1,
+      "obergefreiter": 0,
+      "gefreiter": 0
+    },
+    "perValuePoint": 2,
+    "min": 3
+  },
+  "suited": {
+    "_comment": "Suited for-raden: värden på minst highValue ger en del var, egenskapen en del.",
+    "highValue": 4,
+    "values": {
+      "leadership": "assault",
+      "fireControl": "fireSupport",
+      "rally": "holding"
+    },
+    "traits": {
+      "daredevil": "assault",
+      "cautious": "holding",
+      "veteran": "houseFighting",
+      "green": "quietSectors",
+      "mgSpecialist": "mgFireBase",
+      "forwardObserver": "artillery"
+    }
+  }
+}

@@ -7,7 +7,7 @@ const AWARD_FILES = ['de', 'su'];
 
 export async function loadData(read, scenarioId = 'proto-1943') {
   const scenario = await read(`scenarios/${scenarioId}.json`);
-  const [weapons, text, condition, fire, orders, effects, camera, ai, leaderRules, traits, ...rest] = await Promise.all([
+  const [weapons, text, condition, fire, orders, effects, camera, ai, leaderRules, purchase, traits, ...rest] = await Promise.all([
     read('weapons.json'),
     read('text/en.json'),
     read('rules/condition.json'),
@@ -17,6 +17,7 @@ export async function loadData(read, scenarioId = 'proto-1943') {
     read('rules/camera.json'),
     read('rules/ai.json'),
     read('rules/leaders.json'),
+    read('rules/purchase.json'),
     read('leaders/traits.json'),
     ...RANK_FILES.map((f) => read(`ranks/${f}.json`)),
     ...AWARD_FILES.map((f) => read(`awards/${f}.json`)),
@@ -37,7 +38,7 @@ export async function loadData(read, scenarioId = 'proto-1943') {
   return {
     scenario,
     text,
-    rules: { condition, fire, orders, effects, camera, ai, leaders: leaderRules },
+    rules: { condition, fire, orders, effects, camera, ai, leaders: leaderRules, purchase },
     traits: Object.fromEntries(traits.traits.map((x) => [x.id, x])),
     leaders,
     weapons: Object.fromEntries(weapons.weapons.map((w) => [w.id, w])),
@@ -64,14 +65,17 @@ export function validate(db) {
     const platoon = unitType(db, f.nation, f.unitType);
     if (!platoon) errors.push(`${f.id}: unknown unit type ${f.unitType}`);
     else if (!inYears(platoon.validYears, year)) errors.push(`${f.id}: ${platoon.id} not valid in ${year}`);
-    for (const unit of f.units) {
+    const placements = { ...db.scenario[side].placements };
+    for (const [id, r] of Object.entries(side === 'player' ? db.scenario.purchase?.reinforcements ?? {} : {})) placements[id] = r.placement;
+    for (const unit of [...f.units, ...(f.reinforcements ?? [])]) {
       const t = unitType(db, f.nation, unit.type);
       if (!t) {
         errors.push(`${f.id}/${unit.id}: unknown unit type ${unit.type}`);
         continue;
       }
-      if (!inYears(t.validYears, year)) errors.push(`${unit.id}: ${t.id} not valid in ${year}`);
-      if (!db.scenario[side].placements[unit.id]) errors.push(`${unit.id}: no placement in ${db.scenario.id}`);
+      const reinforcement = (f.reinforcements ?? []).includes(unit);
+      if (!reinforcement && !inYears(t.validYears, year)) errors.push(`${unit.id}: ${t.id} not valid in ${year}`);
+      if (!placements[unit.id]) errors.push(`${unit.id}: no placement in ${db.scenario.id}`);
       for (const team of t.teams ?? []) {
         for (const s of team.slots) if (!t.slots.some((x) => x.slot === s)) errors.push(`${t.id}: team ${team.id} has unknown slot ${s}`);
       }
@@ -95,8 +99,24 @@ export function validate(db) {
       }
       for (const s of t.slots) if (!unit.members[s.slot]) errors.push(`${unit.id}: slot ${s.slot} is empty`);
     }
+    // Leader candidates (purchase screen): known people in the right position.
+    for (const [key, list] of Object.entries(f.candidates ?? {})) {
+      if (key.startsWith('_')) continue;
+      const [uid, slot] = key.split('/');
+      const unit = f.units.find((x) => x.id === uid);
+      const def = unit && unitType(db, f.nation, unit.type)?.slots.find((x) => x.slot === slot);
+      if (!def) errors.push(`candidates ${key}: unknown unit or slot`);
+      for (const pid of list) {
+        const p = db.people[pid];
+        if (!p) errors.push(`candidates ${key}: unknown person ${pid}`);
+        else if (def && p.position !== def.position) errors.push(`candidates ${key}: ${pid} is ${p.position}`);
+        if (!db.leaders?.[pid]) errors.push(`candidates ${key}: ${pid} has no leader values`);
+        const rank = p && db.ranks[p.formation]?.ranks.find((r) => r.id === p.rank);
+        if (rank && !inYears(rank.validYears, year)) errors.push(`${pid}: rank ${p.rank} not used in ${year}`);
+      }
+    }
     // Leaders: every unit's leader (and deputy) has values 1–5 and a known trait.
-    for (const unit of f.units) {
+    for (const unit of [...f.units, ...(f.reinforcements ?? [])]) {
       const t = unitType(db, f.nation, unit.type);
       for (const slot of [t?.leader, t?.deputy, ...(t?.teams ?? []).map((tm) => tm.leader)].filter(Boolean)) {
         const pid = unit.members[slot];
@@ -121,17 +141,25 @@ export const rankOf = (db, p) => db.ranks[p.formation].ranks.find((r) => r.id ==
 
 // Builds one side for the simulation: units in force-file order, each with its
 // men (one per filled slot, in slot order) and the data needed to draw and name them.
-export function buildSide(db, side) {
+// choice (player, from the purchase screen): { leaders: { 'unitId/slot': personId },
+// reinforcements: [unitId] }. Without it the force file's own people are used.
+export function buildSide(db, side, choice = null) {
   const f = db.forces[side];
   const u = db.units[f.nation];
   const keys = Object.entries(db.scenario[side].hotkeys ?? {});
+  const bought = side === 'player' ? (f.reinforcements ?? []).filter((r) => choice?.reinforcements?.includes(r.id) && reinforcementAvailable(db, r)) : [];
   return {
     nation: f.nation,
     formation: f.formation,
     name: f.name,
-    units: f.units.map((unit) => {
+    units: [...f.units, ...bought].map((unit0) => {
+      const unit = { ...unit0, members: { ...unit0.members } };
+      for (const [k, pid] of Object.entries(choice?.leaders ?? {})) {
+        const [uid, slot] = k.split('/');
+        if (uid === unit.id && unit.members[slot]) unit.members[slot] = pid;
+      }
       const t = unitType(db, f.nation, unit.type);
-      const [x, y] = db.scenario[side].placements[unit.id];
+      const [x, y] = db.scenario[side].placements[unit.id] ?? db.scenario.purchase.reinforcements[unit.id].placement;
       return {
         id: unit.id,
         name: unit.name,
@@ -139,7 +167,7 @@ export function buildSide(db, side) {
         type: t.id,
         x,
         y,
-        hotkey: keys.find(([, id]) => id === unit.id)?.[0] ?? null,
+        hotkey: keys.find(([, id]) => id === unit.id)?.[0] ?? unit.hotkey ?? null,
         split: unit.split ?? false,
         teams: t.teams ?? null,
         leaderSlot: t.leader,
@@ -167,4 +195,35 @@ export function buildSide(db, side) {
       };
     }),
   };
+}
+
+// ---- Purchase screen (steg 7) ------------------------------------------------
+
+// A reinforcement is offered when its unit type is in service in the scenario year.
+export function reinforcementAvailable(db, r) {
+  const f = db.forces.player;
+  const t = unitType(db, f.nation, r.type);
+  return !!t && inYears(t.validYears, db.scenario.year) && !!db.scenario.purchase?.reinforcements?.[r.id];
+}
+
+// Price of a leader candidate: base for the position + rank premium + value points,
+// times the trait's cost factor (rules/purchase.json).
+export function leaderPrice(db, pid) {
+  const P = db.rules.purchase.leaderPrice;
+  const p = db.people[pid];
+  const l = db.leaders[pid];
+  const sum = l.leadership + l.fireControl + l.rally;
+  const base = (P.base[p.position] ?? 10) + (P.rank[p.rank] ?? 0) + P.perValuePoint * (sum - 9);
+  return Math.max(P.min ?? 1, Math.round(base * (db.traits[l.trait]?.cost ?? 1)));
+}
+
+export const defaultChoice = (db) => ({
+  leaders: Object.fromEntries(Object.entries(db.forces.player.candidates ?? {}).filter(([k]) => !k.startsWith('_')).map(([k, list]) => [k, list[0]])),
+  reinforcements: [],
+});
+
+export function choiceCost(db, choice) {
+  const leaders = Object.values(choice.leaders).reduce((n, pid) => n + leaderPrice(db, pid), 0);
+  const reinf = choice.reinforcements.reduce((n, id) => n + (db.scenario.purchase.reinforcements[id]?.cost ?? 0), 0);
+  return leaders + reinf;
 }

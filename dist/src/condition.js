@@ -48,8 +48,12 @@ export function threatOn(s) {
   return 0.5 * (sum / men.length) + 0.5 * max;
 }
 
-// Seconds to full fire readiness: mean of the living soldiers' weapons.
+// Seconds to full fire readiness: mean of the living soldiers' weapons, or the
+// heavy weapon's own time.
 export function readyTime(s) {
+  // A heavy weapon (MG on its mount, mortar) sets the pace for its crew.
+  const heavy = living(s).map((m) => weapons[m.weapon]).find((w) => w && (w.type === 'hmg' || w.type === 'mortar'));
+  if (heavy) return heavy.readyTimeS;
   const t = living(s).map((m) => weapons[m.weapon]?.readyTimeS).filter((x) => x > 0);
   return t.length ? t.reduce((a, b) => a + b, 0) / t.length : 4;
 }

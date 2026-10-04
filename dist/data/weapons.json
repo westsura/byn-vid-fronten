@@ -230,6 +230,53 @@
         1933,
         1945
       ]
+    },
+    {
+      "id": "mg34-lafette",
+      "name": "MG 34 auf Lafette 34",
+      "nation": "de",
+      "type": "hmg",
+      "calibre": "7.92×57 mm",
+      "rofPerMin": 300,
+      "magazine": 250,
+      "ammoCarried": 3000,
+      "effectiveRangeM": 1200,
+      "maxRangeM": 2000,
+      "baseHit": 0.06,
+      "suppression": 22,
+      "readyTimeS": 18,
+      "barrelChange": {
+        "afterRounds": 300,
+        "durationS": 8
+      },
+      "validYears": [
+        1936,
+        1945
+      ]
+    },
+    {
+      "id": "grw34",
+      "name": "8 cm Granatwerfer 34",
+      "nation": "de",
+      "type": "mortar",
+      "calibre": "81.4 mm",
+      "rofPerMin": 12,
+      "magazine": 1,
+      "ammoCarried": 36,
+      "effectiveRangeM": 1200,
+      "maxRangeM": 2400,
+      "minRangeM": 50,
+      "baseHit": 0.5,
+      "suppression": 80,
+      "readyTimeS": 15,
+      "lethalRadiusM": 5,
+      "blastRadiusM": 14,
+      "flightS": 7,
+      "scatterM": 9,
+      "validYears": [
+        1934,
+        1945
+      ]
     }
   ]
 }

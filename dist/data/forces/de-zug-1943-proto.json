@@ -1,80 +1,156 @@
 {
- "_comment": "Prototypens tyska pluton. Grupper refererar personer med id; personerna ligger i people/de-1943-proto.json.",
- "id": "de-zug-1943-proto",
- "name": "1. Zug",
- "nation": "de",
- "formation": "heer",
- "unitType": "de-schuetzenzug-1943",
- "year": 1943,
- "unitsFile": "de-heer-1943",
- "peopleFile": "de-1943-proto",
- "units": [
-  {
-   "id": "zugtrupp",
-   "type": "de-zugtrupp-1943",
-   "name": "Zugtrupp",
-   "members": {
-    "zf": "de-001",
-    "ztf": "de-002",
-    "melder-1": "de-003",
-    "melder-2": "de-004",
-    "kt-1": "de-005",
-    "kt-2": "de-006"
-   }
+  "_comment": "Prototypens tyska pluton. Grupper refererar personer med id; personerna ligger i people/de-1943-proto.json.",
+  "id": "de-zug-1943-proto",
+  "name": "1. Zug",
+  "nation": "de",
+  "formation": "heer",
+  "unitType": "de-schuetzenzug-1943",
+  "year": 1943,
+  "unitsFile": "de-heer-1943",
+  "peopleFile": "de-1943-proto",
+  "units": [
+    {
+      "id": "zugtrupp",
+      "type": "de-zugtrupp-1943",
+      "name": "Zugtrupp",
+      "members": {
+        "zf": "de-001",
+        "ztf": "de-002",
+        "melder-1": "de-003",
+        "melder-2": "de-004",
+        "kt-1": "de-005",
+        "kt-2": "de-006"
+      }
+    },
+    {
+      "id": "gruppe-1",
+      "type": "de-gruppe-1943",
+      "name": "1. Gruppe",
+      "members": {
+        "gf": "de-007",
+        "mg1": "de-008",
+        "mg2": "de-009",
+        "mg3": "de-010",
+        "tf": "de-011",
+        "s1": "de-012",
+        "s2": "de-013",
+        "s3": "de-014",
+        "s4": "de-015",
+        "s5": "de-016"
+      },
+      "split": false
+    },
+    {
+      "id": "gruppe-2",
+      "type": "de-gruppe-1943",
+      "name": "2. Gruppe",
+      "members": {
+        "gf": "de-017",
+        "mg1": "de-018",
+        "mg2": "de-019",
+        "mg3": "de-020",
+        "tf": "de-021",
+        "s1": "de-022",
+        "s2": "de-023",
+        "s3": "de-024",
+        "s4": "de-025",
+        "s5": "de-026"
+      },
+      "split": false
+    },
+    {
+      "id": "gruppe-3",
+      "type": "de-gruppe-1943",
+      "name": "3. Gruppe",
+      "members": {
+        "gf": "de-027",
+        "mg1": "de-028",
+        "mg2": "de-029",
+        "mg3": "de-030",
+        "tf": "de-031",
+        "s1": "de-032",
+        "s2": "de-033",
+        "s3": "de-034",
+        "s4": "de-035",
+        "s5": "de-036"
+      },
+      "split": false
+    }
+  ],
+  "candidates": {
+    "_comment": "Ledarkandidater per plats (köpskärmen, steg 7). Den första är förvald. Priset räknas ur grad, värden och egenskap (rules/purchase.json).",
+    "zugtrupp/zf": [
+      "de-001",
+      "de-101",
+      "de-102"
+    ],
+    "zugtrupp/ztf": [
+      "de-002",
+      "de-103",
+      "de-104"
+    ],
+    "gruppe-1/gf": [
+      "de-007",
+      "de-105",
+      "de-106"
+    ],
+    "gruppe-2/gf": [
+      "de-017",
+      "de-107",
+      "de-108"
+    ],
+    "gruppe-3/gf": [
+      "de-027",
+      "de-109",
+      "de-110"
+    ]
   },
-  {
-   "id": "gruppe-1",
-   "type": "de-gruppe-1943",
-   "name": "1. Gruppe",
-   "members": {
-    "gf": "de-007",
-    "mg1": "de-008",
-    "mg2": "de-009",
-    "mg3": "de-010",
-    "tf": "de-011",
-    "s1": "de-012",
-    "s2": "de-013",
-    "s3": "de-014",
-    "s4": "de-015",
-    "s5": "de-016"
-   },
-   "split": false
-  },
-  {
-   "id": "gruppe-2",
-   "type": "de-gruppe-1943",
-   "name": "2. Gruppe",
-   "members": {
-    "gf": "de-017",
-    "mg1": "de-018",
-    "mg2": "de-019",
-    "mg3": "de-020",
-    "tf": "de-021",
-    "s1": "de-022",
-    "s2": "de-023",
-    "s3": "de-024",
-    "s4": "de-025",
-    "s5": "de-026"
-   },
-   "split": false
-  },
-  {
-   "id": "gruppe-3",
-   "type": "de-gruppe-1943",
-   "name": "3. Gruppe",
-   "members": {
-    "gf": "de-027",
-    "mg1": "de-028",
-    "mg2": "de-029",
-    "mg3": "de-030",
-    "tf": "de-031",
-    "s1": "de-032",
-    "s2": "de-033",
-    "s3": "de-034",
-    "s4": "de-035",
-    "s5": "de-036"
-   },
-   "split": false
-  }
- ]
+  "reinforcements": [
+    {
+      "id": "gruppe-4",
+      "type": "de-gruppe-1943",
+      "name": "4. Gruppe",
+      "hotkey": "5",
+      "members": {
+        "gf": "de-200",
+        "mg1": "de-201",
+        "mg2": "de-202",
+        "mg3": "de-203",
+        "tf": "de-204",
+        "s1": "de-205",
+        "s2": "de-206",
+        "s3": "de-207",
+        "s4": "de-208",
+        "s5": "de-209"
+      }
+    },
+    {
+      "id": "smg-gruppe",
+      "type": "de-schwere-mg-gruppe-1943",
+      "name": "sMG-Gruppe",
+      "hotkey": "6",
+      "members": {
+        "gf": "de-300",
+        "mg1": "de-301",
+        "mg2": "de-302",
+        "mg3": "de-303",
+        "s1": "de-304",
+        "s2": "de-305"
+      }
+    },
+    {
+      "id": "grw-gruppe",
+      "type": "de-granatwerfergruppe-1943",
+      "name": "GrW-Gruppe",
+      "hotkey": "7",
+      "members": {
+        "gf": "de-400",
+        "rs": "de-401",
+        "ls": "de-402",
+        "m1": "de-403",
+        "m2": "de-404",
+        "m3": "de-405"
+      }
+    }
+  ]
 }

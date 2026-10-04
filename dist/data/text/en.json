@@ -94,7 +94,7 @@
     "out": "Out of action",
     "keysClick": "CLICK",
     "keysClickText": "Select / order",
-    "keysUnits": "1–4",
+    "keysUnits": "1–7",
     "keysUnitsText": "Select (twice: centre)",
     "keysSpace": "SPACE",
     "keysSpaceText": "Pause",
@@ -109,7 +109,7 @@
       "fast": "Fast Move: click where to run. Faster, but easier to see and hit, and no fire readiness on the way.",
       "crawl": "Crawl: click where to crawl. Slow, but hard to see and hit; a pinned unit can still crawl.",
       "position": "Defend: the unit holds here with better cover. Click the map to move to a new defensive position.",
-      "fire": "Fire: click a spotted enemy unit. The selected units hold their position and concentrate their fire on it.",
+      "fire": "Fire: click a spotted enemy unit to concentrate fire on it. A Granatwerfergruppe fires indirectly at any point you click within its range.",
       "sector": "Cover Sector: drag from one edge of the arc to the other (or click for a 60° arc). The unit holds and fires only into the sector."
     },
     "noLeader": "No leader",
@@ -160,7 +160,8 @@
     "fast": "Moving fast",
     "crawl": "Crawling",
     "fire": "Concentrating fire",
-    "sector": "Covering sector"
+    "sector": "Covering sector",
+    "mortar": "Mortar fire"
   },
   "log": {
     "ready": "{units} units ready. Give orders and start the battle.",
@@ -191,7 +192,8 @@
     "takesCommand": "{leader} takes command of {unit}.",
     "noLeader": "{unit} has no leader left.",
     "leaderMode": "{leader}: {mode}.",
-    "leaderModeOff": "{leader}: no mode."
+    "leaderModeOff": "{leader}: no mode.",
+    "mortarOrder": "{unit}: fire mission."
   },
   "toast": {
     "recovering": "The unit is recovering and cannot take orders.",
@@ -204,7 +206,8 @@
     "cannotSplit": "This unit cannot split. A Gruppe needs both its Gruppenführer and Truppführer to split.",
     "tooFarToMerge": "The two Trupps are too far apart to merge. Move them together first.",
     "noTarget": "Click a spotted enemy unit to fire on.",
-    "autoPaused": "{unit} in contact. Paused."
+    "autoPaused": "{unit} in contact. Paused.",
+    "mortarRange": "Out of mortar range ({min}–{max} m)."
   },
   "result": {
     "held": "You held the objective for {hold} seconds.",
@@ -293,6 +296,43 @@
       "name": "Forward Observer",
       "pro": "Can call in artillery without an observer",
       "con": "Needs line of sight and must stand still"
+    }
+  },
+  "purchase": {
+    "eyebrow": "ASSEMBLE YOUR FORCE",
+    "intro": "Choose the leaders of your platoon and buy reinforcements from the company and battalion. The budget cannot be exceeded.",
+    "budget": "Points",
+    "used": "{used} / {budget}",
+    "left": "{n} points left",
+    "pts": "{n} pts",
+    "coreTitle": "Fixed core",
+    "coreText": "The scenario gives you the platoon below. Its leaders are yours to choose.",
+    "leadersTitle": "Leaders",
+    "leadersText": "Two or three candidates for each leader position, with different rank, qualities and price. Hover a candidate to compare him with your current choice.",
+    "reinfTitle": "Reinforcements",
+    "reinfText": "Units available to the company and battalion in {year}.",
+    "buy": "Buy",
+    "remove": "Remove",
+    "men": "{n} men",
+    "ledBy": "Led by",
+    "deploy": "Deploy and give orders",
+    "age": "Age {age}",
+    "since": "In the field since {year}",
+    "suitedFor": "Suited for",
+    "suited": {
+      "assault": "leading assaults",
+      "fireSupport": "fire support",
+      "holding": "holding and rallying",
+      "houseFighting": "house fighting",
+      "quietSectors": "quiet sectors",
+      "mgFireBase": "MG fire base",
+      "artillery": "calling in artillery",
+      "general": "general duties"
+    },
+    "reinf": {
+      "de-gruppe-1943": "A further rifle Gruppe from the company: MG 34 and nine men.",
+      "de-schwere-mg-gruppe-1943": "A heavy MG 34 on its tripod mount from the machine-gun platoon. Long range and heavy suppression, but slow to set up.",
+      "de-granatwerfergruppe-1943": "An 8 cm Granatwerfer 34. Indirect fire at a marked point within range – no line of sight needed."
     }
   }
 }

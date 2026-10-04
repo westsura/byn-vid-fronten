@@ -46,5 +46,38 @@
         300
       ]
     }
+  },
+  "purchase": {
+    "_comment": "Köpskärmen (steg 7): budget i poäng för ledare och förstärkningar; förstärkningarnas pris och utgångsläge i scenariots utgångsområde (väster).",
+    "budget": 260,
+    "startArea": [
+      30,
+      180,
+      270,
+      760
+    ],
+    "reinforcements": {
+      "gruppe-4": {
+        "cost": 70,
+        "placement": [
+          200,
+          740
+        ]
+      },
+      "smg-gruppe": {
+        "cost": 60,
+        "placement": [
+          230,
+          320
+        ]
+      },
+      "grw-gruppe": {
+        "cost": 65,
+        "placement": [
+          70,
+          660
+        ]
+      }
+    }
   }
 }

@@ -7,7 +7,7 @@ import { seedRandom } from './rng.js';
 import { dist, buildingAt, blocked, canWalk, coverAt, interiorSlots } from './terrain.js';
 import { pathTo, routeDanger } from './nav.js';
 import { setThreatRules, resetThreat, stepThreat, CELL, dangerAt, discomfortAt } from './threat.js';
-import { setFireRules, updateSpotting, fireUnit, grenadesFor, throwGrenades, detonate } from './fire.js';
+import { setFireRules, updateSpotting, fireUnit, grenadesFor, throwGrenades, detonate, fireMortar, mortarOf, mortarInRange } from './fire.js';
 import { setEffectRules, stepEffects } from './effects.js';
 import { setLeaderRules, updateAuras, leaderInfo, orderDelay, speedFactor, suppressionSlowFactor, rallyAura, MODES as LEADER_MODES } from './leaders.js';
 import { setConditionRules, newCondition, updateCondition } from './condition.js';
@@ -287,6 +287,7 @@ function moveOrder(s, x, y) {
   }
   const mode = MOVE_MODES.includes(state.mode) ? state.mode : 'move';
   s.path = path;
+  s.mortarTarget = null;
   s.orderDelay = orderDelay(s, 'move');
   s.moveMode = mode === 'position' ? 'move' : mode;
   s.fireTarget = null;
@@ -302,6 +303,29 @@ function moveOrder(s, x, y) {
 // Fire: the selected units concentrate on the clicked enemy unit while they can
 // see it; they hold their position.
 function fireAt(x, y) {
+  // A mortar among the selected units fires indirectly at the clicked point.
+  const mortars = selectedUnits().filter((s) => mortarOf(s));
+  if (mortars.length) {
+    let ok = false;
+    for (const s of mortars) {
+      if (!orderable(s)) continue;
+      if (!mortarInRange(s, x, y)) {
+        hooks.toast(t('toast.mortarRange', { min: mortarOf(s).w.minRangeM, max: mortarOf(s).w.maxRangeM }));
+        continue;
+      }
+      s.path = [];
+      s.sector = null;
+      s.fireTarget = null;
+      s.mortarTarget = { x, y };
+      s.order = 'mortar';
+      addLog(t('log.mortarOrder', { unit: s.name }));
+      ok = true;
+    }
+    if (ok) state.effects.push({ kind: 'order', x, y, life: 1.5, fire: true });
+    state.mode = 'move';
+    hooks.changed();
+    return ok;
+  }
   const target = state.squads.find(
     (q) => q.side && q.visible && alive(q).some((m) => Math.hypot(m.x - x, m.y - y) < 28),
   );
@@ -331,6 +355,7 @@ export function defend() {
     s.path = [];
     s.order = 'defend';
     s.fireTarget = null;
+    s.mortarTarget = null;
     s.sector = null;
     addLog(t('log.defend', { unit: s.name }));
   }
@@ -351,6 +376,7 @@ export function retreat() {
     s.orderDelay = orderDelay(s, 'retreat');
     s.moveMode = 'retreat';
     s.fireTarget = null;
+    s.mortarTarget = null;
     s.sector = null;
     s.order = 'retreat';
     s.orderHouse = null;
@@ -892,6 +918,7 @@ export function update(dt) {
     moveSquad(s, dt);
     moveSoldiers(s, dt);
     fireUnit(s, dt, state.squads, state, fireEvents);
+    fireMortar(s, dt, state, fireEvents);
     throwGrenades(s, dt, state);
     logContact(s);
     updateCondition(s, dt, state.squads, state.elapsed);

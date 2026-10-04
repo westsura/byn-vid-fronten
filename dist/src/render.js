@@ -242,6 +242,23 @@ function drawSquad(ctx, s) {
       const dest = s.path.at(-1);
       circle(ctx, dest.x, dest.y, 8 * px(), '#f5e9bd');
     }
+    // Mortar fire mission: the target point and the expected spread.
+    if (s.mortarTarget) {
+      const mt = s.mortarTarget;
+      ctx.save();
+      ctx.strokeStyle = '#ff9c7ac0';
+      ctx.lineWidth = 1.5 * px();
+      ctx.setLineDash([4 * px(), 4 * px()]);
+      circle(ctx, mt.x, mt.y, 60, '#ff9c7a90');
+      ctx.setLineDash([]);
+      ctx.beginPath();
+      ctx.moveTo(mt.x - 10 * px(), mt.y);
+      ctx.lineTo(mt.x + 10 * px(), mt.y);
+      ctx.moveTo(mt.x, mt.y - 10 * px());
+      ctx.lineTo(mt.x, mt.y + 10 * px());
+      ctx.stroke();
+      ctx.restore();
+    }
     // Fire order: a line to the ordered target.
     const ft = s.fireTarget != null ? state.squads[s.fireTarget] : null;
     if (ft && ft.visible && alive(ft).length) {
@@ -540,7 +557,14 @@ function drawEffects(ctx) {
     if (e.kind === 'impact') drawImpact(ctx, e);
     else if (e.kind === 'tracer') drawTracer(ctx, e);
     else if (e.kind === 'explosion' && e.visible) drawExplosion(ctx, e);
-    else if (e.kind === 'thrown' && e.visible) {
+    else if (e.kind === 'launch' && e.visible) {
+      // Mortar launch: a puff of smoke at the tube.
+      const k = 1 - e.life / e.max;
+      ctx.save();
+      ctx.globalAlpha *= 0.7 * (1 - k);
+      circle(ctx, e.x, e.y, 4 + 14 * k, '#c9c3b2', true);
+      ctx.restore();
+    } else if (e.kind === 'thrown' && e.visible) {
       const p = 1 - e.life / e.max;
       const x = e.x0 + (e.x1 - e.x0) * p;
       const y = e.y0 + (e.y1 - e.y0) * p - Math.sin(p * Math.PI) * 18;

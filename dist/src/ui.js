@@ -164,7 +164,12 @@ function startOrToggle() {
   resumeAudio();
 }
 
-function restart() {
+// Before a new battle the purchase screen is shown (main.js sets this).
+let beforeBattle = null;
+export const setBeforeBattle = (fn) => (beforeBattle = fn);
+const newBattle = () => (beforeBattle ? beforeBattle() : restart());
+
+export function restart() {
   cursor = null;
   reset();
   setLevel(0);
@@ -337,9 +342,9 @@ export function bindInput(canvas, W, H) {
   };
   $('pause').onclick = startOrToggle;
   $('begin').onclick = startOrToggle;
-  $('again').onclick = restart;
+  $('again').onclick = newBattle;
   $('restart').onclick = () => {
-    if (!state.started || state.ended || confirm(t('toast.confirmRestart'))) restart();
+    if (!state.started || state.ended || confirm(t('toast.confirmRestart'))) newBattle();
   };
   const shake = $('shake');
   if (shake) shake.oninput = () => setShakeStrength(shake.value / 100);

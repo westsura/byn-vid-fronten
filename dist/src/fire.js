@@ -235,7 +235,7 @@ export function fireUnit(s, dt, squads, state, ev) {
   if (!t) return;
   for (const m of living(s)) {
     const w = weapons[m.weapon];
-    if (!w) continue;
+    if (!w || w.type === 'mortar') continue; // the mortar fires indirectly (fireMortar)
     m.fireTimer = (m.fireTimer ?? random() * fireInterval(w)) - dt;
     if (m.fireTimer > 0 || m.ammo <= 0 || m.barrelChange > 0) continue;
     const victims = living(t)
@@ -390,7 +390,38 @@ export function detonate(e, squads, state, ev, focus) {
   const known = playerKnows(squads, e.x, e.y, e.side);
   state.effects.push({ kind: 'explosion', x: e.x, y: e.y, r: blast, life: 1.4, max: 1.4, seed: random(), visible: known });
   if (known) {
-    addTrauma(state, e.x, e.y, effectRules().shake.grenadeTrauma, focus);
+    addTrauma(state, e.x, e.y, g.type === 'mortar' ? effectRules().shake.mortarTrauma : effectRules().shake.grenadeTrauma, focus);
     ev.boom(e.x);
+  }
+}
+
+// ---- Mortar (Granatwerfergruppe, steg 7) --------------------------------------
+// Indirect fire at s.mortarTarget: no line of sight needed, only range. Fires when
+// the unit stands still and is ready; shells land after the flight time.
+export const mortarOf = (s) => living(s).map((m) => ({ m, w: weapons[m.weapon] })).find((x) => x.w?.type === 'mortar') ?? null;
+
+export function mortarInRange(s, x, y) {
+  const mo = mortarOf(s);
+  if (!mo) return false;
+  const d = metres(mo.m, { x, y });
+  return d >= (mo.w.minRangeM ?? 0) && d <= mo.w.maxRangeM;
+}
+
+export function fireMortar(s, dt, state, ev) {
+  const tgt = s.mortarTarget;
+  if (!tgt || s.routed || s.advancing) return;
+  for (const m of living(s)) {
+    const w = weapons[m.weapon];
+    if (w?.type !== 'mortar') continue;
+    m.fireTimer = (m.fireTimer ?? 0) - dt;
+    if (m.fireTimer > 0 || m.ammo <= 0 || s.cond.readiness < P.mortar.minReadiness) continue;
+    m.fireTimer = (60 / w.rofPerMin) * (1 + P.mortar.intervalJitter * (2 * random() - 1));
+    m.ammo -= 1;
+    const spread = (w.scatterM / P.metresPerUnit) * (1.5 - s.cond.readiness / 200) * Math.sqrt(random());
+    const a = random() * Math.PI * 2;
+    state.pending.push({ kind: 'shell', at: state.elapsed + w.flightS, x: tgt.x + Math.cos(a) * spread, y: tgt.y + Math.sin(a) * spread, weapon: w.id, by: s.id, side: s.side });
+    m.flash = 0.2;
+    state.effects.push({ kind: 'launch', x: m.x, y: m.y, life: 0.9, max: 0.9, visible: !s.side || s.visible });
+    if (!s.side || s.visible) ev.shot(s);
   }
 }

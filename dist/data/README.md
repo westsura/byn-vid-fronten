@@ -19,6 +19,7 @@ Allt som beskriver styrkor, personer, vapen, grader, utmärkelser, texter och up
 | `rules/ai.json` | Fiendens AI (steg 5): kostnad för fara och obehag i vägvalet, när den väljer ny väg eller stannar |
 | `leaders/*.json` | Ledarvärden (Leadership, Fire Control, Rally 1–5) och egenskap per person; `leaders/traits.json`: egenskaperna med sina effekter (steg 6) |
 | `rules/leaders.json` | Vad ledarvärdena och plutonsledarnas lägen gör: radie, ordertid, faktorer (steg 6) |
+| `rules/purchase.json` | Köpskärmen (steg 7): ledarpris ur befattning, grad, värden och egenskap; Suited for-raden. Budget, utgångsområde och förstärkningarnas pris och plats ligger i scenariot, kandidater och förstärkningar i styrkefilen |
 | `text/en.json` | All gränssnittstext på engelska. Förband, befattningar, grader och utmärkelser kommer från filerna ovan, på tyska respektive i rysk translitterering |
 
 ## Lägga till eller ändra

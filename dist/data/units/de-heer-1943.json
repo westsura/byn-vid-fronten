@@ -3,30 +3,125 @@
   "formation": "heer",
   "_comment": "Tysk infanteri (Heer) 1943 enligt DESIGN.md. positions = befattningar (tyska namn) med föreskriven grad, vapen och grafikroll. unitTypes = förbandstyper med platser (slots). En grupp kan delas i MG-Trupp och Schützentrupp (teams); Gruppenführer följer MG-Trupp, Truppführer Schützentrupp. Prototypen använder MG34 (beslut 2026-10-02).",
   "positions": {
-    "zugfuehrer": { "name": "Zugführer", "prescribedRank": "leutnant", "weapon": "mp40", "sprite": "leader", "leader": true },
-    "zugtruppfuehrer": { "name": "Zugtruppführer", "prescribedRank": "unteroffizier", "weapon": "mp40", "sprite": "deputy", "leader": true },
-    "melder": { "name": "Melder", "prescribedRank": "grenadier", "weapon": "kar98k", "sprite": "rifleman" },
-    "krankentraeger": { "name": "Krankenträger", "prescribedRank": "grenadier", "weapon": null, "sprite": "assistant" },
-    "gruppenfuehrer": { "name": "Gruppenführer", "prescribedRank": "unteroffizier", "weapon": "mp40", "sprite": "leader", "leader": true },
-    "truppfuehrer": { "name": "Truppführer", "prescribedRank": "gefreiter", "weapon": "kar98k", "sprite": "deputy", "leader": true },
-    "mg-schuetze-1": { "name": "MG-Schütze 1", "prescribedRank": "gefreiter", "weapon": "mg34", "sidearm": "p08", "sprite": "mg" },
-    "mg-schuetze-2": { "name": "MG-Schütze 2", "prescribedRank": "grenadier", "weapon": "p08", "sprite": "assistant" },
-    "mg-schuetze-3": { "name": "MG-Schütze 3", "prescribedRank": "grenadier", "weapon": "kar98k", "sprite": "ammo" },
-    "schuetze": { "name": "Schütze", "prescribedRank": "grenadier", "weapon": "kar98k", "sprite": "rifleman" }
+    "zugfuehrer": {
+      "name": "Zugführer",
+      "prescribedRank": "leutnant",
+      "weapon": "mp40",
+      "sprite": "leader",
+      "leader": true
+    },
+    "zugtruppfuehrer": {
+      "name": "Zugtruppführer",
+      "prescribedRank": "unteroffizier",
+      "weapon": "mp40",
+      "sprite": "deputy",
+      "leader": true
+    },
+    "melder": {
+      "name": "Melder",
+      "prescribedRank": "grenadier",
+      "weapon": "kar98k",
+      "sprite": "rifleman"
+    },
+    "krankentraeger": {
+      "name": "Krankenträger",
+      "prescribedRank": "grenadier",
+      "weapon": null,
+      "sprite": "assistant"
+    },
+    "gruppenfuehrer": {
+      "name": "Gruppenführer",
+      "prescribedRank": "unteroffizier",
+      "weapon": "mp40",
+      "sprite": "leader",
+      "leader": true
+    },
+    "truppfuehrer": {
+      "name": "Truppführer",
+      "prescribedRank": "gefreiter",
+      "weapon": "kar98k",
+      "sprite": "deputy",
+      "leader": true
+    },
+    "mg-schuetze-1": {
+      "name": "MG-Schütze 1",
+      "prescribedRank": "gefreiter",
+      "weapon": "mg34",
+      "sidearm": "p08",
+      "sprite": "mg"
+    },
+    "mg-schuetze-2": {
+      "name": "MG-Schütze 2",
+      "prescribedRank": "grenadier",
+      "weapon": "p08",
+      "sprite": "assistant"
+    },
+    "mg-schuetze-3": {
+      "name": "MG-Schütze 3",
+      "prescribedRank": "grenadier",
+      "weapon": "kar98k",
+      "sprite": "ammo"
+    },
+    "schuetze": {
+      "name": "Schütze",
+      "prescribedRank": "grenadier",
+      "weapon": "kar98k",
+      "sprite": "rifleman"
+    },
+    "richtschuetze-grw": {
+      "name": "Richtschütze",
+      "prescribedRank": "gefreiter",
+      "weapon": "grw34",
+      "sidearm": "p08",
+      "sprite": "mg"
+    },
+    "ladeschuetze": {
+      "name": "Ladeschütze",
+      "prescribedRank": "grenadier",
+      "weapon": "p08",
+      "sprite": "assistant"
+    },
+    "munitionsschuetze": {
+      "name": "Munitionsschütze",
+      "prescribedRank": "grenadier",
+      "weapon": "kar98k",
+      "sprite": "ammo"
+    }
   },
   "unitTypes": [
     {
       "id": "de-zugtrupp-1943",
       "name": "Zugtrupp",
       "kind": "hq",
-      "validYears": [1943, 1943],
+      "validYears": [
+        1943,
+        1943
+      ],
       "slots": [
-        { "slot": "zf", "position": "zugfuehrer" },
-        { "slot": "ztf", "position": "zugtruppfuehrer" },
-        { "slot": "melder-1", "position": "melder" },
-        { "slot": "melder-2", "position": "melder" },
-        { "slot": "kt-1", "position": "krankentraeger" },
-        { "slot": "kt-2", "position": "krankentraeger" }
+        {
+          "slot": "zf",
+          "position": "zugfuehrer"
+        },
+        {
+          "slot": "ztf",
+          "position": "zugtruppfuehrer"
+        },
+        {
+          "slot": "melder-1",
+          "position": "melder"
+        },
+        {
+          "slot": "melder-2",
+          "position": "melder"
+        },
+        {
+          "slot": "kt-1",
+          "position": "krankentraeger"
+        },
+        {
+          "slot": "kt-2",
+          "position": "krankentraeger"
+        }
       ],
       "leader": "zf",
       "deputy": "ztf"
@@ -35,36 +130,186 @@
       "id": "de-gruppe-1943",
       "name": "Gruppe",
       "kind": "squad",
-      "validYears": [1943, 1943],
+      "validYears": [
+        1943,
+        1943
+      ],
       "slots": [
-        { "slot": "gf", "position": "gruppenfuehrer" },
-        { "slot": "mg1", "position": "mg-schuetze-1" },
-        { "slot": "mg2", "position": "mg-schuetze-2" },
-        { "slot": "mg3", "position": "mg-schuetze-3" },
-        { "slot": "tf", "position": "truppfuehrer" },
-        { "slot": "s1", "position": "schuetze" },
-        { "slot": "s2", "position": "schuetze" },
-        { "slot": "s3", "position": "schuetze" },
-        { "slot": "s4", "position": "schuetze" },
-        { "slot": "s5", "position": "schuetze" }
+        {
+          "slot": "gf",
+          "position": "gruppenfuehrer"
+        },
+        {
+          "slot": "mg1",
+          "position": "mg-schuetze-1"
+        },
+        {
+          "slot": "mg2",
+          "position": "mg-schuetze-2"
+        },
+        {
+          "slot": "mg3",
+          "position": "mg-schuetze-3"
+        },
+        {
+          "slot": "tf",
+          "position": "truppfuehrer"
+        },
+        {
+          "slot": "s1",
+          "position": "schuetze"
+        },
+        {
+          "slot": "s2",
+          "position": "schuetze"
+        },
+        {
+          "slot": "s3",
+          "position": "schuetze"
+        },
+        {
+          "slot": "s4",
+          "position": "schuetze"
+        },
+        {
+          "slot": "s5",
+          "position": "schuetze"
+        }
       ],
       "leader": "gf",
       "deputy": "tf",
       "teams": [
-        { "id": "mg-trupp", "name": "MG-Trupp", "leader": "gf", "slots": ["gf", "mg1", "mg2", "mg3"] },
-        { "id": "schuetzentrupp", "name": "Schützentrupp", "leader": "tf", "slots": ["tf", "s1", "s2", "s3", "s4", "s5"] }
+        {
+          "id": "mg-trupp",
+          "name": "MG-Trupp",
+          "leader": "gf",
+          "slots": [
+            "gf",
+            "mg1",
+            "mg2",
+            "mg3"
+          ]
+        },
+        {
+          "id": "schuetzentrupp",
+          "name": "Schützentrupp",
+          "leader": "tf",
+          "slots": [
+            "tf",
+            "s1",
+            "s2",
+            "s3",
+            "s4",
+            "s5"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "de-schwere-mg-gruppe-1943",
+      "name": "schwere MG-Gruppe",
+      "kind": "support",
+      "validYears": [
+        1936,
+        1945
+      ],
+      "leader": "gf",
+      "deputy": "mg1",
+      "_comment": "Ett tungt MG 34 på lavett ur kompaniets kulsprutepluton: Gruppenführer, MG-Schütze 1 vid lavetten, fyra skyttar som laddar och bär ammunition.",
+      "slots": [
+        {
+          "slot": "gf",
+          "position": "gruppenfuehrer"
+        },
+        {
+          "slot": "mg1",
+          "position": "mg-schuetze-1"
+        },
+        {
+          "slot": "mg2",
+          "position": "mg-schuetze-2"
+        },
+        {
+          "slot": "mg3",
+          "position": "mg-schuetze-3"
+        },
+        {
+          "slot": "s1",
+          "position": "schuetze"
+        },
+        {
+          "slot": "s2",
+          "position": "schuetze"
+        }
+      ]
+    },
+    {
+      "id": "de-granatwerfergruppe-1943",
+      "name": "Granatwerfergruppe 8 cm",
+      "kind": "support",
+      "validYears": [
+        1934,
+        1945
+      ],
+      "leader": "gf",
+      "deputy": "rs",
+      "_comment": "En 8 cm Granatwerfer 34 ur kompaniets tunga pluton: Gruppenführer, Richtschütze, Ladeschütze och tre Munitionsschützen.",
+      "slots": [
+        {
+          "slot": "gf",
+          "position": "gruppenfuehrer"
+        },
+        {
+          "slot": "rs",
+          "position": "richtschuetze-grw"
+        },
+        {
+          "slot": "ls",
+          "position": "ladeschuetze"
+        },
+        {
+          "slot": "m1",
+          "position": "munitionsschuetze"
+        },
+        {
+          "slot": "m2",
+          "position": "munitionsschuetze"
+        },
+        {
+          "slot": "m3",
+          "position": "munitionsschuetze"
+        }
       ]
     },
     {
       "id": "de-schuetzenzug-1943",
       "name": "Schützenzug",
       "kind": "platoon",
-      "validYears": [1943, 1943],
+      "validYears": [
+        1943,
+        1943
+      ],
       "components": [
-        { "id": "zugtrupp", "type": "de-zugtrupp-1943", "name": "Zugtrupp" },
-        { "id": "gruppe-1", "type": "de-gruppe-1943", "name": "1. Gruppe" },
-        { "id": "gruppe-2", "type": "de-gruppe-1943", "name": "2. Gruppe" },
-        { "id": "gruppe-3", "type": "de-gruppe-1943", "name": "3. Gruppe" }
+        {
+          "id": "zugtrupp",
+          "type": "de-zugtrupp-1943",
+          "name": "Zugtrupp"
+        },
+        {
+          "id": "gruppe-1",
+          "type": "de-gruppe-1943",
+          "name": "1. Gruppe"
+        },
+        {
+          "id": "gruppe-2",
+          "type": "de-gruppe-1943",
+          "name": "2. Gruppe"
+        },
+        {
+          "id": "gruppe-3",
+          "type": "de-gruppe-1943",
+          "name": "3. Gruppe"
+        }
       ]
     }
   ]

@@ -1,11 +1,12 @@
 // Entry point: wires simulation, rendering, UI and audio together and runs the loop.
 import { W, H } from './config.js';
 import { hooks, step, pause, setForces, setRules } from './sim.js';
-import { loadData, validate, buildSide } from './data.js';
+import { loadData, validate, buildSide, defaultChoice } from './data.js';
+import { openPurchase, bindPurchase } from './purchase.js';
 import { setText, t } from './text.js';
 import { loadMode, modeFromUrl } from './art.js';
 import { loadMap, drawMap, drawPortrait } from './render.js';
-import { renderUI, toast, showResult, bindInput, applyStaticText, cursor } from './ui.js';
+import { renderUI, toast, showResult, bindInput, applyStaticText, cursor, restart, setBeforeBattle } from './ui.js';
 import { fireSound, explosionSound, setVolume } from './audio.js';
 import { setCameraRules, updateCamera, levelInfo, toScreen } from './camera.js';
 
@@ -41,6 +42,19 @@ try {
   setTimeout(() => toast(t('toast.graphicsFailed')), 500);
 }
 bindInput(canvas, W, H);
+
+// Purchase screen before every battle (step 7): the chosen leaders and
+// reinforcements make up the player's force.
+let choice = defaultChoice(db);
+const purchase = () =>
+  openPurchase(db, choice, (c) => {
+    choice = c;
+    setForces({ player: buildSide(db, 'player', c), enemy: buildSide(db, 'enemy') });
+    restart();
+  });
+bindPurchase();
+setBeforeBattle(purchase);
+purchase();
 
 document.addEventListener('visibilitychange', () => {
   if (document.hidden) pause();
