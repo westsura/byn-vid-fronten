@@ -1,6 +1,6 @@
 // Entry point: wires simulation, rendering, UI and audio together and runs the loop.
 import { W, H } from './config.js';
-import { hooks, step, pause, setForces } from './sim.js';
+import { hooks, step, pause, setForces, setRules } from './sim.js';
 import { loadData, validate, buildSide } from './data.js';
 import { setText, t } from './text.js';
 import { loadMode, modeFromUrl } from './art.js';
@@ -24,6 +24,7 @@ setText(db.text);
 applyStaticText();
 const problems = validate(db);
 if (problems.length) console.warn('Data problems:', problems);
+setRules(db);
 setForces({ player: buildSide(db, 'player'), enemy: buildSide(db, 'enemy') });
 
 loadMap('map.png', () => toast(t('toast.mapFailed')));

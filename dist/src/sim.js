@@ -7,6 +7,8 @@ const tr = t; // `t` is shadowed by target squads in fire()
 import { random, seedRandom } from './rng.js';
 import { dist, buildingAt, blocked, canWalk, coverAt, los, interiorSlots } from './terrain.js';
 import { pathTo } from './nav.js';
+import { setThreatRules, resetThreat, stepThreat } from './threat.js';
+import { setConditionRules, newCondition, updateCondition } from './condition.js';
 
 export const state = {
   squads: [],
@@ -20,6 +22,7 @@ export const state = {
   effects: [],
   logs: [],
   mode: 'move',
+  debug: false,
 };
 
 // Set by the UI layer. Kept as no-ops so the simulation runs headless in tests.
@@ -35,7 +38,7 @@ export const playerSquads = () => state.squads.filter((s) => !s.side);
 
 export function soldierPose(m, s) {
   if (m.hp <= 0) return 'fallen';
-  if (!s.routed && (s.underFire > 0 || s.order === 'defend' || s.morale < 40)) return 'prone';
+  if (!s.routed && (s.underFire > 0 || s.cond?.pinned || s.order === 'defend' || s.morale < 40)) return 'prone';
   return m.moving ? 'walk' : 'ready';
 }
 
@@ -54,6 +57,12 @@ export function setForces(f) {
 }
 export const currentForces = () => forces;
 
+// State-model and threat-map parameters (data/rules/condition.json) and the weapon table.
+export function setRules(db) {
+  setThreatRules(db.rules.condition);
+  setConditionRules(db.rules.condition, db.weapons);
+}
+
 // Order states are keys; the interface text comes from data/text/en.json.
 export const orderText = (s) => t('orders.' + s.order, { house: s.orderHouse != null ? houseName(s.orderHouse) : '' });
 export const houseName = (id) => t('map.buildings')?.[id] ?? `#${id}`;
@@ -69,6 +78,12 @@ export function formationOffset(i, n) {
 }
 
 function makeSquad(unit, id, side) {
+  const s = buildSquad(unit, id, side);
+  s.cond = newCondition(s);
+  return s;
+}
+
+function buildSquad(unit, id, side) {
   const { x, y } = unit;
   const roster = unit.men;
   return {
@@ -127,6 +142,7 @@ function makeSquad(unit, id, side) {
 
 export function reset() {
   seedRandom(12345);
+  resetThreat();
   Object.assign(state, {
     squads: [...forces.player.units.map((u, i) => makeSquad(u, i, 0)), ...forces.enemy.units.map((u, i) => makeSquad(u, forces.player.units.length + i, 1))],
     selected: Math.max(0, forces.player.units.findIndex((u) => u.hotkey === '1')),
@@ -139,6 +155,7 @@ export function reset() {
     effects: [],
     logs: [],
     mode: 'move',
+    debug: state.debug,
   });
   addLog(t('log.ready', { units: forces.player.units.length }));
   hooks.changed();
@@ -470,6 +487,7 @@ export function update(dt) {
   replansLeft = REPLAN_BUDGET;
   state.elapsed += dt;
   state.effects = state.effects.filter((e) => (e.life -= dt) > 0);
+  stepThreat(dt);
   for (const s of state.squads) {
     if (!alive(s).length) continue;
     s.underFire = Math.max(0, s.underFire - dt);
@@ -479,6 +497,7 @@ export function update(dt) {
     moveSquad(s, dt);
     moveSoldiers(s, dt);
     fire(s, dt);
+    updateCondition(s, dt, state.squads);
   }
   updateObjective(dt);
 }

@@ -1,0 +1,36 @@
+{
+  "_comment": "Tillståndsmodell och hotkarta (DESIGN.md, Tillståndsmodell; PROMPTER steg 2). Alla värden 0–100. Tider i sekunder, avstånd i kartenheter (1 enhet ≈ 0,1 m). Värdena är startvärden att balansera i steg 3.",
+  "grid": {
+    "_comment": "Hotkartans rutnät: 20 enheter (2 m) per ruta, 60 × 40 rutor. rowsPerUpdate rader räknas om per simuleringssteg, så hela kartan förnyas var fjärde steg.",
+    "cell": 20,
+    "rowsPerUpdate": 10
+  },
+  "discomfort": {
+    "_comment": "Obehag per ruta och sida: byggs upp där sidan beskjuts, klingar av långsamt (från 100 till 0 på ungefär 100 s). Påverkar beteende, inte risk.",
+    "risePerS": 30,
+    "decayPerS": 1
+  },
+  "suppression": {
+    "_comment": "Nedhållning: stiger med hotet i rutorna där gruppens soldater står (hälften medelvärde, hälften högsta), sjunker snabbt när elden upphör.",
+    "risePerS": 70,
+    "decayPerS": 30,
+    "pinnedAt": 60,
+    "unpinnedAt": 35
+  },
+  "cohesion": {
+    "_comment": "Sammanhållning: sjunker av förluster, förlorad ledare och isolering; återhämtar sig per minut utom eld, snabbare med ledaren vid liv. Förluster sänker taket för återhämtningen.",
+    "perCasualty": 8,
+    "leaderLost": 15,
+    "isolationRadius": 400,
+    "isolationPerMin": 6,
+    "recoverPerMin": 10,
+    "recoverWithLeader": 2,
+    "ceilingLossAtFullLosses": 40,
+    "brokenAt": 25,
+    "rallyAt": 50
+  },
+  "readiness": {
+    "_comment": "Eldberedskap: byggs upp när gruppen står still, på vapnens readyTimeS (medel för gruppens levande soldater), nollställs vid förflyttning. Nedhållen grupp bygger långsammare.",
+    "pinnedFactor": 0.25
+  }
+}
