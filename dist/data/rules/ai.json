@@ -1,0 +1,11 @@
+{
+  "_comment": "Fiendens AI (steg 5). Vägval använder hotkartan: varje ruta kostar extra i förhållande till faran (bestrukna rutor just nu) och obehaget (där sidan nyss beskjutits). En grupp på väg kontrollerar var checkS sekund faran längs de närmaste lookAheadUnits av vägen; finns fara över replanDanger väljer den en ny väg runt, och om även den bästa vägen är farlig (snittfara över haltDanger) stannar den i skydd och försöker igen vid nästa beslut. En omväg längre än maxDetour gånger den raka vägen räknas som ingen väg.",
+  "dangerWeight": 40,
+  "discomfortWeight": 4,
+  "checkS": 0.5,
+  "lookAheadUnits": 80,
+  "replanDanger": 0.1,
+  "haltDanger": 0.2,
+  "decisionS": 12,
+  "maxDetour": 2
+}

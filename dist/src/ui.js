@@ -1,6 +1,6 @@
 // DOM side panel, overlays and input handling.
 import { MISSION_TIME, HOLD_TIME } from './config.js';
-import { state, alive, playerSquads, select, selectGroup, groupUnits, issue, defend, retreat, split, merge, canSplit, setMode, setHalfSpeed, togglePause, reset, orderText, houseName, testGrenade, orderRulesUI } from './sim.js';
+import { state, alive, playerSquads, select, selectGroup, groupUnits, issue, defend, retreat, split, merge, canSplit, setMode, setHalfSpeed, togglePause, reset, orderText, houseName, testGrenade, orderRulesUI, setSector, setOpening, unitsPerMetre } from './sim.js';
 import { buildingAt, coverAt } from './terrain.js';
 import { setSound, soundEnabled, resumeAudio } from './audio.js';
 import { MODES, artMode, isPrototype, urlForMode, modeBadge } from './art.js';
@@ -107,7 +107,19 @@ export function renderUI() {
     : s.path.length ? 'posture.moving' : 'posture.ready',
   );
   // Orders: the active map-click mode is highlighted; Split/Merge follows the unit.
-  for (const m of ['move', 'fast', 'crawl', 'fire']) $(m).classList.toggle('active', state.mode === m);
+  for (const m of ['move', 'fast', 'crawl', 'fire', 'sector']) $(m).classList.toggle('active', state.mode === m);
+  // Opening range for a unit covering a sector.
+  const row = $('openingRow');
+  row.hidden = !(n && s.sector);
+  if (s.sector && document.activeElement !== $('opening')) {
+    const max = Math.round(s.sector.range / unitsPerMetre());
+    $('opening').max = String(max);
+    $('opening').value = String(Math.round(s.sector.opening / unitsPerMetre()));
+  }
+  if (s.sector) {
+    const v = Math.round(s.sector.opening / unitsPerMetre());
+    $('openingValue').textContent = v >= Math.round(s.sector.range / unitsPerMetre()) ? t('panel.openingAll') : v + ' m';
+  }
   $('defend').classList.toggle('active', state.mode === 'position');
   $('split').textContent = t(s.team ? 'buttons.merge' : 'buttons.split');
   $('split').disabled = state.ended || !n || (!s.team && !canSplit(s));
@@ -117,7 +129,7 @@ export function renderUI() {
   for (const b of document.querySelectorAll('[data-level]')) b.classList.toggle('active', +b.dataset.level === cam.level);
   $('autopause').textContent = t(state.autoPause ? 'header.autoPauseOn' : 'header.autoPauseOff');
   $('autopause').setAttribute('aria-pressed', String(!!state.autoPause));
-  document.getElementById('map').classList.toggle('fire-mode', state.mode === 'fire');
+  document.getElementById('map').classList.toggle('fire-mode', state.mode === 'fire' || state.mode === 'sector');
   setHTML($('log'), state.logs.map((l) => `<li><time>${clock(l.t)}</time>${l.text}</li>`).join(''));
 }
 
@@ -163,6 +175,13 @@ export function bindInput(canvas, W, H) {
       canvas.setPointerCapture(e.pointerId);
       return;
     }
+    // Cover Sector: drag from one edge of the arc to the other.
+    if (state.mode === 'sector') {
+      const p0 = toWorld(sx, sy);
+      state.sectorDraft = { x1: p0.x, y1: p0.y, x2: p0.x, y2: p0.y };
+      canvas.setPointerCapture(e.pointerId);
+      return;
+    }
     // Edge marker (contact off screen): select the unit and centre on it.
     const mark = edgeMarkers.find((m) => sx >= m.x && sx <= m.x + m.w && sy >= m.y && sy <= m.y + m.h);
     if (mark) {
@@ -191,6 +210,13 @@ export function bindInput(canvas, W, H) {
     canvas.focus();
   });
   canvas.addEventListener('pointermove', (e) => {
+    if (state.sectorDraft) {
+      const { sx, sy } = screenPt(e);
+      const p1 = toWorld(sx, sy);
+      state.sectorDraft.x2 = p1.x;
+      state.sectorDraft.y2 = p1.y;
+      return;
+    }
     if (!drag) return;
     const { sx, sy, scale } = screenPt(e);
     if (Math.hypot(e.clientX - drag.cx, e.clientY - drag.cy) > 5) drag.moved = true;
@@ -201,6 +227,12 @@ export function bindInput(canvas, W, H) {
     }
   });
   canvas.addEventListener('pointerup', (e) => {
+    if (state.sectorDraft) {
+      const d = state.sectorDraft;
+      state.sectorDraft = null;
+      setSector(d.x1, d.y1, d.x2, d.y2);
+      return;
+    }
     if (!drag) return;
     const d = drag;
     drag = null;
@@ -260,7 +292,8 @@ export function bindInput(canvas, W, H) {
   });
 
   // Orders
-  for (const m of ['move', 'fast', 'crawl', 'fire']) $(m).onclick = () => setMode(m);
+  for (const m of ['move', 'fast', 'crawl', 'fire', 'sector']) $(m).onclick = () => setMode(m);
+  $('opening').oninput = () => setOpening(+$('opening').value);
   $('defend').onclick = defend;
   $('retreat').onclick = retreat;
   $('split').onclick = () => split();
@@ -310,7 +343,7 @@ export function bindInput(canvas, W, H) {
       lastHot = { key: e.key, at: performance.now() };
       return;
     }
-    const modes = { m: 'move', r: 'fast', c: 'crawl', f: 'fire' };
+    const modes = { m: 'move', r: 'fast', c: 'crawl', f: 'fire', v: 'sector' };
     if (modes[k]) setMode(modes[k]);
     if (k === 'd') defend();
     if (k === 'b') retreat();

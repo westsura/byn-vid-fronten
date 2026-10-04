@@ -58,6 +58,20 @@ export function addSource({ x, y, radius = 1, intensity = 1, by, sides, life = I
   return s;
 }
 
+// A source over an explicit set of cells (e.g. a covered sector being swept by fire).
+export function addCellSource({ cells, intensity, by, sides, life, id }) {
+  let sc = 0;
+  let sr = 0;
+  for (const i of cells) {
+    sc += i % COLS;
+    sr += Math.floor(i / COLS);
+  }
+  const n = Math.max(1, cells.size);
+  const s = { id, cells, intensity, by, sides, life, c: Math.round(sc / n), r: Math.round(sr / n), radius: 0 };
+  sources.push(s);
+  return s;
+}
+
 export function removeSource(id) {
   sources = sources.filter((s) => s.id !== id);
 }
@@ -83,7 +97,8 @@ function recomputeRow(r, dt) {
       let top = 0;
       let who = null;
       for (const s of sources) {
-        if (!s.sides.includes(side) || Math.abs(s.r - r) > s.radius || Math.abs(s.c - c) > s.radius) continue;
+        if (!s.sides.includes(side)) continue;
+        if (s.cells ? !s.cells.has(i) : Math.abs(s.r - r) > s.radius || Math.abs(s.c - c) > s.radius) continue;
         d += s.intensity;
         if (s.intensity > top) {
           top = s.intensity;

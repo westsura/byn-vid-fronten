@@ -111,14 +111,34 @@ class Heap {
   }
 }
 
-// Remove waypoints that can be skipped with a straight, clear walk.
-function smooth(from, points) {
+// Extra cost along a straight segment (sampled every half cell).
+export function segmentCost(a, b, cost) {
+  if (!cost) return 0;
+  const d = Math.hypot(b.x - a.x, b.y - a.y);
+  const n = Math.max(1, Math.ceil(d / (NAV_CELL / 2)));
+  let sum = 0;
+  for (let k = 1; k <= n; k++) sum += cost(a.x + ((b.x - a.x) * k) / n, a.y + ((b.y - a.y) * k) / n) * (d / n);
+  return sum;
+}
+
+// Remove waypoints that can be skipped with a straight, clear walk (that is not
+// costlier than the planned way round, when a cost map is used).
+function smooth(from, points, cost) {
   const out = [];
   let cur = from;
   let i = 0;
+  const planned = (a, j) => {
+    let sum = 0;
+    let p = a;
+    for (let k = i; k <= j; k++) {
+      sum += segmentCost(p, points[k], cost);
+      p = points[k];
+    }
+    return sum;
+  };
   while (i < points.length) {
     let j = points.length - 1;
-    while (j > i && !canWalk(cur, points[j])) j--;
+    while (j > i && (!canWalk(cur, points[j]) || (cost && segmentCost(cur, points[j], cost) > planned(cur, j) + 1))) j--;
     out.push(points[j]);
     cur = points[j];
     i = j + 1;
@@ -134,11 +154,14 @@ export let pathStats = { searches: 0, expanded: 0 };
  * nearest reachable spot if the goal itself is inside a wall), or null if no route.
  * Every consecutive pair of points, starting at `from`, is a clear straight walk.
  */
-export function pathTo(from, x, y) {
+export function pathTo(from, x, y, opts = {}) {
   ensureGrid();
   pathStats.searches++;
   const goal = { x, y };
-  if (canWalk(from, goal) && !blocked(x, y)) return [goal];
+  // cost(x, y): extra cost per unit of distance at a point (e.g. the threat map);
+  // without it the shortest clear route is used.
+  const cost = opts.cost ?? null;
+  if (!cost && canWalk(from, goal) && !blocked(x, y)) return [goal];
 
   const starts = anchorCells(from, 2);
   if (!starts.length) return null;
@@ -188,11 +211,12 @@ export function pathTo(from, x, y) {
     for (let d = 0; d < 8; d++) {
       if (!edges[i * 8 + d]) continue;
       const n = idx(cx + DIRS[d][0], cy + DIRS[d][1]);
-      const cost = g[i] + DIRS[d][2] * NAV_CELL;
-      if (cost < g[n]) {
-        g[n] = cost;
+      const step = DIRS[d][2] * NAV_CELL;
+      const c = g[i] + step * (1 + (cost ? cost(centre(n % COLS), centre(Math.floor(n / COLS))) : 0));
+      if (c < g[n]) {
+        g[n] = c;
         came[n] = i;
-        open.push({ i: n, f: cost + h(n) });
+        open.push({ i: n, f: c + h(n) });
       }
     }
   }
@@ -201,5 +225,26 @@ export function pathTo(from, x, y) {
   const cells = [];
   for (let n = best; n !== -1; n = came[n]) cells.unshift({ x: centre(n % COLS), y: centre(Math.floor(n / COLS)) });
   if (!snapped) cells.push(target);
-  return smooth(from, cells);
+  return smooth(from, cells, cost);
+}
+
+// Mean extra cost per unit of distance along a route (0 = no danger on the way).
+export function routeDanger(from, path, cost, upTo = Infinity) {
+  let p = from;
+  let sum = 0;
+  let len = 0;
+  for (const q of path) {
+    let d = Math.hypot(q.x - p.x, q.y - p.y);
+    let end = q;
+    if (len + d > upTo) {
+      const k = (upTo - len) / d;
+      end = { x: p.x + (q.x - p.x) * k, y: p.y + (q.y - p.y) * k };
+      d = upTo - len;
+    }
+    sum += segmentCost(p, end, cost);
+    len += d;
+    p = q;
+    if (len >= upTo) break;
+  }
+  return len ? sum / len : 0;
 }

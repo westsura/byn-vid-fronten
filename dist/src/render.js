@@ -142,6 +142,53 @@ export function squadRadius(s) {
   return Math.round(r + 18);
 }
 
+// Cover Sector: the cone (pale while holding fire, warmer once fire is opened)
+// and the opening range as a dashed arc. Shown for selected units, and for all
+// own units while paused.
+function drawSector(ctx, s, sec, draft = false) {
+  const a0 = sec.dir - sec.half;
+  const a1 = sec.dir + sec.half;
+  ctx.save();
+  ctx.fillStyle = sec.open ? '#e0784a26' : '#e8dca01f';
+  ctx.strokeStyle = sec.open ? '#f09a6ad0' : '#efe2a8b0';
+  ctx.lineWidth = 1.5 * px();
+  ctx.beginPath();
+  ctx.moveTo(s.x, s.y);
+  ctx.arc(s.x, s.y, sec.range, a0, a1);
+  ctx.closePath();
+  ctx.fill();
+  ctx.stroke();
+  if (!draft && sec.opening < sec.range - 1) {
+    ctx.setLineDash([6 * px(), 5 * px()]);
+    ctx.beginPath();
+    ctx.arc(s.x, s.y, sec.opening, a0, a1);
+    ctx.stroke();
+    ctx.setLineDash([]);
+  }
+  ctx.restore();
+}
+
+export function drawSectors(ctx) {
+  for (const s of state.squads) {
+    if (s.side || !s.sector || !alive(s).length) continue;
+    if (state.paused || state.selection?.includes(s.id)) drawSector(ctx, s, s.sector);
+  }
+  // While dragging a new sector: a preview from each selected unit.
+  const d = state.sectorDraft;
+  if (d) {
+    for (const id of state.selection ?? []) {
+      const s = state.squads[id];
+      if (!s || !alive(s).length) continue;
+      const a1 = Math.atan2(d.y1 - s.y, d.x1 - s.x);
+      const a2 = Math.atan2(d.y2 - s.y, d.x2 - s.x);
+      const span = Math.atan2(Math.sin(a2 - a1), Math.cos(a2 - a1));
+      const wide = Math.abs(span) > 0.26;
+      const range = Math.max(Math.hypot(d.x1 - s.x, d.y1 - s.y), Math.hypot(d.x2 - s.x, d.y2 - s.y));
+      drawSector(ctx, s, { dir: wide ? a1 + span / 2 : a2, half: wide ? Math.abs(span) / 2 : Math.PI / 6, range, opening: range }, true);
+    }
+  }
+}
+
 function drawSquad(ctx, s) {
   const R = squadRadius(s);
   if (state.selection?.includes(s.id) && alive(s).length) {
@@ -274,6 +321,22 @@ function drawDebug(ctx) {
     ctx.fillRect(x - 18, y - 9, 36, 12);
     ctx.fillStyle = '#ffd7cf';
     ctx.fillText(who, x, y);
+  }
+  ctx.restore();
+}
+
+// Debug: enemy routes (to see the AI go round swept cells or stop).
+function drawEnemyRoutes(ctx) {
+  ctx.save();
+  ctx.setLineDash([5 * px(), 4 * px()]);
+  ctx.strokeStyle = '#ff8a7ac0';
+  ctx.lineWidth = 1.5 * px();
+  for (const s of state.squads) {
+    if (!s.side || !alive(s).length || !s.path.length) continue;
+    ctx.beginPath();
+    ctx.moveTo(s.x, s.y);
+    for (const p of s.path) ctx.lineTo(p.x, p.y);
+    ctx.stroke();
   }
   ctx.restore();
 }
@@ -535,11 +598,15 @@ export function drawMap(ctx, cursor) {
   }
   drawObjective(ctx);
   if (state.debug) drawDebug(ctx);
+  drawSectors(ctx);
   // Fallen soldiers first, so they lie under every living soldier.
   for (const s of state.squads) if (!s.side || s.visible) for (const m of s.men) if (m.hp <= 0) drawUnit(ctx, m, s, state.elapsed, 1.12);
   for (const s of state.squads) if (!s.side || s.visible) drawSquad(ctx, s);
   drawEffects(ctx);
-  if (state.debug) drawDebugValues(ctx);
+  if (state.debug) {
+    drawEnemyRoutes(ctx);
+    drawDebugValues(ctx);
+  }
   if (cursor) {
     ctx.strokeStyle = '#fff';
     ctx.lineWidth = 2;

@@ -5,8 +5,8 @@ import { objective } from './scenario.js';
 import { t } from './text.js';
 import { seedRandom } from './rng.js';
 import { dist, buildingAt, blocked, canWalk, coverAt, interiorSlots } from './terrain.js';
-import { pathTo } from './nav.js';
-import { setThreatRules, resetThreat, stepThreat, CELL } from './threat.js';
+import { pathTo, routeDanger } from './nav.js';
+import { setThreatRules, resetThreat, stepThreat, CELL, dangerAt, discomfortAt } from './threat.js';
 import { setFireRules, updateSpotting, fireUnit, grenadesFor, throwGrenades, detonate } from './fire.js';
 import { setEffectRules, stepEffects } from './effects.js';
 import { setConditionRules, newCondition, updateCondition } from './condition.js';
@@ -44,7 +44,7 @@ export const playerSquads = () => state.squads.filter((s) => !s.side && !s.absor
 export function soldierPose(m, s) {
   if (m.hp <= 0) return 'fallen';
   const c = s.cond;
-  if (!s.routed && (c?.pinned || c?.suppression > 25 || s.order === 'defend' || (s.moveMode === 'crawl' && s.path?.length))) return 'prone';
+  if (!s.routed && (c?.pinned || c?.suppression > 25 || s.order === 'defend' || s.order === 'sector' || (s.moveMode === 'crawl' && s.path?.length))) return 'prone';
   return m.moving ? 'walk' : 'ready';
 }
 
@@ -67,11 +67,15 @@ let weapons = {};
 let orderRules = null;
 export const orderRulesUI = () => orderRules;
 let effectRules = null;
+let aiRules = null;
+let metresPerUnit = 0.1;
 // State-model, threat-map and fire parameters (data/rules/condition.json) and the weapon table.
 export function setRules(db) {
   setThreatRules(db.rules.condition);
   setConditionRules(db.rules.condition, db.weapons);
-  setFireRules(db.rules.fire, db.weapons, CELL, db.rules.orders.movement);
+  setFireRules(db.rules.fire, db.weapons, CELL, db.rules.orders.movement, db.rules.orders.sector);
+  aiRules = db.rules.ai;
+  metresPerUnit = db.rules.fire.metresPerUnit;
   orderRules = db.rules.orders;
   setEffectRules(db.rules.effects);
   effectRules = db.rules.effects;
@@ -125,6 +129,7 @@ function buildSquad(unit, id, side) {
     routed: false,
     target: null,
     fireTarget: null,
+    sector: null,
     moveMode: 'move',
     men: roster.map((def, i) => {
       const o = formationOffset(i, roster.length);
@@ -276,6 +281,7 @@ function moveOrder(s, x, y) {
   s.path = path;
   s.moveMode = mode === 'position' ? 'move' : mode;
   s.fireTarget = null;
+  s.sector = null;
   s.destinationHouse = house?.id ?? null;
   s.order = house ? 'enter' : mode === 'position' ? 'position' : mode;
   s.orderHouse = house?.id ?? null;
@@ -297,6 +303,7 @@ function fireAt(x, y) {
   for (const s of selectedUnits()) {
     if (!orderable(s)) continue;
     s.path = [];
+    s.sector = null;
     s.fireTarget = target.id;
     s.target = null;
     s.retarget = 0;
@@ -315,6 +322,7 @@ export function defend() {
     s.path = [];
     s.order = 'defend';
     s.fireTarget = null;
+    s.sector = null;
     addLog(t('log.defend', { unit: s.name }));
   }
   state.mode = 'position';
@@ -333,6 +341,7 @@ export function retreat() {
     s.path = path;
     s.moveMode = 'retreat';
     s.fireTarget = null;
+    s.sector = null;
     s.order = 'retreat';
     s.orderHouse = null;
     s.defendAtEnd = true;
@@ -340,6 +349,51 @@ export function retreat() {
   }
   hooks.changed();
 }
+
+// Cover Sector: the cone between the directions to two map points (a drag), or a
+// default-width cone towards one point (a click). Range = the farther point,
+// within the limits in orders.json. The units hold their position and cover it.
+export function setSector(x1, y1, x2, y2) {
+  const S = orderRules.sector;
+  const deg = Math.PI / 180;
+  let any = false;
+  for (const s of selectedUnits()) {
+    if (!orderable(s)) continue;
+    const a1 = Math.atan2(y1 - s.y, x1 - s.x);
+    const a2 = Math.atan2(y2 - s.y, x2 - s.x);
+    let span = Math.atan2(Math.sin(a2 - a1), Math.cos(a2 - a1)); // signed, shorter way
+    let dir = a1 + span / 2;
+    let half = Math.abs(span) / 2;
+    if (half * 2 < S.minWidthDeg * deg) {
+      dir = a2;
+      half = (S.defaultWidthDeg * deg) / 2;
+    }
+    half = Math.min(half, (S.maxWidthDeg * deg) / 2);
+    const metres = Math.max(Math.hypot(x1 - s.x, y1 - s.y), Math.hypot(x2 - s.x, y2 - s.y)) * metresPerUnit;
+    const range = Math.max(S.minRangeM, Math.min(S.maxRangeM, metres)) / metresPerUnit;
+    s.path = [];
+    s.fireTarget = null;
+    s.target = null;
+    s.order = 'sector';
+    s.sector = { dir, half, range, opening: range, open: false, lastSeen: null };
+    addLog(t('log.sectorOrder', { unit: s.name }));
+    any = true;
+  }
+  state.mode = 'move';
+  hooks.changed();
+  return any;
+}
+
+// Opening range in metres for the selected units that cover a sector.
+export function setOpening(metres) {
+  for (const s of selectedUnits()) {
+    if (!s.sector) continue;
+    s.sector.opening = Math.min(s.sector.range, metres / metresPerUnit);
+    s.sector.open = false;
+  }
+  hooks.changed();
+}
+export const unitsPerMetre = () => 1 / metresPerUnit;
 
 export function setHalfSpeed(on) {
   state.speed = on ? orderRules.speed.half : 1;
@@ -364,6 +418,7 @@ export function split(id = state.selected) {
   if (state.ended || !s) return false;
   if (s.team) return merge(id);
   s.fireTarget = null;
+  s.sector = null;
   if (!canSplit(s)) {
     hooks.toast(t(s?.routed ? 'toast.recovering' : 'toast.cannotSplit'));
     return false;
@@ -444,7 +499,7 @@ export function merge(id = state.selected) {
     a.men.sort((p, q) => rank[p.slot] - rank[q.slot]);
   }
   a.men.forEach((m, i) => (m.idx = i));
-  Object.assign(a, { name: a.groupName, team: null, leaderSlot: unit?.leaderSlot ?? a.leaderSlot, split: false });
+  Object.assign(a, { sector: null, name: a.groupName, team: null, leaderSlot: unit?.leaderSlot ?? a.leaderSlot, split: false });
   Object.assign(b, { men: [], absorbed: true, path: [], target: null, split: false });
   if (state.selected === b.id) state.selected = a.id;
   state.selection = [...new Set(state.selection.map((id) => (id === b.id ? a.id : id)))];
@@ -496,6 +551,7 @@ function updateBroken(s) {
     s.moveMode = 'broken';
     s.orderHouse = null;
     s.fireTarget = null;
+    s.sector = null;
     addLog(t(s.side ? 'log.enemyRetreat' : 'log.retreat', { unit: s.name }));
   }
   if (s.routed && !c.broken) {
@@ -506,8 +562,41 @@ function updateBroken(s) {
   }
 }
 
+// Enemy AI (steg 5): routes use the threat map. Swept cells and cells where the
+// side has just been fired on cost extra, so units go round them when they can;
+// a unit on the move that finds its way swept re-plans, and if every way is
+// dangerous it goes to ground and tries again at its next decision.
+const aiCost = (side) => (x, y) => dangerAt(x, y, side) * aiRules.dangerWeight + (discomfortAt(x, y, side) / 100) * aiRules.discomfortWeight;
+const dangerOnly = (side) => (x, y) => dangerAt(x, y, side);
+
+export function aiMove(s, x, y) {
+  s.aiGoal = { x, y };
+  const path = pathTo(s, x, y, { cost: aiCost(s.side) });
+  if (!path) return false;
+  // Too long a way round counts as no way round.
+  const len = (p) => p.reduce((acc, q, i) => acc + Math.hypot(q.x - (i ? p[i - 1].x : s.x), q.y - (i ? p[i - 1].y : s.y)), 0);
+  const direct = pathTo(s, x, y);
+  const detour = direct && len(path) > aiRules.maxDetour * len(direct) + 40;
+  if (detour || routeDanger(s, path, dangerOnly(s.side), aiRules.lookAheadUnits) > aiRules.haltDanger) {
+    s.path = [];
+    s.order = 'hold';
+    s.aiHalted = true;
+    return false;
+  }
+  s.path = path;
+  s.order = 'move';
+  s.aiHalted = false;
+  return true;
+}
+
 function updateEnemyAI(s) {
-  if (!s.side || s.routed || state.elapsed - s.lastAI <= 12) return;
+  if (!s.side || s.routed) return;
+  // On the move: is the way ahead being swept?
+  if (s.path.length && s.aiGoal && state.elapsed - (s.lastCheck ?? -1e9) >= aiRules.checkS) {
+    s.lastCheck = state.elapsed;
+    if (routeDanger(s, s.path, dangerOnly(s.side), aiRules.lookAheadUnits) > aiRules.replanDanger) aiMove(s, s.aiGoal.x, s.aiGoal.y);
+  }
+  if (state.elapsed - s.lastAI <= aiRules.decisionS) return;
   s.lastAI = state.elapsed;
   const target = state.squads
     .filter((f) => !f.side && alive(f).length && state.spotted[1].has(f.id) && dist(s, f) < 310)
@@ -517,8 +606,7 @@ function updateEnemyAI(s) {
     s.order = 'defend';
   } else {
     const e = state.squads.filter((q) => q.side).indexOf(s); // index among enemy units
-    s.path = pathTo(s, 820 + e * 50, 330 + e * 80) || [];
-    s.order = 'move';
+    aiMove(s, 820 + e * 50, 330 + e * 80);
   }
 }
 
@@ -566,7 +654,7 @@ function soldierTarget(s, m, i) {
     ty = s.y;
   }
   // A defending or suppressed soldier uses nearby cover without leaving the squad.
-  if (!home && !s.path.length && !s.routed && (s.cond.suppression > 0 || s.order === 'defend')) {
+  if (!home && !s.path.length && !s.routed && (s.cond.suppression > 0 || s.order === 'defend' || s.order === 'sector')) {
     if (m.coverTimer <= 0 || !m.coverPoint) {
       let best = { x: tx, y: ty };
       let score = coverAt(tx, ty);

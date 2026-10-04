@@ -14,7 +14,7 @@
 import { W, H } from './config.js';
 import { woods } from './scenario.js';
 import { los, coverAt, buildingAt } from './terrain.js';
-import { addSource } from './threat.js';
+import { addSource, addCellSource } from './threat.js';
 import { addImpacts, addTracers, addTrauma, effectRules } from './effects.js';
 import { random } from './rng.js';
 
@@ -26,10 +26,12 @@ let ROWS = 0;
 let hinder = null; // Uint8Array: 1 = cell with trees or bushes
 
 let MOVE = null; // movement modes (rules/orders.json): exposure and spotting factors
+let SECTOR = null; // Cover Sector rules (rules/orders.json)
 
-export function setFireRules(rules, weaponTable, cell, movement) {
+export function setFireRules(rules, weaponTable, cell, movement, sector) {
   P = rules;
   MOVE = movement ?? null;
+  SECTOR = sector ?? null;
   weapons = weaponTable ?? {};
   CELL = cell;
   COLS = Math.ceil(W / CELL);
@@ -132,10 +134,62 @@ export function hitChance(w, s, m, t, v, hinderCells) {
   return w.baseHit * F.hitScale * rangeFactor(w, metres(m, v)) * ready * (1 - cover) * shooterSup * movementOf(t).exposure * P.sight.perCellHitFactor ** hinderCells;
 }
 
+// ---- Cover Sector (DESIGN.md, Defensiv eld och bevakningssektorer) -----------
+// s.sector = { dir, half (radians), range (units), opening (units), open, lastSeen }.
+// Inside: within the cone's angle and range, seen from the unit's centre.
+export function inSector(s, p, range = s.sector.range) {
+  const d = Math.hypot(p.x - s.x, p.y - s.y);
+  if (d > range) return false;
+  let a = Math.atan2(p.y - s.y, p.x - s.x) - s.sector.dir;
+  a = Math.atan2(Math.sin(a), Math.cos(a));
+  return Math.abs(a) <= s.sector.half;
+}
+
+// Opening range: hold fire until an enemy in the sector is within it; then fire
+// on anything in the sector until it has been empty for reopenS seconds.
+function updateSectorOpen(s, squads, state) {
+  const sec = s.sector;
+  const inside = squads.filter((t) => t.side !== s.side && state.spotted[s.side].has(t.id) && living(t).some((v) => inSector(s, v)));
+  if (inside.length) sec.lastSeen = state.elapsed;
+  if (!sec.open && inside.some((t) => living(t).some((v) => inSector(s, v, Math.min(sec.opening, sec.range))))) sec.open = true;
+  if (sec.open && state.elapsed - (sec.lastSeen ?? -1e9) > SECTOR.reopenS) sec.open = false;
+  return inside;
+}
+
+// The sector's cells that can be seen from the unit (cached while it stands still).
+export function sectorCells(s) {
+  const sec = s.sector;
+  const key = `${Math.round(s.x)},${Math.round(s.y)},${sec.dir},${sec.half},${sec.range}`;
+  if (sec.cellsKey === key) return sec.cells;
+  const cells = new Set();
+  const c0 = Math.max(0, Math.floor((s.x - sec.range) / CELL));
+  const c1 = Math.min(COLS - 1, Math.floor((s.x + sec.range) / CELL));
+  const r0 = Math.max(0, Math.floor((s.y - sec.range) / CELL));
+  const r1 = Math.min(ROWS - 1, Math.floor((s.y + sec.range) / CELL));
+  for (let r = r0; r <= r1; r++)
+    for (let c = c0; c <= c1; c++) {
+      const p = { x: (c + 0.5) * CELL, y: (r + 0.5) * CELL };
+      if (inSector(s, p) && sight(s, p) !== null) cells.add(r * COLS + c);
+    }
+  sec.cells = cells;
+  sec.cellsKey = key;
+  return cells;
+}
+
 // The unit's current target: nearest spotted enemy unit that at least one of its
 // soldiers can see and reach. Re-chosen every targetRetargetS seconds.
 function chooseTarget(s, squads, state) {
   const men = living(s);
+  // Cover Sector: only enemies inside the cone, and only once fire is opened.
+  if (s.sector) {
+    const inside = updateSectorOpen(s, squads, state);
+    if (!s.sector.open) return null;
+    return (
+      inside
+        .sort((a, b) => Math.hypot(a.x - s.x, a.y - s.y) - Math.hypot(b.x - s.x, b.y - s.y))
+        .find((t) => men.some((m) => weapons[m.weapon] && living(t).some((v) => inSector(s, v) && metres(m, v) < weapons[m.weapon].maxRangeM && sight(m, v) !== null))) ?? null
+    );
+  }
   // A Fire order: the ordered target first, while it lives and is spotted.
   const ordered = s.fireTarget != null ? squads[s.fireTarget] : null;
   if (ordered && !living(ordered).length) {
@@ -169,7 +223,9 @@ export function fireUnit(s, dt, squads, state, ev) {
   // Broken units and units carrying out a Retreat order do not fire.
   if (s.routed || (s.order === 'retreat' && s.advancing)) return;
   s.retarget = (s.retarget ?? 0) - dt;
-  if (s.retarget <= 0 || (s.target && !living(s.target).length)) {
+  // A sector unit re-checks every update: it must hold fire the moment the
+  // sector empties or before the enemy is inside the opening range.
+  if (s.sector || s.retarget <= 0 || (s.target && !living(s.target).length)) {
     s.target = chooseTarget(s, squads, state);
     s.retarget = P.fire.targetRetargetS;
   }
@@ -181,6 +237,7 @@ export function fireUnit(s, dt, squads, state, ev) {
     m.fireTimer = (m.fireTimer ?? random() * fireInterval(w)) - dt;
     if (m.fireTimer > 0 || m.ammo <= 0 || m.barrelChange > 0) continue;
     const victims = living(t)
+      .filter((v) => !s.sector || inSector(s, v))
       .map((v) => ({ v, h: metres(m, v) < w.maxRangeM ? sight(m, v) : null }))
       .filter((x) => x.h !== null);
     m.fireTimer = fireInterval(w) * (1 + P.fire.intervalJitter * (2 * random() - 1));
@@ -207,6 +264,17 @@ export function fireUnit(s, dt, squads, state, ev) {
 
 function shootAt(s, m, w, t, v, h, rounds, state, ev) {
   const E = P.effectOnTarget;
+  // A unit covering a sector sweeps it: the whole visible cone is dangerous while it fires.
+  if (s.sector) {
+    addCellSource({
+      id: `sector:${s.id}:${state.elapsed.toFixed(2)}:${m.idx}`,
+      cells: sectorCells(s),
+      intensity: ((w.suppression * rounds) / P.effectOnTarget.intensityDivisor) * SECTOR.sweepFactor,
+      by: s.id,
+      sides: [t.side],
+      life: SECTOR.sweepLifeS,
+    });
+  }
   // Into the threat map around the target: this is what raises its suppression.
   const cover = coverAt(v.x, v.y);
   addSource({ x: v.x, y: v.y, radius: E.radius, life: E.lifeS, by: s.id, sides: [t.side], intensity: ((w.suppression * rounds) / E.intensityDivisor) * (1 - E.coverFactor * cover) });

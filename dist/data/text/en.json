@@ -62,7 +62,8 @@
     "crawl": "⤓ Crawl",
     "fire": "✛ Fire",
     "retreat": "↩ Retreat",
-    "halfSpeed": "½ Speed"
+    "halfSpeed": "½ Speed",
+    "sector": "◠ Cover Sector"
   },
   "brief": {
     "eyebrow": "YOUR MISSION",
@@ -108,7 +109,8 @@
       "fast": "Fast Move: click where to run. Faster, but easier to see and hit, and no fire readiness on the way.",
       "crawl": "Crawl: click where to crawl. Slow, but hard to see and hit; a pinned unit can still crawl.",
       "position": "Defend: the unit holds here with better cover. Click the map to move to a new defensive position.",
-      "fire": "Fire: click a spotted enemy unit. The selected units hold their position and concentrate their fire on it."
+      "fire": "Fire: click a spotted enemy unit. The selected units hold their position and concentrate their fire on it.",
+      "sector": "Cover Sector: drag from one edge of the arc to the other (or click for a 60° arc). The unit holds and fires only into the sector."
     },
     "noLeader": "No leader",
     "fitTitle": "Men fit to fight / strength",
@@ -123,7 +125,12 @@
     "keysZoom": "+ − / wheel",
     "keysZoomText": "Zoom level",
     "keysPan": "Right-drag / Shift+arrows",
-    "keysPanText": "Move camera"
+    "keysPanText": "Move camera",
+    "opening": "Open fire at",
+    "openingAll": "whole sector",
+    "openingLabel": "Opening range in metres",
+    "keysSector": "V",
+    "keysSectorText": "Cover Sector"
   },
   "morale": {
     "steady": "Steady",
@@ -152,7 +159,8 @@
     "retreat": "Retreating",
     "fast": "Moving fast",
     "crawl": "Crawling",
-    "fire": "Concentrating fire"
+    "fire": "Concentrating fire",
+    "sector": "Covering sector"
   },
   "log": {
     "ready": "{units} units ready. Give orders and start the battle.",
@@ -176,7 +184,8 @@
     "crawlOrder": "{unit}: crawling forward.",
     "positionOrder": "{unit}: moving to a defensive position.",
     "fireOrder": "{unit}: concentrate fire!",
-    "retreatOrder": "{unit}: falling back."
+    "retreatOrder": "{unit}: falling back.",
+    "sectorOrder": "{unit}: covering sector."
   },
   "toast": {
     "recovering": "The unit is recovering and cannot take orders.",

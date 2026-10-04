@@ -47,5 +47,17 @@
   "hotkeys": {
     "_comment": "En tryckning markerar, en andra tryckning (eller tryckning på redan markerad enhet) centrerar kameran.",
     "doublePressS": 0.6
+  },
+  "sector": {
+    "_comment": "Cover Sector (steg 5, DESIGN.md Defensiv eld och bevakningssektorer). Spelaren drar en kon från enheten: två kanter (dra) eller en riktning (klick, defaultWidthDeg bred). Konens räckvidd = det längsta avståndet i dragningen, högst maxRangeM. Öppningsavstånd: enheten håller inne elden tills en fiende i sektorn är inom avståndet; därefter skjuter den mot allt i sektorn tills sektorn varit tom i reopenS sekunder. När enheten skjuter läggs hela konens synliga rutor i hotkartan med sweepFactor av eldens styrka.",
+    "defaultWidthDeg": 60,
+    "minWidthDeg": 15,
+    "maxWidthDeg": 160,
+    "maxRangeM": 100,
+    "minRangeM": 10,
+    "openingStepM": 5,
+    "reopenS": 5,
+    "sweepFactor": 0.5,
+    "sweepLifeS": 1.5
   }
 }

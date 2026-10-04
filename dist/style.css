@@ -830,3 +830,23 @@ canvas.fire-mode {
 .squad .count {
   white-space:nowrap;
 }
+.opening {
+  display:flex;
+  align-items:center;
+  gap:8px;
+  font-size:12.5px;
+  color:var(--muted);
+  margin:-4px 0 10px;
+}
+.opening input {
+  flex:1;
+  accent-color:#e8c46a;
+}
+.opening b {
+  color:var(--text);
+  min-width:84px;
+  text-align:right;
+}
+.opening[hidden] {
+  display:none;
+}
