@@ -1,6 +1,6 @@
 # Byn vid fronten
 
-Taktiskt infanterispel i realtid, sett rakt ovanifrån. Operation Morgonljus, en fransk by 1944.
+Taktiskt infanterispel i realtid, sett rakt ovanifrån. Unternehmen Morgenlicht, den fiktiva byn Berezovka på östfronten 1943.
 Ren HTML, CSS och JavaScript (ES-moduler) med Canvas 2D. Inget byggsteg.
 
 Spela: https://byn-vid-fronten.vercel.app

@@ -8,7 +8,7 @@
     "title": "BYN VID FRONTEN",
     "subtitle": "TACTICAL BATTLE · PROTOTYPE 04",
     "theatre": "EASTERN FRONT, 1943",
-    "operation": "Operation Morgonljus",
+    "operation": "Unternehmen Morgenlicht",
     "graphics": "Graphics",
     "graphicsLabel": "Graphics set",
     "soundOff": "Sound off",
@@ -17,7 +17,7 @@
   },
   "map": {
     "sector": "SECTOR 07",
-    "village": "MALINOVKA",
+    "village": "BEREZOVKA",
     "objective": "FARMYARD",
     "enemy": "ENEMY",
     "pausedBanner": "PAUSED — GIVE YOUR ORDERS",

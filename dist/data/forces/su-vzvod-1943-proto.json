@@ -1,5 +1,5 @@
 {
- "_comment": "Prototypens sovjetiska motståndare. Personerna ligger i people/su-1943-proto.json.",
+ "_comment": "Prototypens sovjetiska motståndare: upravleniye och två otdeleniya (24 man, Björns beslut 2026-10-04). Personerna ligger i people/su-1943-proto.json; su-025–su-046 står i reserv för större styrkor.",
  "id": "su-vzvod-1943-proto",
  "name": "Strelkovyy vzvod",
  "nation": "su",
@@ -52,42 +52,6 @@
     "str-4": "su-022",
     "str-5": "su-023",
     "str-6": "su-024"
-   }
-  },
-  {
-   "id": "otdeleniye-3",
-   "type": "su-otdeleniye-1943",
-   "name": "3-ye otdeleniye",
-   "members": {
-    "ko": "su-025",
-    "pul": "su-026",
-    "vn": "su-027",
-    "avt-1": "su-028",
-    "avt-2": "su-029",
-    "str-1": "su-030",
-    "str-2": "su-031",
-    "str-3": "su-032",
-    "str-4": "su-033",
-    "str-5": "su-034",
-    "str-6": "su-035"
-   }
-  },
-  {
-   "id": "otdeleniye-4",
-   "type": "su-otdeleniye-1943",
-   "name": "4-ye otdeleniye",
-   "members": {
-    "ko": "su-036",
-    "pul": "su-037",
-    "vn": "su-038",
-    "avt-1": "su-039",
-    "avt-2": "su-040",
-    "str-1": "su-041",
-    "str-2": "su-042",
-    "str-3": "su-043",
-    "str-4": "su-044",
-    "str-5": "su-045",
-    "str-6": "su-046"
    }
   }
  ]

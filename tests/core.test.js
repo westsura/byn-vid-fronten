@@ -10,7 +10,7 @@ test('initial state: Zugtrupp + three Gruppen against the Soviet vzvod, 1. Grupp
   const own = state.squads.filter((s) => !s.side);
   assert.deepEqual(own.map((s) => s.name), ['Zugtrupp', '1. Gruppe', '2. Gruppe', '3. Gruppe']);
   assert.deepEqual(own.map((s) => s.men.length), [6, 10, 10, 10]);
-  assert.equal(state.squads.filter((s) => s.side).length, 5);
+  assert.equal(state.squads.filter((s) => s.side).length, 3);
   assert.equal(player().name, '1. Gruppe');
   assert.equal(state.paused, true);
   assert.ok(state.squads.every((s) => s.men.every((m) => !blocked(m.x, m.y))), 'nobody starts inside a wall');

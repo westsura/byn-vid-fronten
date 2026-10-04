@@ -13,7 +13,7 @@ Byn vid fronten är ett taktiskt infanterispel i webbläsaren, vy ovanifrån, me
 | Prototypår | 1943 |
 | Skala | En pluton. Spelaren ger order till enskilda grupper. |
 | Tempo | Pausbar realtid |
-| Operation | Morgonljus (fiktiv) |
+| Operation | Unternehmen Morgenlicht (fiktiv) |
 | Miljö | Rysk eller ukrainsk by. Prototypkartan får vara vilken by som helst; kartor anpassas per scenario senare. |
 | Språk | Gränssnittet på engelska. Tyska termer för tyska förband, befattningar, grader och utmärkelser; rysk translitterering för sovjetiska (se Språk i gränssnittet). |
 | Historisk trohet | Uniformer, gradbeteckningar, utmärkelser och symboler visas historiskt korrekt (se Symboler). |
@@ -55,7 +55,7 @@ Spelarens styrka är en tysk skyttepluton (Schützenzug) byggd på faktisk organ
 
 **Motståndaren**
 
-Sovjetiskt infanteri: större numerär, många kulsprutepistoler (PPSj) för närstrid, kulsprutan DP som gruppvapen. Kontrasten är medveten: färre och bättre ledda tyska grupper mot massa och närstridseldkraft. Grader och benämningar, se Röda armén – förband, befattningar och grader.
+Sovjetiskt infanteri: större numerär, många kulsprutepistoler (PPSj) för närstrid, kulsprutan DP som gruppvapen. Kontrasten är medveten: färre och bättre ledda tyska grupper mot massa och närstridseldkraft. Prototypen (1943) har en mindre motståndare: upravleniye vzvoda och två otdeleniya, 24 man, i den fiktiva byn Berezovka (beslut 2026-10-04). Grader och benämningar, se Röda armén – förband, befattningar och grader.
 
 ## Tillståndsmodell
 

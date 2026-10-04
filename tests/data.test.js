@@ -55,7 +55,7 @@ test('Soviet strelkovyy vzvod: otdeleniya with DP and several PPSh, transliterat
   const su = buildSide(db, 'enemy');
   assert.equal(su.formation, 'rkka');
   const otd = su.units.filter((u) => u.kind === 'squad');
-  assert.ok(otd.length >= 3);
+  assert.equal(otd.length, 2);
   for (const o of otd) {
     assert.equal(o.men.filter((m) => m.weapon === 'dp27').length, 1);
     assert.ok(o.men.filter((m) => m.weapon === 'ppsh41').length >= 3);

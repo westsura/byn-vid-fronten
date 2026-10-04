@@ -1,4 +1,4 @@
-// Scenario data for "Operation Morgonljus". Everything map-specific lives here.
+// Scenario data for "Unternehmen Morgenlicht". Everything map-specific lives here.
 import { STEP } from './config.js';
 
 export const objective = { x: 755, y: 290, radius: 68, enemyRadius: 100 };
