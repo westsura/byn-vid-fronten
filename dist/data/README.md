@@ -11,6 +11,7 @@ Allt som beskriver styrkor, personer, vapen, grader, utmärkelser, texter och up
 | `people/*.json` | Personer: id, namn, formation, grad, befattning, vapen, utmärkelser, födelseår och status. Personen är skild från förbandet |
 | `forces/*.json` | En styrka: vilka förband som ingår och vilka personer som står på vilka platser |
 | `scenarios/proto-1943.json` | År, vilka styrkor som möts, utgångslägen och snabbtangenter |
+| `rules/condition.json` | Tillståndsmodell och hotkarta (steg 2): nedhållning, sammanhållning, eldberedskap, obehag, rutnät och gränser för Pinned/Broken |
 | `text/en.json` | All gränssnittstext på engelska. Förband, befattningar, grader och utmärkelser kommer från filerna ovan, på tyska respektive i rysk translitterering |
 
 ## Lägga till eller ändra

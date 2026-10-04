@@ -3,7 +3,8 @@
 > **Från 2026-10-02 styrs arbetet av `DESIGN.md` och stegen i projektets PROMPTER.md (steg 0–8).** Inventeringen finns i `docs/INVENTERING.md`. Faserna nedan är historik.
 >
 > - [x] Steg 0 – inventering (godkänd 2026-10-02)
-> - [ ] Steg 1 – enhetsdata: datafiler, personmodell, tysk Schützenzug 1943 och sovjetisk Strelkovyy vzvod på kartan, engelskt gränssnitt. Väntar på godkännande.
+> - [x] Steg 1 – enhetsdata: datafiler, personmodell, tysk Schützenzug 1943 och sovjetisk Strelkovyy vzvod på kartan, engelskt gränssnitt. Godkänt 2026-10-04.
+> - [ ] Steg 2 – tillståndsmodell och hotkarta: nedhållning, sammanhållning, eldberedskap, obehag, debugläge (G) med testeld. Väntar på godkännande.
 
 Status per fas. **Klart** betyder implementerat och verifierat (automatiskt test och/eller provspelning i webbläsare). Publicerat = på https://byn-vid-fronten.vercel.app (varje push till `main`).
 
