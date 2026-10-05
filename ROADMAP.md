@@ -14,6 +14,7 @@
 > - [ ] Steg 8 – scenario 1, motanfall mot stenhuset: briefing, köpskärm, strid med sovjetisk AI (försvar, motstöt), segervillkor på stridsdugliga i byggnaden vid tidens slut, resultatskärm med förluster och ledarnas öde, resultatet sparat för kampanj. Publicerat på Vercel. Väntar på godkännande.
 >   - Beslut 2026-10-04: kartan byggs om för att kunna vara mycket större (Björn återkommer med assets); vapnens räckvidder får då betydelse.
 > - [ ] Större östfrontskarta byggd av delar (alternativ B i INVENTERING avsnitt 6) och terräng som påverkar striden (fas B). Påbörjat 2026-10-05: grafikbeställning `docs/art/REQUEST_005.md` (omgång 1 = stilprov), 3600 × 2400 enheter.
+>   - REQUEST_005 v1 levererat 2026-10-05 och provat i en lokal testby: `docs/art/review/request-005-v1/REVIEW.md`. **Ej godkänt.** Björn bedömer stilen.
 
 Status per fas. **Klart** betyder implementerat och verifierat (automatiskt test och/eller provspelning i webbläsare). Publicerat = på https://byn-vid-fronten.vercel.app (varje push till `main`).
 

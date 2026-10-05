@@ -1,0 +1,1062 @@
+{
+  "package": "REQUEST_005",
+  "version": 1,
+  "status": "style-pilot-not-approved",
+  "units": "0.1 metre",
+  "light": {
+    "from": "nw",
+    "shadowDirection": "se",
+    "targetLengthHeightRatio": 0.4
+  },
+  "assets": [
+    {
+      "id": "ground-grass-dry",
+      "file": "ground-grass-dry-v1.webp",
+      "kind": "texture",
+      "pixelSize": [
+        2048,
+        2048
+      ],
+      "pxPerUnit": 4,
+      "worldSize": [
+        512,
+        512
+      ],
+      "anchor": {
+        "pixel": [
+          0,
+          0
+        ],
+        "meaning": "image top-left"
+      },
+      "layer": "ground",
+      "concept": false,
+      "repeat": [
+        "x",
+        "y"
+      ]
+    },
+    {
+      "id": "ground-field-ploughed",
+      "file": "ground-field-ploughed-v1.webp",
+      "kind": "texture",
+      "pixelSize": [
+        2048,
+        2048
+      ],
+      "pxPerUnit": 4,
+      "worldSize": [
+        512,
+        512
+      ],
+      "anchor": {
+        "pixel": [
+          0,
+          0
+        ],
+        "meaning": "image top-left"
+      },
+      "layer": "ground",
+      "concept": false,
+      "repeat": [
+        "x",
+        "y"
+      ]
+    },
+    {
+      "id": "ground-yard",
+      "file": "ground-yard-v1.webp",
+      "kind": "texture",
+      "pixelSize": [
+        2048,
+        2048
+      ],
+      "pxPerUnit": 4,
+      "worldSize": [
+        512,
+        512
+      ],
+      "anchor": {
+        "pixel": [
+          0,
+          0
+        ],
+        "meaning": "image top-left"
+      },
+      "layer": "ground",
+      "concept": false,
+      "repeat": [
+        "x",
+        "y"
+      ]
+    },
+    {
+      "id": "road-dirt-main",
+      "file": "road-dirt-main-v1.png",
+      "kind": "segment",
+      "pixelSize": [
+        2048,
+        320
+      ],
+      "pxPerUnit": 4,
+      "worldSize": [
+        512,
+        80
+      ],
+      "anchor": {
+        "pixel": [
+          0,
+          0
+        ],
+        "meaning": "image top-left"
+      },
+      "layer": "ground",
+      "concept": false,
+      "repeat": [
+        "x"
+      ],
+      "roadWidthUnits": 60,
+      "footprint": [
+        [
+          0,
+          10
+        ],
+        [
+          512,
+          10
+        ],
+        [
+          512,
+          70
+        ],
+        [
+          0,
+          70
+        ]
+      ]
+    },
+    {
+      "id": "bldg-izba-a-roof",
+      "file": "bldg-izba-a-roof-v1.png",
+      "kind": "sprite",
+      "pixelSize": [
+        600,
+        720
+      ],
+      "pxPerUnit": 6,
+      "worldSize": [
+        100,
+        120
+      ],
+      "anchor": {
+        "pixel": [
+          60,
+          60
+        ],
+        "meaning": "footprint top-left"
+      },
+      "layer": "roof",
+      "concept": false,
+      "material": "adobe",
+      "footprint": [
+        [
+          0,
+          0
+        ],
+        [
+          70,
+          0
+        ],
+        [
+          70,
+          90
+        ],
+        [
+          0,
+          90
+        ]
+      ],
+      "walls": 4.5,
+      "doors": [
+        {
+          "wall": "s",
+          "at": 35,
+          "width": 9
+        }
+      ],
+      "windows": [
+        {
+          "wall": "n",
+          "at": 35,
+          "width": 10
+        },
+        {
+          "wall": "w",
+          "at": 19,
+          "width": 9
+        },
+        {
+          "wall": "w",
+          "at": 51.5,
+          "width": 9
+        },
+        {
+          "wall": "e",
+          "at": 27,
+          "width": 9
+        },
+        {
+          "wall": "e",
+          "at": 51.5,
+          "width": 9
+        }
+      ],
+      "innerWalls": [
+        [
+          [
+            4.5,
+            67.5
+          ],
+          [
+            29,
+            67.5
+          ]
+        ],
+        [
+          [
+            40,
+            67.5
+          ],
+          [
+            65.5,
+            67.5
+          ]
+        ]
+      ],
+      "innerWallThickness": 3.5,
+      "heightUnits": 45
+    },
+    {
+      "id": "bldg-izba-a-interior",
+      "file": "bldg-izba-a-interior-v1.png",
+      "kind": "sprite",
+      "pixelSize": [
+        600,
+        720
+      ],
+      "pxPerUnit": 6,
+      "worldSize": [
+        100,
+        120
+      ],
+      "anchor": {
+        "pixel": [
+          60,
+          60
+        ],
+        "meaning": "footprint top-left"
+      },
+      "layer": "interior",
+      "concept": false,
+      "material": "adobe",
+      "footprint": [
+        [
+          0,
+          0
+        ],
+        [
+          70,
+          0
+        ],
+        [
+          70,
+          90
+        ],
+        [
+          0,
+          90
+        ]
+      ],
+      "walls": 4.5,
+      "doors": [
+        {
+          "wall": "s",
+          "at": 35,
+          "width": 9
+        }
+      ],
+      "windows": [
+        {
+          "wall": "n",
+          "at": 35,
+          "width": 10
+        },
+        {
+          "wall": "w",
+          "at": 19,
+          "width": 9
+        },
+        {
+          "wall": "w",
+          "at": 51.5,
+          "width": 9
+        },
+        {
+          "wall": "e",
+          "at": 27,
+          "width": 9
+        },
+        {
+          "wall": "e",
+          "at": 51.5,
+          "width": 9
+        }
+      ],
+      "innerWalls": [
+        [
+          [
+            4.5,
+            67.5
+          ],
+          [
+            29,
+            67.5
+          ]
+        ],
+        [
+          [
+            40,
+            67.5
+          ],
+          [
+            65.5,
+            67.5
+          ]
+        ]
+      ],
+      "innerWallThickness": 3.5,
+      "heightUnits": 45
+    },
+    {
+      "id": "bldg-stone-office-roof",
+      "file": "bldg-stone-office-roof-v1.png",
+      "kind": "sprite",
+      "pixelSize": [
+        1140,
+        960
+      ],
+      "pxPerUnit": 6,
+      "worldSize": [
+        190,
+        160
+      ],
+      "anchor": {
+        "pixel": [
+          60,
+          60
+        ],
+        "meaning": "footprint top-left"
+      },
+      "layer": "roof",
+      "concept": false,
+      "material": "stone",
+      "footprint": [
+        [
+          0,
+          0
+        ],
+        [
+          140,
+          0
+        ],
+        [
+          140,
+          110
+        ],
+        [
+          0,
+          110
+        ]
+      ],
+      "walls": 4,
+      "doors": [
+        {
+          "wall": "s",
+          "at": 70,
+          "width": 12
+        }
+      ],
+      "windows": [
+        {
+          "wall": "n",
+          "at": 23,
+          "width": 10
+        },
+        {
+          "wall": "n",
+          "at": 46,
+          "width": 10
+        },
+        {
+          "wall": "n",
+          "at": 70,
+          "width": 10
+        },
+        {
+          "wall": "n",
+          "at": 94,
+          "width": 10
+        },
+        {
+          "wall": "n",
+          "at": 118,
+          "width": 10
+        },
+        {
+          "wall": "s",
+          "at": 21,
+          "width": 10
+        },
+        {
+          "wall": "s",
+          "at": 43,
+          "width": 10
+        },
+        {
+          "wall": "s",
+          "at": 97,
+          "width": 10
+        },
+        {
+          "wall": "s",
+          "at": 120,
+          "width": 10
+        },
+        {
+          "wall": "w",
+          "at": 30,
+          "width": 12
+        },
+        {
+          "wall": "w",
+          "at": 78,
+          "width": 12
+        },
+        {
+          "wall": "e",
+          "at": 30,
+          "width": 12
+        },
+        {
+          "wall": "e",
+          "at": 78,
+          "width": 12
+        }
+      ],
+      "innerWalls": [
+        [
+          [
+            59,
+            4
+          ],
+          [
+            59,
+            31
+          ]
+        ],
+        [
+          [
+            59,
+            41
+          ],
+          [
+            59,
+            66
+          ]
+        ],
+        [
+          [
+            59,
+            79
+          ],
+          [
+            59,
+            106
+          ]
+        ],
+        [
+          [
+            81,
+            4
+          ],
+          [
+            81,
+            30
+          ]
+        ],
+        [
+          [
+            81,
+            41
+          ],
+          [
+            81,
+            65
+          ]
+        ],
+        [
+          [
+            81,
+            79
+          ],
+          [
+            81,
+            106
+          ]
+        ],
+        [
+          [
+            4,
+            50
+          ],
+          [
+            59,
+            50
+          ]
+        ],
+        [
+          [
+            81,
+            50
+          ],
+          [
+            136,
+            50
+          ]
+        ]
+      ],
+      "innerWallThickness": 2,
+      "heightUnits": 80
+    },
+    {
+      "id": "bldg-stone-office-interior",
+      "file": "bldg-stone-office-interior-v1.png",
+      "kind": "sprite",
+      "pixelSize": [
+        1140,
+        960
+      ],
+      "pxPerUnit": 6,
+      "worldSize": [
+        190,
+        160
+      ],
+      "anchor": {
+        "pixel": [
+          60,
+          60
+        ],
+        "meaning": "footprint top-left"
+      },
+      "layer": "interior",
+      "concept": false,
+      "material": "stone",
+      "footprint": [
+        [
+          0,
+          0
+        ],
+        [
+          140,
+          0
+        ],
+        [
+          140,
+          110
+        ],
+        [
+          0,
+          110
+        ]
+      ],
+      "walls": 4,
+      "doors": [
+        {
+          "wall": "s",
+          "at": 70,
+          "width": 12
+        }
+      ],
+      "windows": [
+        {
+          "wall": "n",
+          "at": 23,
+          "width": 10
+        },
+        {
+          "wall": "n",
+          "at": 46,
+          "width": 10
+        },
+        {
+          "wall": "n",
+          "at": 70,
+          "width": 10
+        },
+        {
+          "wall": "n",
+          "at": 94,
+          "width": 10
+        },
+        {
+          "wall": "n",
+          "at": 118,
+          "width": 10
+        },
+        {
+          "wall": "s",
+          "at": 21,
+          "width": 10
+        },
+        {
+          "wall": "s",
+          "at": 43,
+          "width": 10
+        },
+        {
+          "wall": "s",
+          "at": 97,
+          "width": 10
+        },
+        {
+          "wall": "s",
+          "at": 120,
+          "width": 10
+        },
+        {
+          "wall": "w",
+          "at": 30,
+          "width": 12
+        },
+        {
+          "wall": "w",
+          "at": 78,
+          "width": 12
+        },
+        {
+          "wall": "e",
+          "at": 30,
+          "width": 12
+        },
+        {
+          "wall": "e",
+          "at": 78,
+          "width": 12
+        }
+      ],
+      "innerWalls": [
+        [
+          [
+            59,
+            4
+          ],
+          [
+            59,
+            31
+          ]
+        ],
+        [
+          [
+            59,
+            41
+          ],
+          [
+            59,
+            66
+          ]
+        ],
+        [
+          [
+            59,
+            79
+          ],
+          [
+            59,
+            106
+          ]
+        ],
+        [
+          [
+            81,
+            4
+          ],
+          [
+            81,
+            30
+          ]
+        ],
+        [
+          [
+            81,
+            41
+          ],
+          [
+            81,
+            65
+          ]
+        ],
+        [
+          [
+            81,
+            79
+          ],
+          [
+            81,
+            106
+          ]
+        ],
+        [
+          [
+            4,
+            50
+          ],
+          [
+            59,
+            50
+          ]
+        ],
+        [
+          [
+            81,
+            50
+          ],
+          [
+            136,
+            50
+          ]
+        ]
+      ],
+      "innerWallThickness": 2,
+      "heightUnits": 80
+    },
+    {
+      "id": "tree-birch-1",
+      "file": "tree-birch-1-v1.png",
+      "kind": "sprite",
+      "pixelSize": [
+        636,
+        636
+      ],
+      "pxPerUnit": 6,
+      "worldSize": [
+        106,
+        106
+      ],
+      "anchor": {
+        "pixel": [
+          246,
+          246
+        ],
+        "meaning": "trunk center"
+      },
+      "layer": "canopy",
+      "concept": false,
+      "footprint": {
+        "type": "circle",
+        "center": [
+          0,
+          0
+        ],
+        "radius": 2
+      },
+      "canopy": {
+        "type": "circle",
+        "center": [
+          0,
+          0
+        ],
+        "radius": 35
+      },
+      "heightUnits": 60
+    },
+    {
+      "id": "tree-birch-1-trunk",
+      "file": "tree-birch-1-trunk-v1.png",
+      "kind": "sprite",
+      "pixelSize": [
+        60,
+        60
+      ],
+      "pxPerUnit": 6,
+      "worldSize": [
+        10,
+        10
+      ],
+      "anchor": {
+        "pixel": [
+          24,
+          24
+        ],
+        "meaning": "trunk center"
+      },
+      "layer": "object",
+      "concept": false,
+      "footprint": {
+        "type": "circle",
+        "center": [
+          0,
+          0
+        ],
+        "radius": 2
+      },
+      "canopy": null
+    },
+    {
+      "id": "haystack-1",
+      "file": "haystack-1-v1.png",
+      "kind": "sprite",
+      "pixelSize": [
+        360,
+        360
+      ],
+      "pxPerUnit": 6,
+      "worldSize": [
+        60,
+        60
+      ],
+      "anchor": {
+        "pixel": [
+          150,
+          150
+        ],
+        "meaning": "stack center"
+      },
+      "layer": "object",
+      "concept": false,
+      "footprint": {
+        "type": "circle",
+        "center": [
+          0,
+          0
+        ],
+        "radius": 20
+      },
+      "canopy": {
+        "type": "circle",
+        "center": [
+          0,
+          0
+        ],
+        "radius": 20
+      },
+      "heightUnits": 30
+    },
+    {
+      "id": "fence-wattle-straight",
+      "file": "fence-wattle-straight-v1.png",
+      "kind": "segment",
+      "pixelSize": [
+        264,
+        84
+      ],
+      "pxPerUnit": 6,
+      "worldSize": [
+        44,
+        14
+      ],
+      "anchor": {
+        "pixel": [
+          0,
+          30
+        ],
+        "meaning": "first centerline connector"
+      },
+      "layer": "object",
+      "concept": false,
+      "footprint": [
+        [
+          0,
+          -3
+        ],
+        [
+          40,
+          -3
+        ],
+        [
+          40,
+          3
+        ],
+        [
+          0,
+          3
+        ]
+      ],
+      "heightUnits": 10,
+      "segmentLengthUnits": 40
+    },
+    {
+      "id": "fence-wattle-end",
+      "file": "fence-wattle-end-v1.png",
+      "kind": "segment",
+      "pixelSize": [
+        264,
+        84
+      ],
+      "pxPerUnit": 6,
+      "worldSize": [
+        44,
+        14
+      ],
+      "anchor": {
+        "pixel": [
+          0,
+          30
+        ],
+        "meaning": "first centerline connector"
+      },
+      "layer": "object",
+      "concept": false,
+      "footprint": [
+        [
+          0,
+          -3
+        ],
+        [
+          40,
+          -3
+        ],
+        [
+          40,
+          3
+        ],
+        [
+          0,
+          3
+        ]
+      ],
+      "heightUnits": 10,
+      "segmentLengthUnits": 40
+    },
+    {
+      "id": "fence-wattle-corner",
+      "file": "fence-wattle-corner-v1.png",
+      "kind": "segment",
+      "pixelSize": [
+        306,
+        306
+      ],
+      "pxPerUnit": 6,
+      "worldSize": [
+        51,
+        51
+      ],
+      "anchor": {
+        "pixel": [
+          0,
+          18
+        ],
+        "meaning": "first centerline connector"
+      },
+      "layer": "object",
+      "concept": false,
+      "footprint": [
+        [
+          0,
+          -3
+        ],
+        [
+          43,
+          -3
+        ],
+        [
+          43,
+          40
+        ],
+        [
+          37,
+          40
+        ],
+        [
+          37,
+          3
+        ],
+        [
+          0,
+          3
+        ]
+      ],
+      "heightUnits": 10,
+      "segmentLengthUnits": 40
+    },
+    {
+      "id": "ravine-edge-straight",
+      "file": "ravine-edge-straight-v1.png",
+      "kind": "segment",
+      "pixelSize": [
+        480,
+        360
+      ],
+      "pxPerUnit": 6,
+      "worldSize": [
+        80,
+        60
+      ],
+      "anchor": {
+        "pixel": [
+          0,
+          0
+        ],
+        "meaning": "image top-left"
+      },
+      "layer": "ground",
+      "concept": false,
+      "repeat": [
+        "x"
+      ],
+      "footprint": [
+        [
+          0,
+          0
+        ],
+        [
+          80,
+          0
+        ],
+        [
+          80,
+          60
+        ],
+        [
+          0,
+          60
+        ]
+      ],
+      "descentDirection": "s",
+      "depthUnits": 30,
+      "blocking": false
+    },
+    {
+      "id": "concept-berezovka-overview",
+      "file": "concept-berezovka-overview-v1.png",
+      "kind": "sprite",
+      "pixelSize": [
+        1800,
+        1200
+      ],
+      "pxPerUnit": 0.5,
+      "worldSize": [
+        3600,
+        2400
+      ],
+      "anchor": {
+        "pixel": [
+          0,
+          0
+        ],
+        "meaning": "image top-left"
+      },
+      "layer": "ground",
+      "concept": true
+    }
+  ]
+}
