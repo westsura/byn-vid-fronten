@@ -961,3 +961,34 @@ body.purchasing { overflow:hidden; }
   .cands, .rlist { grid-template-columns:1fr; }
   .p-head { flex-direction:column; align-items:stretch; }
 }
+/* ---- Step 8: briefing and result screens ---- */
+.screen[hidden] { display:none; }
+.brief-grid { display:grid; grid-template-columns:minmax(0,1fr) minmax(0,1fr); gap:28px; }
+.briefing p, .briefing li { color:#d7dbc9; line-height:1.55; }
+.briefing ul { padding-left:18px; margin:0; }
+.brief-map { position:relative; margin:22px 0 0; }
+.brief-map img, .brief-map svg { width:100%; display:block; border:1px solid var(--line); }
+.map-box { position:relative; }
+.brief-map svg { position:absolute; inset:0; width:100%; height:100%; border:0; }
+.brief-map figcaption { color:var(--muted); font-size:12px; margin-top:6px; }
+.briefing .b-top { margin-bottom:4px; }
+.outcome { font-size:34px; }
+.outcome.won { color:#a9d36f; }
+.outcome.lost { color:#e2876a; }
+.outcome.draw { color:var(--accent); }
+.losses { width:100%; border-collapse:collapse; font-size:13.5px; }
+.losses th, .losses td { text-align:left; padding:7px 10px; border-bottom:1px solid #333d30; }
+.losses th { color:var(--muted); font-weight:600; font-size:12px; }
+.losses tr.sum td { font-weight:700; border-top:1px solid var(--line); }
+.fates { display:grid; grid-template-columns:repeat(3, minmax(0,1fr)); gap:8px; }
+.fate { display:flex; gap:10px; align-items:center; background:#1d241c; border:1px solid #3a4636; border-radius:4px; padding:8px 10px; font-size:12.5px; }
+.fate div { display:grid; flex:1; }
+.fate div span { color:var(--muted); }
+.fate em { font-style:normal; font-weight:700; }
+.fate.ok em { color:#a9d36f; }
+.fate.warn em { color:#e2c766; }
+.fate.bad em { color:#e2876a; }
+.fate.dead em { color:#ff9f8f; }
+.fate.dead { opacity:.85; }
+.saved { margin-top:16px; }
+@media (max-width:900px) { .brief-grid, .fates { grid-template-columns:1fr; } }

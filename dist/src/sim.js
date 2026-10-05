@@ -1,7 +1,8 @@
 // Battle simulation: squads, orders, movement, fire, unit state and mission end.
 // No DOM access here — the UI listens to events emitted through `hooks`.
-import { MISSION_TIME, HOLD_TIME, W, H } from './config.js';
-import { objective } from './scenario.js';
+import { W, H } from './config.js';
+import { setMission, updateMission, missionBuilding, buildingCounts } from './mission.js';
+import { setResultRules, battleResult, saveResult } from './result.js';
 import { t } from './text.js';
 import { seedRandom } from './rng.js';
 import { dist, buildingAt, blocked, canWalk, coverAt, interiorSlots } from './terrain.js';
@@ -69,6 +70,8 @@ let orderRules = null;
 export const orderRulesUI = () => orderRules;
 let effectRules = null;
 let aiRules = null;
+let scenario = null;
+let enemyRoles = null; // unitId → 'garrison' | 'reserve' | 'command' (scenario AI)
 let metresPerUnit = 0.1;
 // State-model, threat-map and fire parameters (data/rules/condition.json) and the weapon table.
 export function setRules(db) {
@@ -80,6 +83,10 @@ export function setRules(db) {
   orderRules = db.rules.orders;
   setEffectRules(db.rules.effects);
   setLeaderRules(db.rules.leaders, db.traits);
+  setMission(db.scenario.mission);
+  setResultRules(db.rules.result);
+  scenario = db.scenario;
+  enemyRoles = db.scenario.enemy.roles ?? null;
   effectRules = db.rules.effects;
   fireRulesCheck = db.rules.fire.spotting.checkS;
   weapons = db.weapons;
@@ -204,6 +211,7 @@ export function reset() {
   });
   state.selection = [state.selected];
   updateAuras(state);
+  state.counts = buildingCounts(state);
   for (const q of state.squads) q.leadId = leaderInfo(q).man?.personId ?? null;
   addLog(t('log.ready', { units: forces.player.units.length }));
   hooks.changed();
@@ -566,14 +574,17 @@ export function pause() {
   }
 }
 
-function finish(win, reason) {
+// End of battle: outcome 'won' | 'lost' | 'draw'; the result is kept in
+// state.result (and saved for a later campaign) and shown by the UI.
+function finish(outcome, reasonKey, params) {
   state.ended = true;
-  state.won = win;
+  state.won = outcome === 'won';
+  state.outcome = outcome;
   state.paused = true;
-  const left = playerSquads().reduce((n, s) => n + alive(s).length, 0);
-  addLog(t(win ? 'log.won' : 'log.ended'));
-  const total = playerSquads().reduce((n, s) => n + s.men.length, 0);
-  hooks.finished(win, reason + ' ' + t('result.left', { left, total }));
+  addLog(t(outcome === 'won' ? 'log.won' : 'log.ended'));
+  state.result = battleResult(state, scenario, outcome, reasonKey, params);
+  saveResult(state.result);
+  hooks.finished(state.result);
   hooks.changed();
 }
 
@@ -656,6 +667,49 @@ export function aiMove(s, x, y) {
   return true;
 }
 
+// Scenario AI (step 8): defend the building, counterattack when the Germans are weak.
+const fitMen = (q) => (q.cond.broken || q.cond.pinned || q.routed ? 0 : alive(q).length);
+function insideBuilding(q, b) {
+  return alive(q).filter((m) => buildingAt(m.x, m.y) === b).length;
+}
+function roleAI(s, role) {
+  const b = missionBuilding();
+  const C = aiRules.counterattack;
+  const enter = () => {
+    if (insideBuilding(s, b) >= alive(s).length * 0.6 && !s.path.length) {
+      s.order = 'defend';
+      return;
+    }
+    if (aiMove(s, b.midX, b.midY)) {
+      s.defendAtEnd = true;
+      s.order = 'enter';
+      s.orderHouse = b.id;
+    }
+  };
+  if (role === 'garrison') return enter();
+  if (role === 'command') {
+    s.path = [];
+    s.order = 'defend';
+    return;
+  }
+  // reserve
+  if (s.counterattacking) return enter();
+  const near = state.squads.filter((q) => !q.side && !q.absorbed).flatMap((q) => alive(q).filter((m) => Math.hypot(m.x - b.midX, m.y - b.midY) <= C.nearUnits).map(() => q));
+  const germansNear = near.length;
+  const germansFitNear = near.filter((q) => fitMen(q) > 0).length;
+  const garrisonFit = state.squads.filter((q) => q.side && enemyRoles[q.unitId] === 'garrison').reduce((n, q) => n + (q.cond.broken || q.routed ? 0 : insideBuilding(q, b)), 0);
+  // Weak: few Germans fit to fight at the house compared with the Soviets there and in reserve.
+  const weak = germansNear > 0 && germansFitNear <= C.weakRatio * (fitMen(s) + garrisonFit);
+  const lost = germansNear > 0 && garrisonFit < C.holdMin;
+  if (weak || lost) {
+    s.counterattacking = true;
+    if (s.visible) addLog(t('log.counterattack'));
+    return enter();
+  }
+  s.path = [];
+  s.order = 'defend';
+}
+
 function updateEnemyAI(s) {
   if (!s.side || s.routed) return;
   // On the move: is the way ahead being swept?
@@ -665,6 +719,7 @@ function updateEnemyAI(s) {
   }
   if (state.elapsed - s.lastAI <= aiRules.decisionS) return;
   s.lastAI = state.elapsed;
+  if (enemyRoles?.[s.unitId] && missionBuilding()) return roleAI(s, enemyRoles[s.unitId]);
   const target = state.squads
     .filter((f) => !f.side && alive(f).length && state.spotted[1].has(f.id) && dist(s, f) < 310)
     .sort((a, b) => dist(a, s) - dist(b, s))[0];
@@ -847,18 +902,6 @@ function moveSoldiers(s, dt) {
   }
 }
 
-function updateObjective(dt) {
-  const near = (s, r) => alive(s).length && dist(s, objective) < r;
-  const friends = state.squads.some((s) => !s.side && !s.routed && near(s, objective.radius));
-  const enemies = state.squads.some((s) => s.side && near(s, objective.enemyRadius));
-  if (friends && !enemies) state.capture = Math.min(HOLD_TIME, state.capture + dt);
-  else if (enemies) state.capture = Math.max(0, state.capture - dt * 0.6);
-
-  if (state.capture >= HOLD_TIME) finish(true, t('result.held', { hold: HOLD_TIME }));
-  else if (!playerSquads().some((s) => alive(s).length)) finish(false, t('result.wiped'));
-  else if (state.elapsed >= MISSION_TIME) finish(false, t('result.timeout'));
-}
-
 // Advance the battle unless it is paused or over. The frame loop calls this.
 export function step(dt) {
   if (state.paused || state.ended) return false;
@@ -925,5 +968,5 @@ export function update(dt) {
     updateCommand(s);
     updateBroken(s);
   }
-  updateObjective(dt);
+  updateMission(state, dt, finish);
 }

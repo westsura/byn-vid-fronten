@@ -1,8 +1,13 @@
 {
-  "_comment": "Prototypens uppställning för steg 1: år, styrkor och utgångslägen på nuvarande karta. Kartans geometri ligger kvar i src/scenario.js tills scenarierna byggs i steg 8. Panelen visar förbanden i styrkefilens ordning (Zugtrupp först); snabbtangenterna anges här.",
-  "id": "proto-1943",
+  "_comment": "Scenario 1 (steg 8): Motanfall. Sovjetiskt infanteri har tagit stenhuset vid gården i Berezovka. Den tyska plutonen ska ta tillbaka det. Segervillkor: vid tidens slut jämförs antalet stridsdugliga (levande, enheten varken Broken eller Pinned) tyska och sovjetiska soldater i byggnaden. Kartans geometri ligger kvar i src/scenario.js tills den nya kartan byggs.",
+  "id": "counterattack-1943",
   "year": 1943,
   "map": "village-1",
+  "mission": {
+    "type": "building",
+    "building": 1,
+    "timeLimitS": 600
+  },
   "player": {
     "forces": "de-zug-1943-proto",
     "placements": {
@@ -34,17 +39,23 @@
     "forces": "su-vzvod-1943-proto",
     "placements": {
       "otdeleniye-1": [
-        865,
-        335
+        756,
+        196
       ],
       "otdeleniye-2": [
-        875,
-        670
+        1015,
+        320
       ],
       "upravleniye": [
-        1140,
-        300
+        1130,
+        250
       ]
+    },
+    "roles": {
+      "_comment": "Sovjetisk AI: garrison försvarar byggnaden, reserve gör motstöt när tyskarna vid byggnaden är svaga eller när byggnaden tappas, command stannar bakom och leder (Komandir vzvoda väljer läge själv).",
+      "otdeleniye-1": "garrison",
+      "otdeleniye-2": "reserve",
+      "upravleniye": "command"
     }
   },
   "purchase": {
@@ -79,15 +90,5 @@
         ]
       }
     }
-  },
-  "mission": {
-    "_comment": "Den tidigare prototypens uppdrag: håll området vid gårdsflaggan i holdS sekunder utan fiende i närheten.",
-    "type": "area",
-    "x": 755,
-    "y": 290,
-    "radius": 68,
-    "enemyRadius": 100,
-    "holdS": 20,
-    "timeLimitS": 360
   }
 }

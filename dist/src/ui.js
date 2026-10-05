@@ -1,5 +1,5 @@
 // DOM side panel, overlays and input handling.
-import { MISSION_TIME, HOLD_TIME } from './config.js';
+import { mission, timeLimit } from './mission.js';
 import { state, alive, playerSquads, select, selectGroup, groupUnits, issue, defend, retreat, split, merge, canSplit, setMode, setHalfSpeed, togglePause, reset, orderText, houseName, testGrenade, orderRulesUI, setSector, setOpening, unitsPerMetre, setLeaderMode } from './sim.js';
 import { leaderInfo, traitOf, MODES as LEADER_MODES } from './leaders.js';
 import { buildingAt, coverAt } from './terrain.js';
@@ -12,6 +12,8 @@ import { squadRadius, setShakeStrength, edgeMarkers } from './render.js';
 
 const $ = (id) => document.getElementById(id);
 export let cursor = null;
+let scenarioId = '';
+export const setScenarioId = (id) => (scenarioId = id);
 
 const clock = (sec) => String(Math.floor(sec / 60)).padStart(2, '0') + ':' + String(sec % 60).padStart(2, '0');
 
@@ -23,11 +25,6 @@ export function toast(text) {
   toast.timer = setTimeout(() => el.classList.remove('show'), 2700);
 }
 
-export function showResult(win, text) {
-  $('result').hidden = false;
-  $('resultTitle').textContent = t(win ? 'brief.won' : 'brief.lost');
-  $('resultText').textContent = text;
-}
 
 function setHTML(el, html) {
   // Only touch the DOM when content changes, so hover and focus are kept.
@@ -110,10 +107,25 @@ export function renderUI() {
   $('phase').textContent = t(state.ended ? 'phase.ended' : state.paused ? (state.started ? 'phase.paused' : 'phase.planning') : 'phase.running');
   $('pause').textContent = t(state.paused ? (state.started ? 'buttons.resume' : 'buttons.begin') : 'buttons.pause');
   $('pause').disabled = state.ended;
-  $('clock').textContent = clock(Math.max(0, Math.ceil(MISSION_TIME - state.elapsed)));
-  $('captureBar').style.width = (state.capture / HOLD_TIME) * 100 + '%';
-  $('captureTime').textContent = Math.floor(state.capture) + ' / ' + HOLD_TIME + ' s';
-  $('captureText').textContent = t(state.capture > 0 ? 'panel.securing' : 'panel.noControl');
+  $('clock').textContent = clock(Math.max(0, Math.ceil(timeLimit() - state.elapsed)));
+  // Mission card: the scenario's task and how it stands.
+  const M = mission();
+  const sid = scenarioId;
+  $('missionTitle').textContent = t(`scenarios.${sid}.missionTitle`);
+  $('missionText').textContent = t(`scenarios.${sid}.missionText`, { hold: M?.holdS });
+  if (M?.type === 'building') {
+    // Only Soviet soldiers the player can see are counted on screen.
+    const c = state.counts ?? { fit: [0, 0], seenFit: [0, 0] };
+    const su = c.seenFit?.[1] ?? 0;
+    const total = c.fit[0] + su;
+    $('captureBar').style.width = (total ? (100 * c.fit[0]) / total : 0) + '%';
+    $('captureText').textContent = t('panel.inBuilding');
+    $('captureTime').textContent = t('panel.fitCounts', { de: c.fit[0], su });
+  } else {
+    $('captureBar').style.width = (state.capture / (M?.holdS ?? 20)) * 100 + '%';
+    $('captureTime').textContent = Math.floor(state.capture) + ' / ' + (M?.holdS ?? 20) + ' s';
+    $('captureText').textContent = t(state.capture > 0 ? 'panel.securing' : 'panel.noControl');
+  }
   $('forceCount').textContent = t('panel.men', { n: playerSquads().reduce((sum, q) => sum + alive(q).length, 0) });
   setHTML($('squads'), forcesHTML());
 
@@ -167,14 +179,13 @@ function startOrToggle() {
 // Before a new battle the purchase screen is shown (main.js sets this).
 let beforeBattle = null;
 export const setBeforeBattle = (fn) => (beforeBattle = fn);
-const newBattle = () => (beforeBattle ? beforeBattle() : restart());
+export const newBattle = () => (beforeBattle ? beforeBattle() : restart());
 
 export function restart() {
   cursor = null;
   reset();
   setLevel(0);
   $('intro').hidden = false;
-  $('result').hidden = true;
 }
 
 // Static interface text: elements with data-t="key" get their text from en.json,
@@ -183,7 +194,7 @@ export function applyStaticText() {
   document.documentElement.lang = 'en';
   document.title = t('meta.title');
   document.querySelector('meta[name="description"]')?.setAttribute('content', t('meta.description'));
-  for (const el of document.querySelectorAll('[data-t]')) el.textContent = t(el.dataset.t, { hold: HOLD_TIME });
+  for (const el of document.querySelectorAll('[data-t]')) el.textContent = t(el.dataset.t, { hold: mission()?.holdS ?? '' });
   for (const el of document.querySelectorAll('[data-t-aria]')) el.setAttribute('aria-label', t(el.dataset.tAria));
 }
 
@@ -342,7 +353,6 @@ export function bindInput(canvas, W, H) {
   };
   $('pause').onclick = startOrToggle;
   $('begin').onclick = startOrToggle;
-  $('again').onclick = newBattle;
   $('restart').onclick = () => {
     if (!state.started || state.ended || confirm(t('toast.confirmRestart'))) newBattle();
   };

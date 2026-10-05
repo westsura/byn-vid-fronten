@@ -28,7 +28,7 @@
     "ariaLabel": "Battle map. Select a unit with 1–4; press again to centre on it. Click the map to give the order. Arrow keys move the order cursor and Enter gives the order; Shift and arrow keys move the camera.",
     "buildings": [
       "West house",
-      "Farmhouse",
+      "Stone house",
       "East house",
       "Barn",
       "South house",
@@ -40,7 +40,9 @@
     "zoomLabel": "Zoom level",
     "zoomMap": "Map",
     "zoomPlatoon": "Platoon",
-    "zoomUnit": "Unit"
+    "zoomUnit": "Unit",
+    "objectiveBuilding": "OBJECTIVE: {house}",
+    "fitCounts": "Fit inside: {de} German · {su} Soviet seen"
   },
   "phase": {
     "planning": "PLANNING",
@@ -66,13 +68,11 @@
     "sector": "◠ Cover Sector"
   },
   "brief": {
-    "eyebrow": "YOUR MISSION",
-    "title": "Take the village crossroads.",
-    "text": "Lead your platoon forward and hold the farmyard by the objective flag for {hold} seconds. The enemy is defending the village.",
-    "hint": "Select a unit below. Click the map to give orders. Click a house to enter it. Space pauses.",
-    "resultEyebrow": "THE BATTLE IS OVER",
-    "won": "The farmyard is secured.",
-    "lost": "The attack has stalled."
+    "eyebrow": "YOUR FORCE IS DEPLOYED",
+    "title": "Give your orders.",
+    "text": "The battle is paused. Select units, give orders and set leaders' modes, then start. You can pause at any time.",
+    "hint": "Space pauses. 1–7 select units. G shows the debug view.",
+    "resultEyebrow": "THE BATTLE IS OVER"
   },
   "panel": {
     "missionEyebrow": "01 / MISSION",
@@ -130,7 +130,9 @@
     "openingAll": "whole sector",
     "openingLabel": "Opening range in metres",
     "keysSector": "V",
-    "keysSectorText": "Cover Sector"
+    "keysSectorText": "Cover Sector",
+    "inBuilding": "Fit inside the building (Soviet: seen)",
+    "fitCounts": "{de} : {su}"
   },
   "morale": {
     "steady": "Steady",
@@ -193,7 +195,8 @@
     "noLeader": "{unit} has no leader left.",
     "leaderMode": "{leader}: {mode}.",
     "leaderModeOff": "{leader}: no mode.",
-    "mortarOrder": "{unit}: fire mission."
+    "mortarOrder": "{unit}: fire mission.",
+    "counterattack": "Enemy counterattack!"
   },
   "toast": {
     "recovering": "The unit is recovering and cannot take orders.",
@@ -212,8 +215,40 @@
   "result": {
     "held": "You held the objective for {hold} seconds.",
     "wiped": "All your units are out of action.",
-    "timeout": "Time ran out before the objective was secured.",
-    "left": "{left} of {total} own soldiers remaining."
+    "timeout": "Time ran out.",
+    "left": "{left} of {total} own soldiers remaining.",
+    "enemyGone": "The enemy has no unit left that can fight.",
+    "building": {
+      "won": "{de} of your men hold the building against {su}.",
+      "lost": "The enemy holds the building: {su} of theirs against {de} of yours.",
+      "draw": "Neither side holds the building: {de} against {su}."
+    },
+    "eyebrow": "AFTER ACTION REPORT",
+    "outcome": {
+      "won": "Victory",
+      "lost": "Defeat",
+      "draw": "Draw"
+    },
+    "inBuilding": "Fit in the building (DE : SU)",
+    "inBuildingNote": "Counted at the end of the battle.",
+    "lossesTitle": "Losses",
+    "unit": "Unit",
+    "strength": "Strength",
+    "fit": "In action",
+    "lightly": "Lightly wounded",
+    "badly": "Badly wounded",
+    "killed": "Killed",
+    "total": "Platoon",
+    "enemyLosses": "Enemy: {out} of {strength} men out of action, {fit} still in action.",
+    "leadersTitle": "The leaders' fate",
+    "status": {
+      "active": "Unharmed",
+      "lightlyWounded": "Lightly wounded",
+      "badlyWounded": "Badly wounded",
+      "killed": "Killed"
+    },
+    "saved": "The result is saved (people and their status) for a campaign later.",
+    "again": "New battle"
   },
   "graphics": {
     "sprites": "Sprites (v4, approved style)",
@@ -333,6 +368,51 @@
       "de-gruppe-1943": "A further rifle Gruppe from the company: MG 34 and nine men.",
       "de-schwere-mg-gruppe-1943": "A heavy MG 34 on its tripod mount from the machine-gun platoon. Long range and heavy suppression, but slow to set up.",
       "de-granatwerfergruppe-1943": "An 8 cm Granatwerfer 34. Indirect fire at a marked point within range – no line of sight needed."
+    }
+  },
+  "briefing": {
+    "eyebrow": "BRIEFING",
+    "time": "Time limit",
+    "budget": "Budget",
+    "points": "pts",
+    "situation": "Situation",
+    "task": "Task",
+    "conditions": "Victory conditions",
+    "enemy": "Enemy",
+    "forces": "Own forces",
+    "mapAlt": "Map of the village with the objective marked",
+    "startArea": "START AREA",
+    "objective": "OBJECTIVE",
+    "continue": "Assemble your force"
+  },
+  "scenarios": {
+    "counterattack-1943": {
+      "title": "Counterattack on the stone house",
+      "missionTitle": "Take back the stone house",
+      "missionText": "At the end of the time limit you need more men fit to fight inside the stone house than the enemy.",
+      "situation": "Before dawn Soviet infantry broke into Berezovka and took the stone house by the farmyard – the one solid building in the village and the hinge of our line. Your Schützenzug has been brought up west of the village to throw them out before they can bring up more men.",
+      "task": "Retake the stone house and hold it until the time runs out.",
+      "conditions": [
+        "At the end of the time limit, count the men fit to fight inside the stone house – alive, and their unit neither Broken nor Pinned.",
+        "More German than Soviet: victory. Equal: draw. Fewer: defeat.",
+        "The battle ends at once if one side has no unit left that can fight."
+      ],
+      "enemy": "About a platoon: one otdeleniye in the stone house, one in reserve in the farmyards to the east, and the platoon command behind them. Expect PPSh and a DP in every otdeleniye, and a counterattack if you are weak at the house.",
+      "forces": "Your Schützenzug: Zugtrupp and three Gruppen. Choose their leaders and buy reinforcements on the next screen.",
+      "mapCaption": "The stone house (objective) and your start area in the west."
+    },
+    "proto-1943": {
+      "title": "Secure the farmyard",
+      "missionTitle": "Secure the farmyard",
+      "missionText": "Hold the area with no enemy nearby for {hold} seconds.",
+      "situation": "Prototype scenario.",
+      "task": "Hold the farmyard.",
+      "conditions": [
+        "Hold the area by the flag with no enemy nearby."
+      ],
+      "enemy": "A Soviet platoon.",
+      "forces": "Your Schützenzug.",
+      "mapCaption": "The farmyard and your start area."
     }
   }
 }

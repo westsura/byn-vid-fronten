@@ -1,6 +1,7 @@
 // Canvas rendering of the map, buildings, squads and effects. Reads state only.
 import { W, H } from './config.js';
-import { buildings, objective } from './scenario.js';
+import { buildings } from './scenario.js';
+import { mission, missionBuilding } from './mission.js';
 import { state, alive, formationOffset, houseName, playerSquads, inContact, offScreen } from './sim.js';
 import { shakeAmount, effectRules } from './effects.js';
 import { radiusOf } from './leaders.js';
@@ -107,7 +108,11 @@ function drawBuildings(ctx) {
 }
 
 function drawObjective(ctx) {
-  const { x, y, radius } = objective;
+  const b = missionBuilding();
+  if (b) return drawObjectiveBuilding(ctx, b);
+  const M = mission();
+  if (!M) return;
+  const { x, y, radius } = M;
   ctx.save();
   ctx.setLineDash([8 * px(), 6 * px()]);
   ctx.lineWidth = 2 * px();
@@ -131,6 +136,32 @@ function drawObjective(ctx) {
   ctx.fillStyle = '#d5bd78';
   ctx.fillRect(x, y - 5, 13, 9);
   ctx.restore();
+}
+
+// Building to take back (step 8): pulsing outline and a label above it.
+function drawObjectiveBuilding(ctx, b) {
+  const pulse = 0.55 + 0.45 * Math.sin(performance.now() / 420);
+  ctx.save();
+  ctx.strokeStyle = `rgba(240,154,106,${0.5 + 0.4 * pulse})`;
+  ctx.lineWidth = 3 * px();
+  ctx.setLineDash([10 * px(), 6 * px()]);
+  ctx.strokeRect(b.x - 6, b.y - 6, b.w + 12, b.h + 12);
+  ctx.restore();
+  label(ctx, b.midX, b.y - 6, (g) => {
+    const c = state.counts ?? { fit: [0, 0] };
+    const txt = `◈  ${t('map.objectiveBuilding', { house: houseName(b.id).toUpperCase() })}`;
+    const sub = t('map.fitCounts', { de: c.fit[0], su: c.seenFit?.[1] ?? 0 });
+    g.font = 'bold 12px system-ui';
+    g.textAlign = 'center';
+    const w = Math.max(g.measureText(txt).width, g.measureText(sub).width) + 18;
+    g.fillStyle = '#182219e0';
+    g.fillRect(-w / 2, -40, w, 34);
+    g.fillStyle = '#ffd2b8';
+    g.fillText(txt, 0, -26);
+    g.font = '11px system-ui';
+    g.fillStyle = '#efe4bd';
+    g.fillText(sub, 0, -11);
+  });
 }
 
 // Radius that encloses the squad's formation (41 for the original five-man squad).

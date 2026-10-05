@@ -6,7 +6,9 @@ import { openPurchase, bindPurchase } from './purchase.js';
 import { setText, t } from './text.js';
 import { loadMode, modeFromUrl } from './art.js';
 import { loadMap, drawMap, drawPortrait } from './render.js';
-import { renderUI, toast, showResult, bindInput, applyStaticText, cursor, restart, setBeforeBattle } from './ui.js';
+import { renderUI, toast, bindInput, applyStaticText, cursor, restart, setBeforeBattle, setScenarioId } from './ui.js';
+import { showBriefing, showResultScreen, setBuildingsForScreens } from './screens.js';
+import { buildings } from './scenario.js';
 import { fireSound, explosionSound, setVolume } from './audio.js';
 import { setCameraRules, updateCamera, levelInfo, toScreen } from './camera.js';
 
@@ -20,11 +22,15 @@ hooks.toast = toast;
 const screenX = (x) => toScreen(x, 0).x;
 hooks.shot = (x) => fireSound(screenX(x));
 hooks.boom = (x) => explosionSound(screenX(x));
-hooks.finished = showResult;
+
 
 // Game data (units, people, weapons, ranks, text) from dist/data. Problems in the
 // data are reported in the console; the game still starts with what loaded.
-const db = await loadData((path) => fetch('data/' + path).then((r) => r.json()));
+// Scenario: ?scenario=<id> (default: scenario 1, the counterattack).
+const scenarioId = new URLSearchParams(location.search).get('scenario') || 'counterattack-1943';
+const db = await loadData((path) => fetch('data/' + path).then((r) => r.json()), scenarioId);
+setScenarioId(db.scenario.id);
+setBuildingsForScreens(buildings);
 setText(db.text);
 applyStaticText();
 const problems = validate(db);
@@ -43,8 +49,9 @@ try {
 }
 bindInput(canvas, W, H);
 
-// Purchase screen before every battle (step 7): the chosen leaders and
-// reinforcements make up the player's force.
+// Before every battle: briefing (step 8), then the purchase screen (step 7);
+// the chosen leaders and reinforcements make up the player's force. After the
+// battle: the result screen, then a new briefing.
 let choice = defaultChoice(db);
 const purchase = () =>
   openPurchase(db, choice, (c) => {
@@ -52,9 +59,11 @@ const purchase = () =>
     setForces({ player: buildSide(db, 'player', c), enemy: buildSide(db, 'enemy') });
     restart();
   });
+const beforeBattle = () => showBriefing(db, purchase);
 bindPurchase();
-setBeforeBattle(purchase);
-purchase();
+setBeforeBattle(beforeBattle);
+hooks.finished = (result) => setTimeout(() => showResultScreen(db, result, db.people, beforeBattle), 1200);
+beforeBattle();
 
 document.addEventListener('visibilitychange', () => {
   if (document.hidden) pause();

@@ -1,0 +1,4 @@
+{
+  "_comment": "Resultat (steg 8). En man utom strid (hp ≤ 0) räknas som stupad om hp ≤ killedBelow, annars som svårt sårad. En man som träffats men kunnat fortsätta (0 < hp < 100) är lätt sårad. Strukturen sparas för en senare kampanj.",
+  "killedBelow": -25
+}

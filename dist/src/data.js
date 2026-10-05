@@ -7,7 +7,7 @@ const AWARD_FILES = ['de', 'su'];
 
 export async function loadData(read, scenarioId = 'proto-1943') {
   const scenario = await read(`scenarios/${scenarioId}.json`);
-  const [weapons, text, condition, fire, orders, effects, camera, ai, leaderRules, purchase, traits, ...rest] = await Promise.all([
+  const [weapons, text, condition, fire, orders, effects, camera, ai, leaderRules, purchase, result, traits, ...rest] = await Promise.all([
     read('weapons.json'),
     read('text/en.json'),
     read('rules/condition.json'),
@@ -18,6 +18,7 @@ export async function loadData(read, scenarioId = 'proto-1943') {
     read('rules/ai.json'),
     read('rules/leaders.json'),
     read('rules/purchase.json'),
+    read('rules/result.json'),
     read('leaders/traits.json'),
     ...RANK_FILES.map((f) => read(`ranks/${f}.json`)),
     ...AWARD_FILES.map((f) => read(`awards/${f}.json`)),
@@ -38,7 +39,7 @@ export async function loadData(read, scenarioId = 'proto-1943') {
   return {
     scenario,
     text,
-    rules: { condition, fire, orders, effects, camera, ai, leaders: leaderRules, purchase },
+    rules: { condition, fire, orders, effects, camera, ai, leaders: leaderRules, purchase, result },
     traits: Object.fromEntries(traits.traits.map((x) => [x.id, x])),
     leaders,
     weapons: Object.fromEntries(weapons.weapons.map((w) => [w.id, w])),

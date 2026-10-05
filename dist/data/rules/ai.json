@@ -7,5 +7,11 @@
   "replanDanger": 0.1,
   "haltDanger": 0.2,
   "decisionS": 12,
-  "maxDetour": 2
+  "maxDetour": 2,
+  "counterattack": {
+    "_comment": "Motstöt (steg 8): reserven anfaller byggnaden när tyska stridsdugliga soldater (varken Pinned eller Broken) inom nearUnits från den är högst weakRatio × de sovjetiska (reservens stridsdugliga och försvararna i byggnaden), eller när försvararna i byggnaden är färre än holdMin och tyskar finns nära. Bedöms var decisionS sekund.",
+    "nearUnits": 170,
+    "weakRatio": 0.4,
+    "holdMin": 3
+  }
 }
