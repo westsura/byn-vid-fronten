@@ -10,7 +10,8 @@ Allt som beskriver styrkor, personer, vapen, grader, utmärkelser, texter och up
 | `units/de-heer-1943.json`, `units/su-rkka-1943.json` | Befattningar (föreskriven grad, vapen, figur) och förbandstyper med platser, ledare och trupper (MG-Trupp / Schützentrupp) |
 | `people/*.json` | Personer: id, namn, formation, grad, befattning, vapen, utmärkelser, födelseår och status. Personen är skild från förbandet |
 | `forces/*.json` | En styrka: vilka förband som ingår och vilka personer som står på vilka platser |
-| `scenarios/proto-1943.json` | År, vilka styrkor som möts, utgångslägen och snabbtangenter |
+| `scenarios/counterattack-1943.json` | Scenario 1 (steg 8): motanfall mot stenhuset – år, uppdrag och segervillkor, tidsgräns, styrkor, utgångslägen, sovjetiska roller (garrison, reserve, command), budget och förstärkningar. Spelet startar med detta scenario (`?scenario=proto-1943` ger det tidigare) |
+| `scenarios/proto-1943.json` | Det tidigare prototypscenariot (håll gården); används av testerna |
 | `rules/condition.json` | Tillståndsmodell och hotkarta (steg 2): nedhållning, sammanhållning, eldberedskap, obehag, rutnät och gränser för Pinned/Broken |
 | `rules/fire.json` | Eld och siktlinje (steg 3): skala meter per kartenhet, upptäcktsavstånd, skymmande terräng, eldtillfällen per vapentyp, träff- och nedhållningsfaktorer, flankering |
 | `rules/orders.json` | Delad grupp (steg 3), förflyttningssätt med fart, exponering och upptäckt (steg 4), halv hastighet och snabbtangenter, Cover Sector med öppningsavstånd (steg 5) |
@@ -20,6 +21,7 @@ Allt som beskriver styrkor, personer, vapen, grader, utmärkelser, texter och up
 | `leaders/*.json` | Ledarvärden (Leadership, Fire Control, Rally 1–5) och egenskap per person; `leaders/traits.json`: egenskaperna med sina effekter (steg 6) |
 | `rules/leaders.json` | Vad ledarvärdena och plutonsledarnas lägen gör: radie, ordertid, faktorer (steg 6) |
 | `rules/purchase.json` | Köpskärmen (steg 7): ledarpris ur befattning, grad, värden och egenskap; Suited for-raden. Budget, utgångsområde och förstärkningarnas pris och plats ligger i scenariot, kandidater och förstärkningar i styrkefilen |
+| `rules/result.json` | Resultat (steg 8): när en man utom strid räknas som stupad eller svårt sårad |
 | `text/en.json` | All gränssnittstext på engelska. Förband, befattningar, grader och utmärkelser kommer från filerna ovan, på tyska respektive i rysk translitterering |
 
 ## Lägga till eller ändra

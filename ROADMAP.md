@@ -10,7 +10,8 @@
 > - [x] Steg 4 – order och kontroll: aktiv paus, halv hastighet, Move/Fast Move/Crawl/Defend/Fire/Retreat/Split-Merge, enhetspanel med halvkort, val och kamera (tre zoomnivåer, glidning, panorering), klick på kantmarkering, autopaus. Godkänt 2026-10-04.
 > - [x] Steg 5 – defensiv eld: Cover Sector (dra en kon, V), öppningsavstånd, eld bara i sektorn, sektorns rutor i hotkartan när den skjuter, fiendens AI går runt bestrukna rutor eller stannar. Godkänt 2026-10-04.
 > - [x] Steg 6 – ledare: värden och egenskaper i datafiler, lägen Direct Fire / Lead Assault / Rally för Zugführer och Zugtruppführer, ordertid, ställföreträdare tar över, ledarkort i panelen, radie på kartan och namngivna händelser. Godkänt 2026-10-04.
-> - [ ] Steg 7 – köpskärm: fast kärna, budget, ledarkandidater med ledarkort och jämförelse, förstärkningar (extra Gruppe, schwere MG-Gruppe, Granatwerfergruppe 8 cm) efter år, tung kulspruta och granatkastare med indirekt eld. Väntar på godkännande.
+> - [x] Steg 7 – köpskärm: fast kärna, budget, ledarkandidater med ledarkort och jämförelse, förstärkningar (extra Gruppe, schwere MG-Gruppe, Granatwerfergruppe 8 cm) efter år, tung kulspruta och granatkastare med indirekt eld. Godkänt 2026-10-05.
+> - [ ] Steg 8 – scenario 1, motanfall mot stenhuset: briefing, köpskärm, strid med sovjetisk AI (försvar, motstöt), segervillkor på stridsdugliga i byggnaden vid tidens slut, resultatskärm med förluster och ledarnas öde, resultatet sparat för kampanj. Publicerat på Vercel. Väntar på godkännande.
 >   - Beslut 2026-10-04: kartan byggs om för att kunna vara mycket större (Björn återkommer med assets); vapnens räckvidder får då betydelse.
 
 Status per fas. **Klart** betyder implementerat och verifierat (automatiskt test och/eller provspelning i webbläsare). Publicerat = på https://byn-vid-fronten.vercel.app (varje push till `main`).
