@@ -1,0 +1,11 @@
+{
+  "_comment": "Ledaregenskaper (DESIGN.md, Ledare: tabellen över egenskaper). Namn, fördel och nackdel visas från text/en.json (traits.<id>). Effekterna är faktorer som spelet läser; 1 = ingen ändring. cost används av köpskärmen (steg 7). Forward Observer får effekt först när inkallat artilleri finns.",
+  "traits": [
+    { "id": "daredevil", "icon": "⚡", "effects": { "advanceSpeed": 1.15, "advanceCohesionLoss": 0.8, "retreatDelayS": 3, "exposure": 1.15 }, "cost": 1.1 },
+    { "id": "cautious", "icon": "◆", "effects": { "holdCohesionLoss": 0.8, "advanceDelayFactor": 1.6 }, "cost": 1.0 },
+    { "id": "veteran", "icon": "⚑", "effects": { "buildingHit": 1.2, "closeHit": 1.2, "closeRangeM": 15 }, "cost": 1.3 },
+    { "id": "green", "icon": "○", "effects": { "rallyPenalty": 1, "suppressionRise": 1.25 }, "cost": 0.7 },
+    { "id": "mgSpecialist", "icon": "✚", "effects": { "barrelChange": 0.5, "lmgReady": 0.7 }, "cost": 1.1 },
+    { "id": "forwardObserver", "icon": "◎", "effects": {}, "cost": 1.2 }
+  ]
+}

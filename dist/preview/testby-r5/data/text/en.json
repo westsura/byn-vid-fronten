@@ -1,0 +1,418 @@
+{
+  "_comment": "All gränssnittstext på engelska (DESIGN.md, Språk i gränssnittet). Förband, befattningar, grader och utmärkelser kommer från datafilerna på originalspråk. {namn} ersätts med värden.",
+  "meta": {
+    "title": "Byn vid fronten — tactical infantry battle",
+    "description": "Lead a German infantry platoon on the Eastern Front, 1943. Give orders, use cover and pause when you need to."
+  },
+  "header": {
+    "title": "BYN VID FRONTEN",
+    "subtitle": "TACTICAL BATTLE · PROTOTYPE 04",
+    "theatre": "EASTERN FRONT, 1943",
+    "operation": "Unternehmen Morgenlicht",
+    "graphics": "Graphics",
+    "graphicsLabel": "Graphics set",
+    "soundOff": "Sound off",
+    "soundOn": "Sound on",
+    "restart": "Restart",
+    "shake": "Shake",
+    "shakeLabel": "Camera shake strength",
+    "autoPauseOn": "Auto-pause on contact: on",
+    "autoPauseOff": "Auto-pause on contact: off"
+  },
+  "map": {
+    "sector": "SECTOR 07",
+    "village": "BEREZOVKA",
+    "objective": "FARMYARD",
+    "enemy": "ENEMY",
+    "pausedBanner": "PAUSED — GIVE YOUR ORDERS",
+    "ariaLabel": "Battle map. Select a unit with 1–4; press again to centre on it. Click the map to give the order. Arrow keys move the order cursor and Enter gives the order; Shift and arrow keys move the camera.",
+    "buildings": [
+      "West house",
+      "Stone house",
+      "East house",
+      "Barn",
+      "South house",
+      "Storehouse"
+    ],
+    "legendOwn": "Own unit",
+    "legendEnemy": "Spotted enemy",
+    "legendObjective": "Objective",
+    "zoomLabel": "Zoom level",
+    "zoomMap": "Map",
+    "zoomPlatoon": "Platoon",
+    "zoomUnit": "Unit",
+    "objectiveBuilding": "OBJECTIVE: {house}",
+    "fitCounts": "Fit inside: {de} German · {su} Soviet seen"
+  },
+  "phase": {
+    "planning": "PLANNING",
+    "paused": "PAUSED",
+    "running": "BATTLE IN PROGRESS",
+    "ended": "ENDED"
+  },
+  "buttons": {
+    "begin": "▶ Start battle",
+    "resume": "▶ Resume",
+    "pause": "Ⅱ Pause",
+    "move": "↗ Move",
+    "defend": "⊙ Defend",
+    "beginBrief": "Start battle",
+    "again": "Play again →",
+    "split": "⑂ Split",
+    "merge": "⑃ Merge",
+    "fast": "» Fast Move",
+    "crawl": "⤓ Crawl",
+    "fire": "✛ Fire",
+    "retreat": "↩ Retreat",
+    "halfSpeed": "½ Speed",
+    "sector": "◠ Cover Sector"
+  },
+  "brief": {
+    "eyebrow": "YOUR FORCE IS DEPLOYED",
+    "title": "Give your orders.",
+    "text": "The battle is paused. Select units, give orders and set leaders' modes, then start. You can pause at any time.",
+    "hint": "Space pauses. 1–7 select units. G shows the debug view.",
+    "resultEyebrow": "THE BATTLE IS OVER"
+  },
+  "panel": {
+    "missionEyebrow": "01 / MISSION",
+    "missionTitle": "Secure the farmyard",
+    "missionText": "Hold the area with no enemy nearby.",
+    "noControl": "No control",
+    "securing": "Securing the area",
+    "forcesEyebrow": "02 / YOUR PLATOON",
+    "men": "{n} men",
+    "ordersEyebrow": "03 / ORDERS",
+    "soldier": "SOLDIER",
+    "portraitLabel": "Close-up of a soldier in the selected unit and his current posture",
+    "cover": "Cover",
+    "ammo": "Ammunition",
+    "order": "Order",
+    "eventsEyebrow": "EVENTS",
+    "footer": "Early playable version · Simplified simulation",
+    "leader": "Leader",
+    "out": "Out of action",
+    "keysClick": "CLICK",
+    "keysClickText": "Select / order",
+    "keysUnits": "1–7",
+    "keysUnitsText": "Select (twice: centre)",
+    "keysSpace": "SPACE",
+    "keysSpaceText": "Pause",
+    "keysDefend": "D",
+    "keysDefendText": "Defend",
+    "keysDebug": "G",
+    "keysDebugText": "Debug view",
+    "keysSplit": "S",
+    "keysSplitText": "Split / merge",
+    "help": {
+      "move": "Click the ground to move, or a house to enter it through the door.",
+      "fast": "Fast Move: click where to run. Faster, but easier to see and hit, and no fire readiness on the way.",
+      "crawl": "Crawl: click where to crawl. Slow, but hard to see and hit; a pinned unit can still crawl.",
+      "position": "Defend: the unit holds here with better cover. Click the map to move to a new defensive position.",
+      "fire": "Fire: click a spotted enemy unit to concentrate fire on it. A Granatwerfergruppe fires indirectly at any point you click within its range.",
+      "sector": "Cover Sector: drag from one edge of the arc to the other (or click for a 60° arc). The unit holds and fires only into the sector."
+    },
+    "noLeader": "No leader",
+    "fitTitle": "Men fit to fight / strength",
+    "readiness": "Fire readiness",
+    "cohesion": "Cohesion",
+    "keysModes": "M R C F",
+    "keysModesText": "Move · Fast · Crawl · Fire",
+    "keysRetreat": "B",
+    "keysRetreatText": "Retreat",
+    "keysHalf": "H",
+    "keysHalfText": "Half speed",
+    "keysZoom": "+ − / wheel",
+    "keysZoomText": "Zoom level",
+    "keysPan": "Right-drag / Shift+arrows",
+    "keysPanText": "Move camera",
+    "opening": "Open fire at",
+    "openingAll": "whole sector",
+    "openingLabel": "Opening range in metres",
+    "keysSector": "V",
+    "keysSectorText": "Cover Sector",
+    "inBuilding": "Fit inside the building (Soviet: seen)",
+    "fitCounts": "{de} : {su}"
+  },
+  "morale": {
+    "steady": "Steady",
+    "shaken": "Shaken",
+    "broken": "Broken",
+    "pinned": "Pinned"
+  },
+  "cover": {
+    "building": "Building",
+    "vegetation": "Vegetation",
+    "open": "Open ground"
+  },
+  "posture": {
+    "out": "Out of action",
+    "pinned": "Pinned · taking cover",
+    "defending": "Prone · defending",
+    "moving": "Moving",
+    "ready": "Ready"
+  },
+  "orders": {
+    "hold": "Holding",
+    "move": "Moving",
+    "enter": "Entering {house}",
+    "position": "Taking up position",
+    "defend": "Defending",
+    "retreat": "Retreating",
+    "fast": "Moving fast",
+    "crawl": "Crawling",
+    "fire": "Concentrating fire",
+    "sector": "Covering sector",
+    "mortar": "Mortar fire"
+  },
+  "log": {
+    "ready": "{units} units ready. Give orders and start the battle.",
+    "moveOrder": "{unit}: new move order.",
+    "enterOrder": "{unit}: taking position in {house}.",
+    "defend": "{unit} takes up a defensive position.",
+    "retreat": "{unit} is falling back.",
+    "enemyRetreat": "Enemy {unit} is falling back.",
+    "casualty": "{unit} loses a man.",
+    "enemyCasualty": "Enemy {unit} loses a man.",
+    "won": "Mission accomplished.",
+    "ended": "The battle is over.",
+    "rallied": "{unit} has rallied.",
+    "enemyRallied": "Enemy {unit} has rallied.",
+    "split": "{unit} splits into MG-Trupp and Schützentrupp.",
+    "merge": "{unit} is together again.",
+    "barrelChange": "{unit}: {weapon} barrel change.",
+    "barrelDone": "{unit}: barrel changed, MG firing again.",
+    "contact": "{unit} in contact!",
+    "fastOrder": "{unit}: fast move.",
+    "crawlOrder": "{unit}: crawling forward.",
+    "positionOrder": "{unit}: moving to a defensive position.",
+    "fireOrder": "{unit}: concentrate fire!",
+    "retreatOrder": "{unit}: falling back.",
+    "sectorOrder": "{unit}: covering sector.",
+    "rallies": "{leader} rallies {unit}.",
+    "leaderFell": "{leader} has fallen ({unit}).",
+    "takesCommand": "{leader} takes command of {unit}.",
+    "noLeader": "{unit} has no leader left.",
+    "leaderMode": "{leader}: {mode}.",
+    "leaderModeOff": "{leader}: no mode.",
+    "mortarOrder": "{unit}: fire mission.",
+    "counterattack": "Enemy counterattack!"
+  },
+  "toast": {
+    "recovering": "The unit is recovering and cannot take orders.",
+    "unreachable": "That place cannot be reached. Choose open ground or the middle of a house.",
+    "mapFailed": "The map image could not be loaded. Try reloading the page.",
+    "dataFailed": "Game data could not be loaded.",
+    "graphicsFailed": "The sprite graphics could not be loaded. Code-drawn graphics are used.",
+    "confirmRestart": "End this battle and start over?",
+    "confirmGraphics": "Changing graphics restarts the battle. Continue?",
+    "cannotSplit": "This unit cannot split. A Gruppe needs both its Gruppenführer and Truppführer to split.",
+    "tooFarToMerge": "The two Trupps are too far apart to merge. Move them together first.",
+    "noTarget": "Click a spotted enemy unit to fire on.",
+    "autoPaused": "{unit} in contact. Paused.",
+    "mortarRange": "Out of mortar range ({min}–{max} m)."
+  },
+  "result": {
+    "held": "You held the objective for {hold} seconds.",
+    "wiped": "All your units are out of action.",
+    "timeout": "Time ran out.",
+    "left": "{left} of {total} own soldiers remaining.",
+    "enemyGone": "The enemy has no unit left that can fight.",
+    "building": {
+      "won": "{de} of your men hold the building against {su}.",
+      "lost": "The enemy holds the building: {su} of theirs against {de} of yours.",
+      "draw": "Neither side holds the building: {de} against {su}."
+    },
+    "eyebrow": "AFTER ACTION REPORT",
+    "outcome": {
+      "won": "Victory",
+      "lost": "Defeat",
+      "draw": "Draw"
+    },
+    "inBuilding": "Fit in the building (DE : SU)",
+    "inBuildingNote": "Counted at the end of the battle.",
+    "lossesTitle": "Losses",
+    "unit": "Unit",
+    "strength": "Strength",
+    "fit": "In action",
+    "lightly": "Lightly wounded",
+    "badly": "Badly wounded",
+    "killed": "Killed",
+    "total": "Platoon",
+    "enemyLosses": "Enemy: {out} of {strength} men out of action, {fit} still in action.",
+    "leadersTitle": "The leaders' fate",
+    "status": {
+      "active": "Unharmed",
+      "lightlyWounded": "Lightly wounded",
+      "badlyWounded": "Badly wounded",
+      "killed": "Killed"
+    },
+    "saved": "The result is saved (people and their status) for a campaign later.",
+    "again": "New battle"
+  },
+  "graphics": {
+    "sprites": "Sprites (v4, approved style)",
+    "code": "Code-drawn (fallback)",
+    "badge": "TEST VILLAGE – MAP ART REQUEST_005 v1 – NOT APPROVED"
+  },
+  "status": {
+    "pinned": "▼ PINNED",
+    "broken": "✕ BROKEN",
+    "barrel": "⟳ BARREL CHANGE"
+  },
+  "debug": {
+    "title": "DEBUG VIEW",
+    "threatOwn": "Fire against own units",
+    "threatEnemy": "Fire against enemy",
+    "discomfort": "Discomfort (lingers)",
+    "tool": "Shift+click: test fire on/off",
+    "values": "SUP {sup} · COH {coh} · RDY {rdy}",
+    "test": "TEST",
+    "fireOn": "Test fire on the cell. Start the battle to see the effect.",
+    "fireOnRunning": "Test fire on the cell.",
+    "fireOff": "Test fire removed.",
+    "on": "Debug view on. Shift+click a cell for test fire.",
+    "off": "Debug view off.",
+    "explode": "Alt+click: test grenade",
+    "grenade": "Test grenade.",
+    "grenadePaused": "Test grenade set. It goes off when the battle runs."
+  },
+  "units": {
+    "teamName": "{unit} · {team}"
+  },
+  "leaders": {
+    "title": "Leaders",
+    "leadership": "Leadership",
+    "fireControl": "Fire Control",
+    "rally": "Rally",
+    "noTrait": "No trait",
+    "standIn": "stand-in",
+    "modeLabel": "Mode",
+    "modeOff": "None",
+    "modes": {
+      "directFire": "Direct Fire",
+      "leadAssault": "Lead Assault",
+      "rally": "Rally",
+      "null": "None"
+    },
+    "modeHelp": {
+      "directFire": "Units within the radius build fire readiness faster and hit better.",
+      "leadAssault": "Units within the radius take orders faster, are slowed less by suppression and lose less cohesion from casualties.",
+      "rally": "Units within the radius regain cohesion faster when out of fire – also broken units."
+    }
+  },
+  "traits": {
+    "daredevil": {
+      "name": "Daredevil",
+      "pro": "Faster assault, breaks less easily when advancing",
+      "con": "Hard to pull back, heavier losses"
+    },
+    "cautious": {
+      "name": "Cautious",
+      "pro": "Holds a position better",
+      "con": "Slow to advance from cover"
+    },
+    "veteran": {
+      "name": "Eastern Front Veteran",
+      "pro": "Better in buildings and close combat",
+      "con": "Costs more"
+    },
+    "green": {
+      "name": "Green",
+      "pro": "Cheap",
+      "con": "Weak rally, can be pinned himself"
+    },
+    "mgSpecialist": {
+      "name": "MG Specialist",
+      "pro": "Faster barrel change and MG readiness",
+      "con": "No help to the Schützentrupp"
+    },
+    "forwardObserver": {
+      "name": "Forward Observer",
+      "pro": "Can call in artillery without an observer",
+      "con": "Needs line of sight and must stand still"
+    }
+  },
+  "purchase": {
+    "eyebrow": "ASSEMBLE YOUR FORCE",
+    "intro": "Choose the leaders of your platoon and buy reinforcements from the company and battalion. The budget cannot be exceeded.",
+    "budget": "Points",
+    "used": "{used} / {budget}",
+    "left": "{n} points left",
+    "pts": "{n} pts",
+    "coreTitle": "Fixed core",
+    "coreText": "The scenario gives you the platoon below. Its leaders are yours to choose.",
+    "leadersTitle": "Leaders",
+    "leadersText": "Two or three candidates for each leader position, with different rank, qualities and price. Hover a candidate to compare him with your current choice.",
+    "reinfTitle": "Reinforcements",
+    "reinfText": "Units available to the company and battalion in {year}.",
+    "buy": "Buy",
+    "remove": "Remove",
+    "men": "{n} men",
+    "ledBy": "Led by",
+    "deploy": "Deploy and give orders",
+    "age": "Age {age}",
+    "since": "In the field since {year}",
+    "suitedFor": "Suited for",
+    "suited": {
+      "assault": "leading assaults",
+      "fireSupport": "fire support",
+      "holding": "holding and rallying",
+      "houseFighting": "house fighting",
+      "quietSectors": "quiet sectors",
+      "mgFireBase": "MG fire base",
+      "artillery": "calling in artillery",
+      "general": "general duties"
+    },
+    "reinf": {
+      "de-gruppe-1943": "A further rifle Gruppe from the company: MG 34 and nine men.",
+      "de-schwere-mg-gruppe-1943": "A heavy MG 34 on its tripod mount from the machine-gun platoon. Long range and heavy suppression, but slow to set up.",
+      "de-granatwerfergruppe-1943": "An 8 cm Granatwerfer 34. Indirect fire at a marked point within range – no line of sight needed."
+    }
+  },
+  "briefing": {
+    "eyebrow": "BRIEFING",
+    "time": "Time limit",
+    "budget": "Budget",
+    "points": "pts",
+    "situation": "Situation",
+    "task": "Task",
+    "conditions": "Victory conditions",
+    "enemy": "Enemy",
+    "forces": "Own forces",
+    "mapAlt": "Map of the village with the objective marked",
+    "startArea": "START AREA",
+    "objective": "OBJECTIVE",
+    "continue": "Assemble your force"
+  },
+  "scenarios": {
+    "counterattack-1943": {
+      "title": "Counterattack on the stone house",
+      "missionTitle": "Take back the stone house",
+      "missionText": "At the end of the time limit you need more men fit to fight inside the stone house than the enemy.",
+      "situation": "Before dawn Soviet infantry broke into Berezovka and took the stone house by the farmyard – the one solid building in the village and the hinge of our line. Your Schützenzug has been brought up west of the village to throw them out before they can bring up more men.",
+      "task": "Retake the stone house and hold it until the time runs out.",
+      "conditions": [
+        "At the end of the time limit, count the men fit to fight inside the stone house – alive, and their unit neither Broken nor Pinned.",
+        "More German than Soviet: victory. Equal: draw. Fewer: defeat.",
+        "The battle ends at once if one side has no unit left that can fight."
+      ],
+      "enemy": "About a platoon: one otdeleniye in the stone house, one in reserve in the farmyards to the east, and the platoon command behind them. Expect PPSh and a DP in every otdeleniye, and a counterattack if you are weak at the house.",
+      "forces": "Your Schützenzug: Zugtrupp and three Gruppen. Choose their leaders and buy reinforcements on the next screen.",
+      "mapCaption": "The stone house (objective) and your start area in the west."
+    },
+    "proto-1943": {
+      "title": "Secure the farmyard",
+      "missionTitle": "Secure the farmyard",
+      "missionText": "Hold the area with no enemy nearby for {hold} seconds.",
+      "situation": "Prototype scenario.",
+      "task": "Hold the farmyard.",
+      "conditions": [
+        "Hold the area by the flag with no enemy nearby."
+      ],
+      "enemy": "A Soviet platoon.",
+      "forces": "Your Schützenzug.",
+      "mapCaption": "The farmyard and your start area."
+    }
+  }
+}

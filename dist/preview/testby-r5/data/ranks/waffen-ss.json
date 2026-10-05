@@ -1,0 +1,21 @@
+{
+  "formation": "waffen-ss",
+  "name": "Waffen-SS",
+  "_comment": "Enligt DESIGN.md, Waffen-SS – gradbeteckningar. Axelklaffar av Heer-modell (samma tress- och stjärnsystem som Heer-motsvarigheten, svart underlag med vapenfärg) plus gradbeteckning på vänster kragspegel. Höger kragspegel bar SS-runorna, örnen bars på vänster överarm. heerEquivalent pekar på id i heer.json.",
+  "ranks": [
+    { "id": "ss-schuetze", "name": "SS-Schütze", "abbr": "SS-Schtz.", "level": 1, "category": "enlisted", "heerEquivalent": "schuetze", "insignia": "Slät", "validYears": [1935, 1942], "insigniaImage": null },
+    { "id": "ss-grenadier", "name": "SS-Grenadier", "abbr": "SS-Gren.", "level": 1, "category": "enlisted", "heerEquivalent": "grenadier", "insignia": "Slät", "validYears": [1942, 1945], "insigniaImage": null },
+    { "id": "ss-oberschuetze", "name": "SS-Oberschütze", "abbr": "SS-Oschtz.", "level": 2, "category": "enlisted", "heerEquivalent": "oberschuetze", "insignia": "Slät; rund ärmbricka med stjärna", "validYears": [1935, 1942], "insigniaImage": null },
+    { "id": "ss-obergrenadier", "name": "SS-Obergrenadier", "abbr": "SS-Ogren.", "level": 2, "category": "enlisted", "heerEquivalent": "obergrenadier", "insignia": "Slät; rund ärmbricka med stjärna", "validYears": [1942, 1945], "insigniaImage": null },
+    { "id": "ss-sturmmann", "name": "SS-Sturmmann", "abbr": "SS-Strm.", "level": 3, "category": "enlisted", "heerEquivalent": "gefreiter", "insignia": "En silverrand; en ärmvinkel", "validYears": [1935, 1945], "insigniaImage": null },
+    { "id": "ss-rottenfuehrer", "name": "SS-Rottenführer", "abbr": "SS-Rttf.", "level": 4, "category": "enlisted", "heerEquivalent": "obergefreiter", "insignia": "Två silverränder; två ärmvinklar", "validYears": [1935, 1945], "insigniaImage": null },
+    { "id": "ss-unterscharfuehrer", "name": "SS-Unterscharführer", "abbr": "SS-Uscha.", "level": 6, "category": "nco", "heerEquivalent": "unteroffizier", "insignia": "En stjärna; tress på kragen", "validYears": [1935, 1945], "insigniaImage": null },
+    { "id": "ss-scharfuehrer", "name": "SS-Scharführer", "abbr": "SS-Scha.", "level": 7, "category": "nco", "heerEquivalent": "unterfeldwebel", "insignia": "En stjärna och en rand", "validYears": [1935, 1945], "insigniaImage": null },
+    { "id": "ss-oberscharfuehrer", "name": "SS-Oberscharführer", "abbr": "SS-Oscha.", "level": 8, "category": "nco", "heerEquivalent": "feldwebel", "insignia": "Två stjärnor", "validYears": [1935, 1945], "insigniaImage": null },
+    { "id": "ss-hauptscharfuehrer", "name": "SS-Hauptscharführer", "abbr": "SS-Hscha.", "level": 9, "category": "nco", "heerEquivalent": "oberfeldwebel", "insignia": "Två stjärnor och en rand", "validYears": [1935, 1945], "insigniaImage": null },
+    { "id": "ss-sturmscharfuehrer", "name": "SS-Sturmscharführer", "abbr": "SS-Stuscha.", "level": 10, "category": "nco", "heerEquivalent": "stabsfeldwebel", "insignia": "Två stjärnor och två ränder", "validYears": [1935, 1945], "insigniaImage": null },
+    { "id": "ss-untersturmfuehrer", "name": "SS-Untersturmführer", "abbr": "SS-Ustuf.", "level": 11, "category": "officer", "heerEquivalent": "leutnant", "insignia": "Tre stjärnor", "validYears": [1935, 1945], "insigniaImage": null },
+    { "id": "ss-obersturmfuehrer", "name": "SS-Obersturmführer", "abbr": "SS-Ostuf.", "level": 12, "category": "officer", "heerEquivalent": "oberleutnant", "insignia": "Tre stjärnor och en rand", "validYears": [1935, 1945], "insigniaImage": null },
+    { "id": "ss-hauptsturmfuehrer", "name": "SS-Hauptsturmführer", "abbr": "SS-Hstuf.", "level": 13, "category": "officer", "heerEquivalent": "hauptmann", "insignia": "Tre stjärnor och två ränder", "validYears": [1935, 1945], "insigniaImage": null }
+  ]
+}

@@ -1,0 +1,15 @@
+{
+  "_comment": "Ledare (DESIGN.md, Ledare; steg 6). Värden 1–5, neutral = 3. Gruppens ledare (Gruppenführer, i delad grupp Truppführer för Schützentrupp) påverkar sin egen enhet; Zugführer och Zugtruppführer påverkar enheter inom sin radie med det läge de valt. Avstånd i kartenheter (1 enhet ≈ 0,1 m).",
+  "neutral": 3,
+  "noLeader": { "leadership": 1, "fireControl": 1, "rally": 1 },
+  "radius": { "base": 120, "perLeadership": 30 },
+  "orderDelay": { "_comment": "Sekunder från order till att enheten börjar röra sig: base + perLeadership × ledarens Leadership, aldrig under min.", "base": 2.0, "perLeadership": -0.35, "min": 0.3 },
+  "group": { "_comment": "Gruppledarens egna värden, som faktor per poäng över/under neutral.", "readinessPerFireControl": 0.08, "hitPerFireControl": 0.05, "recoveryPerRally": 0.15 },
+  "modes": {
+    "_comment": "Plutonsledarnas lägen. directFire: snabbare eldberedskap och bättre träff (per Fire Control-poäng); leadAssault: snabbare ordermottagning, mindre inbromsning av nedhållning och mindre förlust av sammanhållning vid förluster; rally: snabbare återsamling (per Rally-poäng), även för en isolerad enhet, så länge den är utom eld.",
+    "directFire": { "readinessPerFireControl": 0.1, "hitPerFireControl": 0.04 },
+    "leadAssault": { "orderDelayFactor": 0.4, "suppressionSlowFactor": 0.5, "casualtyCohesionFactor": 0.75 },
+    "rally": { "recoveryPerRally": 0.6 }
+  },
+  "ai": { "_comment": "Sovjetisk Komandir vzvoda: Rally om en egen enhet inom radien är Broken eller Shaken (sammanhållning under shakenBelow), annars Direct Fire.", "shakenBelow": 55 }
+}

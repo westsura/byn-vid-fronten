@@ -1,0 +1,93 @@
+{
+  "_comment": "Prototypens uppställning för steg 1: år, styrkor och utgångslägen på nuvarande karta. Kartans geometri ligger kvar i src/scenario.js tills scenarierna byggs i steg 8. Panelen visar förbanden i styrkefilens ordning (Zugtrupp först); snabbtangenterna anges här.",
+  "id": "proto-1943",
+  "year": 1943,
+  "map": "village-1",
+  "player": {
+    "forces": "de-zug-1943-proto",
+    "placements": {
+      "gruppe-1": [
+        140,
+        230
+      ],
+      "gruppe-2": [
+        125,
+        410
+      ],
+      "zugtrupp": [
+        60,
+        500
+      ],
+      "gruppe-3": [
+        150,
+        600
+      ]
+    },
+    "hotkeys": {
+      "1": "gruppe-1",
+      "2": "gruppe-2",
+      "3": "gruppe-3",
+      "4": "zugtrupp"
+    }
+  },
+  "enemy": {
+    "forces": "su-vzvod-1943-proto",
+    "placements": {
+      "otdeleniye-1": [
+        865,
+        335
+      ],
+      "otdeleniye-2": [
+        875,
+        670
+      ],
+      "upravleniye": [
+        1140,
+        300
+      ]
+    }
+  },
+  "purchase": {
+    "_comment": "Köpskärmen (steg 7): budget i poäng för ledare och förstärkningar; förstärkningarnas pris och utgångsläge i scenariots utgångsområde (väster).",
+    "budget": 260,
+    "startArea": [
+      30,
+      180,
+      270,
+      760
+    ],
+    "reinforcements": {
+      "gruppe-4": {
+        "cost": 70,
+        "placement": [
+          200,
+          740
+        ]
+      },
+      "smg-gruppe": {
+        "cost": 60,
+        "placement": [
+          230,
+          320
+        ]
+      },
+      "grw-gruppe": {
+        "cost": 65,
+        "placement": [
+          70,
+          660
+        ]
+      }
+    }
+  },
+  "mission": {
+    "_comment": "Den tidigare prototypens uppdrag: håll området vid gårdsflaggan i holdS sekunder utan fiende i närheten.",
+    "type": "area",
+    "x": 755,
+    "y": 290,
+    "radius": 68,
+    "enemyRadius": 100,
+    "holdS": 20,
+    "timeLimitS": 360
+  }
+}

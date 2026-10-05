@@ -1,0 +1,94 @@
+{
+  "_comment": "Scenario 1 (steg 8): Motanfall. Sovjetiskt infanteri har tagit stenhuset vid g\u00e5rden i Berezovka. Den tyska plutonen ska ta tillbaka det. Segervillkor: vid tidens slut j\u00e4mf\u00f6rs antalet stridsdugliga (levande, enheten varken Broken eller Pinned) tyska och sovjetiska soldater i byggnaden. Kartans geometri ligger kvar i src/scenario.js tills den nya kartan byggs.",
+  "id": "counterattack-1943",
+  "year": 1943,
+  "map": "village-1",
+  "mission": {
+    "type": "building",
+    "building": 1,
+    "timeLimitS": 600
+  },
+  "player": {
+    "forces": "de-zug-1943-proto",
+    "placements": {
+      "gruppe-1": [
+        140,
+        230
+      ],
+      "gruppe-2": [
+        125,
+        410
+      ],
+      "zugtrupp": [
+        60,
+        500
+      ],
+      "gruppe-3": [
+        150,
+        600
+      ]
+    },
+    "hotkeys": {
+      "1": "gruppe-1",
+      "2": "gruppe-2",
+      "3": "gruppe-3",
+      "4": "zugtrupp"
+    }
+  },
+  "enemy": {
+    "forces": "su-vzvod-1943-proto",
+    "placements": {
+      "otdeleniye-1": [
+        830,
+        235
+      ],
+      "otdeleniye-2": [
+        1015,
+        320
+      ],
+      "upravleniye": [
+        1130,
+        250
+      ]
+    },
+    "roles": {
+      "_comment": "Sovjetisk AI: garrison f\u00f6rsvarar byggnaden, reserve g\u00f6r motst\u00f6t n\u00e4r tyskarna vid byggnaden \u00e4r svaga eller n\u00e4r byggnaden tappas, command stannar bakom och leder (Komandir vzvoda v\u00e4ljer l\u00e4ge sj\u00e4lv).",
+      "otdeleniye-1": "garrison",
+      "otdeleniye-2": "reserve",
+      "upravleniye": "command"
+    }
+  },
+  "purchase": {
+    "_comment": "K\u00f6psk\u00e4rmen (steg 7): budget i po\u00e4ng f\u00f6r ledare och f\u00f6rst\u00e4rkningar; f\u00f6rst\u00e4rkningarnas pris och utg\u00e5ngsl\u00e4ge i scenariots utg\u00e5ngsomr\u00e5de (v\u00e4ster).",
+    "budget": 260,
+    "startArea": [
+      30,
+      180,
+      270,
+      760
+    ],
+    "reinforcements": {
+      "gruppe-4": {
+        "cost": 70,
+        "placement": [
+          200,
+          740
+        ]
+      },
+      "smg-gruppe": {
+        "cost": 60,
+        "placement": [
+          230,
+          320
+        ]
+      },
+      "grw-gruppe": {
+        "cost": 65,
+        "placement": [
+          70,
+          660
+        ]
+      }
+    }
+  }
+}

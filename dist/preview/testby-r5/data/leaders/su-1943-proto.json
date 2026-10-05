@@ -1,0 +1,41 @@
+{
+  "_comment": "Ledarvärden för prototypens sovjetiska motståndare (people/su-1943-proto.json). Samma skala och egenskaper som för tyska ledare. Komandir vzvoda väljer läge själv (AI). Pulemyotchik är ställföreträdare i otdeleniye och har därför värden men ingen egenskap.",
+  "leaders": {
+    "su-001": {
+      "leadership": 3,
+      "fireControl": 2,
+      "rally": 3,
+      "trait": "cautious"
+    },
+    "su-002": {
+      "leadership": 3,
+      "fireControl": 3,
+      "rally": 4,
+      "trait": null
+    },
+    "su-003": {
+      "leadership": 3,
+      "fireControl": 3,
+      "rally": 2,
+      "trait": "daredevil"
+    },
+    "su-014": {
+      "leadership": 2,
+      "fireControl": 2,
+      "rally": 2,
+      "trait": "green"
+    },
+    "su-004": {
+      "leadership": 1,
+      "fireControl": 3,
+      "rally": 1,
+      "trait": null
+    },
+    "su-015": {
+      "leadership": 2,
+      "fireControl": 2,
+      "rally": 1,
+      "trait": null
+    }
+  }
+}

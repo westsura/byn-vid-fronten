@@ -1,0 +1,23 @@
+{
+  "formation": "heer",
+  "name": "Heer",
+  "_comment": "Grader och gradbeteckningar, fältuniform, infanteri (vit vapenfärg). Enligt DESIGN.md, Heer – gradbeteckningar. level = inbördes ordning. insigniaImage fylls i när grafik finns. Grenadier/Obergrenadier ersatte Schütze/Oberschütze i infanteriet från hösten 1942.",
+  "ranks": [
+    { "id": "schuetze", "name": "Schütze", "abbr": "Schtz.", "level": 1, "category": "enlisted", "insignia": "Slät axelklaff", "validYears": [1935, 1942], "insigniaImage": null },
+    { "id": "oberschuetze", "name": "Oberschütze", "abbr": "Oschtz.", "level": 2, "category": "enlisted", "insignia": "Rund ärmbricka med stjärna, vänster överarm", "validYears": [1935, 1942], "insigniaImage": null },
+    { "id": "grenadier", "name": "Grenadier", "abbr": "Gren.", "level": 1, "category": "enlisted", "insignia": "Slät axelklaff", "validYears": [1942, 1945], "insigniaImage": null },
+    { "id": "obergrenadier", "name": "Obergrenadier", "abbr": "Ogren.", "level": 2, "category": "enlisted", "insignia": "Rund ärmbricka med stjärna, vänster överarm", "validYears": [1942, 1945], "insigniaImage": null },
+    { "id": "gefreiter", "name": "Gefreiter", "abbr": "Gefr.", "level": 3, "category": "enlisted", "insignia": "En vinkel, vänster överarm", "validYears": [1935, 1945], "insigniaImage": null },
+    { "id": "obergefreiter", "name": "Obergefreiter", "abbr": "Ogefr.", "level": 4, "category": "enlisted", "insignia": "Två vinklar", "validYears": [1935, 1945], "insigniaImage": null },
+    { "id": "stabsgefreiter", "name": "Stabsgefreiter", "abbr": "Stgefr.", "level": 5, "category": "enlisted", "insignia": "Två vinklar med stjärna", "validYears": [1935, 1945], "insigniaImage": null },
+    { "id": "unteroffizier", "name": "Unteroffizier", "abbr": "Uffz.", "level": 6, "category": "nco", "insignia": "Silvertress på kragen och runt axelklaffen, öppen nertill", "validYears": [1935, 1945], "insigniaImage": null },
+    { "id": "unterfeldwebel", "name": "Unterfeldwebel", "abbr": "Ufw.", "level": 7, "category": "nco", "insignia": "Tress helt runt axelklaffen", "validYears": [1935, 1945], "insigniaImage": null },
+    { "id": "feldwebel", "name": "Feldwebel", "abbr": "Fw.", "level": 8, "category": "nco", "insignia": "Hel tress plus en stjärna", "validYears": [1935, 1945], "insigniaImage": null },
+    { "id": "oberfeldwebel", "name": "Oberfeldwebel", "abbr": "Ofw.", "level": 9, "category": "nco", "insignia": "Hel tress plus två stjärnor", "validYears": [1935, 1945], "insigniaImage": null },
+    { "id": "stabsfeldwebel", "name": "Stabsfeldwebel", "abbr": "Stfw.", "level": 10, "category": "nco", "insignia": "Hel tress plus tre stjärnor", "validYears": [1935, 1945], "insigniaImage": null },
+    { "id": "leutnant", "name": "Leutnant", "abbr": "Lt.", "level": 11, "category": "officer", "insignia": "Officersaxelklaff av flätad silversnodd, ingen stjärna", "validYears": [1935, 1945], "insigniaImage": null },
+    { "id": "oberleutnant", "name": "Oberleutnant", "abbr": "Oblt.", "level": 12, "category": "officer", "insignia": "Officersaxelklaff med en stjärna", "validYears": [1935, 1945], "insigniaImage": null },
+    { "id": "hauptmann", "name": "Hauptmann", "abbr": "Hptm.", "level": 13, "category": "officer", "insignia": "Officersaxelklaff med två stjärnor", "validYears": [1935, 1945], "insigniaImage": null }
+  ],
+  "otherInsignia": "Örn (Hoheitsabzeichen) på höger bröst, kragspeglar (Litzen) på kragen."
+}

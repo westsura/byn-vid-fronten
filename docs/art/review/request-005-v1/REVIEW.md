@@ -17,6 +17,13 @@ Granskat av Claude 2026-10-05. **Status: ej godkänt** (stilprov; Björn bedöme
   - Kartan ritades i dubbel upplösning (som på en retinaskärm), med spelets riktiga soldater och alla tre zoomnivåer.
   - Ingen ny grafik är publicerad på Vercel.
 
+**Förhandsvisning (publicerad 2026-10-05 på Björns begäran):** https://byn-vid-fronten.vercel.app/preview/testby-r5/
+
+- Det är en separat kopia av spelet i `dist/preview/testby-r5/`. Det riktiga spelet är oförändrat.
+- Husens väggar och skogens skydd följer testbyns tre hus och björkar.
+- Dörrar och fönster följer ännu spelets gamla mall och inte bildernas exakta öppningar.
+- Staket, ravin och åker är bara bild. De påverkar inte spelet.
+
 Skärmbilder: `1-map.jpg`, `2-platoon.jpg`, `3-unit-izba.jpg`, `4-unit-stonehouse.jpg`, `5-unit-stone-interior.jpg`, `6-unit-ravine-road.jpg`.
 
 ## Resultat per del

@@ -1,0 +1,68 @@
+{
+  "_comment": "Eld och siktlinje (DESIGN.md, Eld och rörelse; PROMPTER steg 3 del A). Vapnens egna värden (räckvidd, eldhastighet, grundträff, nedhållning, tid till eldberedskap) ligger i weapons.json. Här ligger hur de räknas om till spelet. Startvärden att balansera.",
+  "metresPerUnit": 0.1,
+  "spotting": {
+    "_comment": "En fiendegrupp upptäcks när någon av sidans soldater har fri sikt till någon av dess soldater inom rangeUnits. Kontrolleras var checkS sekund.",
+    "rangeUnits": 335,
+    "checkS": 0.25
+  },
+  "sight": {
+    "_comment": "Siktlinje på hotkartans rutnät: husväggar blockerar exakt (dörrar och fönster är öppna). Rutor med träd och buskar är skymmande: varje mellanliggande skymmande ruta sänker träffchansen med perCellHitFactor, och fler än blockAfterCells skymmande rutor blockerar sikten helt.",
+    "perCellHitFactor": 0.8,
+    "blockAfterCells": 5
+  },
+  "fire": {
+    "_comment": "Varje soldat skjuter själv mot en upptäckt fiende inom räckhåll. Ett eldtillfälle är ett skott (gevär, pistol) eller en salva (kulsprutepistol, kulspruta). Intervallet följer vapnets rofPerMin, ±30 % slump.",
+    "roundsPerEvent": {
+      "rifle": 1,
+      "pistol": 1,
+      "smg": 4,
+      "lmg": 6,
+      "hmg": 8
+    },
+    "intervalJitter": 0.3,
+    "targetRetargetS": 1.5,
+    "hitScale": 0.5,
+    "readinessFloor": 0.15,
+    "shooterSuppressionPenalty": 0.7,
+    "proneCover": 0.14,
+    "damageMin": 45,
+    "damageMax": 80
+  },
+  "effectOnTarget": {
+    "_comment": "Elden läggs in i hotkartan som en källa runt målet (radius rutor) som lever lifeS sekunder. Intensitet = vapnets suppression × rundor / intensityDivisor, minskad av målets skydd (coverFactor). Flera källor i samma ruta summeras upp till 1. Därifrån höjer hotkartan målets nedhållning (rules/condition.json).",
+    "radius": 1,
+    "lifeS": 1.5,
+    "intensityDivisor": 200,
+    "coverFactor": 0.5
+  },
+  "flanking": {
+    "_comment": "En grupp som beskjuts från två riktningar som skiljer mer än minAngleDeg inom windowS sekunder är flankerad och förlorar sammanhållning.",
+    "minAngleDeg": 90,
+    "windowS": 6,
+    "cohesionPerMin": 12
+  },
+  "grenades": {
+    "_comment": "Handgranater i närstrid. Varje Schütze/Strelok och Avtomatchik bär perMan granater (nationens typ). Var checkS sekund kan en stillastående grupp med mål inom kastavstånd kasta en, med chansen chancePerCheck. Granaten landar inom scatterM från målet och briserar efter vapnets fuseS. Explosionen läggs i hotkartan (båda sidor) och ger kamerastöt om spelaren kan se den.",
+    "byNation": {
+      "de": "stg24",
+      "su": "rgd33"
+    },
+    "throwers": [
+      "rifle",
+      "smg"
+    ],
+    "perMan": 1,
+    "checkS": 2,
+    "chancePerCheck": 0.3,
+    "minRangeM": 5,
+    "scatterM": 3,
+    "coverFactor": 0.7,
+    "threatLifeS": 2.5
+  },
+  "mortar": {
+    "_comment": "Granatkastare (steg 7): indirekt eld mot en markerad punkt inom vapnets minRangeM–maxRangeM, utan krav på siktlinje. Den skjuter när gruppen står still och eldberedskapen är minst minReadiness. Spridningen = vapnets scatterM, större vid låg eldberedskap. Granaten slår ner efter vapnets flightS och verkar som en handgranat med vapnets radier.",
+    "minReadiness": 80,
+    "intervalJitter": 0.2
+  }
+}

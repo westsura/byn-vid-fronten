@@ -1,0 +1,63 @@
+{
+  "_comment": "Order och förbandshantering (PROMPTER steg 3 del B). Delad grupp: MG-Trupp (Gruppenführer) och Schützentrupp (Truppführer). Avstånd i kartenheter (1 enhet ≈ 0,1 m).",
+  "split": {
+    "_comment": "Vid delning ställer sig Schützentrupp offsetUnits bakom MG-Trupp (sett från fienden). Sammanslagning kräver att trupperna står inom mergeRangeUnits från varandra och att båda trupperna har sin ledare vid liv vid delning.",
+    "offsetUnits": 45,
+    "mergeRangeUnits": 120
+  },
+  "movement": {
+    "_comment": "Förflyttningssätt (steg 4). unitSpeed = gruppens fart, menSpeed = soldaternas fart när de följer gruppen (kartenheter/s). exposure gäller träffchansen mot en grupp som förflyttar sig så, spotFactor upptäcktsavståndet mot den. Nedhållen grupp kan bara krypa, med pinnedFactor av krypfarten.",
+    "move": {
+      "unitSpeed": 24,
+      "menSpeed": 36,
+      "exposure": 1.0,
+      "spotFactor": 1.0
+    },
+    "fast": {
+      "unitSpeed": 40,
+      "menSpeed": 56,
+      "exposure": 1.3,
+      "spotFactor": 1.15
+    },
+    "crawl": {
+      "unitSpeed": 8,
+      "menSpeed": 14,
+      "exposure": 0.6,
+      "spotFactor": 0.6,
+      "pinnedFactor": 0.5
+    },
+    "retreat": {
+      "unitSpeed": 36,
+      "menSpeed": 50,
+      "exposure": 1.2,
+      "spotFactor": 1.0,
+      "distanceUnits": 220
+    },
+    "broken": {
+      "unitSpeed": 30,
+      "menSpeed": 46,
+      "exposure": 1.2,
+      "spotFactor": 1.0
+    }
+  },
+  "speed": {
+    "_comment": "Halv hastighet: simuleringen går med denna faktor.",
+    "half": 0.5
+  },
+  "hotkeys": {
+    "_comment": "En tryckning markerar, en andra tryckning (eller tryckning på redan markerad enhet) centrerar kameran.",
+    "doublePressS": 0.6
+  },
+  "sector": {
+    "_comment": "Cover Sector (steg 5, DESIGN.md Defensiv eld och bevakningssektorer). Spelaren drar en kon från enheten: två kanter (dra) eller en riktning (klick, defaultWidthDeg bred). Konens räckvidd = det längsta avståndet i dragningen, högst maxRangeM. Öppningsavstånd: enheten håller inne elden tills en fiende i sektorn är inom avståndet; därefter skjuter den mot allt i sektorn tills sektorn varit tom i reopenS sekunder. När enheten skjuter läggs hela konens synliga rutor i hotkartan med sweepFactor av eldens styrka.",
+    "defaultWidthDeg": 60,
+    "minWidthDeg": 15,
+    "maxWidthDeg": 160,
+    "maxRangeM": 100,
+    "minRangeM": 10,
+    "openingStepM": 5,
+    "reopenS": 5,
+    "sweepFactor": 0.5,
+    "sweepLifeS": 1.5
+  }
+}

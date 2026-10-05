@@ -1,0 +1,58 @@
+{
+ "_comment": "Prototypens sovjetiska motståndare: upravleniye och två otdeleniya (24 man, Björns beslut 2026-10-04). Personerna ligger i people/su-1943-proto.json; su-025–su-046 står i reserv för större styrkor.",
+ "id": "su-vzvod-1943-proto",
+ "name": "Strelkovyy vzvod",
+ "nation": "su",
+ "formation": "rkka",
+ "unitType": "su-strelkovyy-vzvod-1943",
+ "year": 1943,
+ "unitsFile": "su-rkka-1943",
+ "peopleFile": "su-1943-proto",
+ "units": [
+  {
+   "id": "upravleniye",
+   "type": "su-upravleniye-vzvoda-1943",
+   "name": "Upravleniye vzvoda",
+   "members": {
+    "kv": "su-001",
+    "pkv": "su-002"
+   }
+  },
+  {
+   "id": "otdeleniye-1",
+   "type": "su-otdeleniye-1943",
+   "name": "1-ye otdeleniye",
+   "members": {
+    "ko": "su-003",
+    "pul": "su-004",
+    "vn": "su-005",
+    "avt-1": "su-006",
+    "avt-2": "su-007",
+    "str-1": "su-008",
+    "str-2": "su-009",
+    "str-3": "su-010",
+    "str-4": "su-011",
+    "str-5": "su-012",
+    "str-6": "su-013"
+   }
+  },
+  {
+   "id": "otdeleniye-2",
+   "type": "su-otdeleniye-1943",
+   "name": "2-ye otdeleniye",
+   "members": {
+    "ko": "su-014",
+    "pul": "su-015",
+    "vn": "su-016",
+    "avt-1": "su-017",
+    "avt-2": "su-018",
+    "str-1": "su-019",
+    "str-2": "su-020",
+    "str-3": "su-021",
+    "str-4": "su-022",
+    "str-5": "su-023",
+    "str-6": "su-024"
+   }
+  }
+ ]
+}
